@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import profile from "./assets/profile.png";
+import campuseats from "./assets/campuseats.png";
 
 const App = () => {
   return (
@@ -25,7 +26,7 @@ const App = () => {
           <div className="r-r1">
             <div className="r1-box">
               <div className="r1-box-left">
-                <img className="proj-img" src={profile} alt="profile" />
+                <img className="proj-img" src={campuseats} alt="profile" />
               </div>
               <div className="r1-box-right">
                 <div className="proj-info">
@@ -39,7 +40,21 @@ const App = () => {
             </div>
             <div className="r1-box">
               <div className="r1-box-left">
-                <img className="proj-img" src={profile} alt="profile" />
+                <img className="proj-img" src={campuseats} alt="profile" />
+              </div>
+              <div className="r1-box-right">
+                <div className="proj-info">
+                  <h2 className="title">Edusclup</h2>
+                  <p>
+                    lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                    id dolor sed diam gravida molestie.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="r1-box">
+              <div className="r1-box-left">
+                <img className="proj-img" src={campuseats} alt="profile" />
               </div>
               <div className="r1-box-right">
                 <div className="proj-info">
@@ -53,21 +68,7 @@ const App = () => {
             </div>
             <div className="r1-box">
               <div className="r1-box-left">
-                <img className="proj-img" src={profile} alt="profile" />
-              </div>
-              <div className="r1-box-right">
-                <div className="proj-info">
-                  <h2 className="title">Campus Eats</h2>
-                  <p>
-                    lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                    id dolor sed diam gravida molestie.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="r1-box">
-              <div className="r1-box-left">
-                <img className="proj-img" src={profile} alt="profile" />
+                <img className="proj-img" src={campuseats} alt="profile" />
               </div>
               <div className="r1-box-right">
                 <div className="proj-info">

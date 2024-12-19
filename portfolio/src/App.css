@@ -36,6 +36,7 @@ body {
 .r-r1 {
   flex: 2;
   border-radius: 20px;
+  border: 8px solid #f2cc8f;
   padding: 20px;
   overflow: auto;
 }
@@ -91,12 +92,12 @@ body {
 .con-c1-2 {
   flex: 1;
   font-family: Montserrat;
-  font-size: 12px;
+  font-size: 13px;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 20px;
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: 28px;
+  margin-right: 28px;
   text-indent: 35px;
   text-align: justify;
   /* border: 2px solid red; */
