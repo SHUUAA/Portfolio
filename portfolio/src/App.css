@@ -1,0 +1,158 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: #141414;
+  font-family: Montserrat;
+}
+
+.container {
+  width: 1300px;
+  height: 650px;
+  padding: 1em;
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.content-l {
+  flex: 1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content-r {
+  flex: 2;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.r-r1 {
+  flex: 2;
+  border-radius: 20px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.r-r1::-webkit-scrollbar {
+  width: 0px;
+}
+
+.r1-box {
+  background-color: #e07a5f;
+  height: 130px;
+  border-radius: 18px;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.r-r1 {
+  background-color: #f2cc8f;
+}
+
+.r-r2 {
+  background-color: #e07a5f;
+}
+
+.con-c1,
+.con-c2 {
+  flex: 1;
+  border-radius: 20px;
+}
+
+.con-c1 {
+  background-color: #f4f1de;
+  display: flex;
+  flex-direction: column;
+}
+
+.con-c1-1 {
+  flex: 1.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  /* border: 2px solid red; */
+}
+
+.profile {
+  height: 130px;
+  width: 130px;
+  border-radius: 100%;
+  border: 5px solid #3d405b;
+}
+
+.con-c1-2 {
+  flex: 1;
+  font-family: Montserrat;
+  font-size: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
+  text-indent: 35px;
+  text-align: justify;
+  /* border: 2px solid red; */
+}
+
+.con-c2 {
+  background-color: #81b29a;
+}
+
+.r3-box1,
+.r3-box2 {
+  flex: 1;
+  border-radius: 20px;
+}
+
+.r3-box1 {
+  background-color: #3d405b;
+}
+
+.r3-box2 {
+  background-color: #6d597a;
+}
+
+.r-r3 {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+
+.proj-img {
+  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+}
+
+.proj-info {
+  display: flex;
+  flex-direction: column;
+  /* border: 2px solid blue; */
+}
+
+.r1-box-left {
+  flex: 1;
+  /* border: 2px solid red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.r1-box-right {
+  flex: 4;
+  /* border: 2px solid red; */
+}
+
+.title {
+  /* border: 2px solid green; */
+  margin: 0;
+  margin-top: 20px;
+}
