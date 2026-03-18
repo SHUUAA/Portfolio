@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-slate-950;
+  }
+}
+
+@theme {
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  --animate-blob: blob 7s infinite;
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+  
+  .animate-slide-infinite {
+    animation: slideInfinite 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInfinite {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.canvas-mirror {
+  transform: scaleX(-1);
+}
