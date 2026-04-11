@@ -32,7 +32,13 @@ export const LiquidChrome: React.FC<LiquidChromeProps> = ({
     if (!containerRef.current) return;
 
     const container = containerRef.current;
-    const renderer = new Renderer({ antialias: true });
+    
+    // Optimization: Limit DPR to 1.5 for performance on high-DPI screens
+    const dpr = Math.min(window.devicePixelRatio, 1.5);
+    const renderer = new Renderer({ 
+      antialias: false, // Liquid effects don't need anti-aliasing
+      dpr: dpr
+    });
     const gl = renderer.gl;
     gl.clearColor(1, 1, 1, 1);
 
@@ -47,7 +53,7 @@ export const LiquidChrome: React.FC<LiquidChromeProps> = ({
     `;
 
     const fragmentShader = `
-      precision highp float;
+      precision mediump float;
       uniform float uTime;
       uniform vec3 uResolution;
       uniform vec3 uBaseColor;
@@ -61,9 +67,9 @@ export const LiquidChrome: React.FC<LiquidChromeProps> = ({
           vec2 fragCoord = uvCoord * uResolution.xy;
           vec2 uv = (2.0 * fragCoord - uResolution.xy) / min(uResolution.x, uResolution.y);
 
-          for (float i = 1.0; i < 7.0; i++){
-              uv.x += uAmplitude / i * cos(i * uFrequencyX * uv.y + uTime + uMouse.x * 3.14159);
-              uv.y += uAmplitude / i * cos(i * uFrequencyY * uv.x + uTime + uMouse.y * 3.14159);
+          for (float i = 1.0; i < 5.0; i++){
+              uv.x += uAmplitude / i * cos(i * uFrequencyX * uv.y + uTime + uMouse.x * 2.0);
+              uv.y += uAmplitude / i * cos(i * uFrequencyY * uv.x + uTime + uMouse.y * 2.0);
           }
 
           vec2 diff = (uvCoord - uMouse);

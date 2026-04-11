@@ -1,139 +1,225 @@
-import React from 'react';
-import GlassSurface from './GlassSurface';
+import React, { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import { ArrowUpRight } from 'lucide-react';
+import { CoreCapabilities } from './CoreCapabilities';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export const PROJECTS = [
   {
-    title: "NEURAL INTERFACE",
-    category: "AI / RESEARCH",
-    description: "A brain-computer interface concept visualizing neural activity in real-time.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800",
+    title: "Lifewood Website",
+    category: "WEB DEVELOPMENT",
+    description: "Developed a comprehensive company website showcasing Lifewood's services and projects. Includes an application form, admin panel for managing applications, and automated messaging for application updates.",
+    tech: ["React Vite", "CSS", "Ant Design", "Firebase", "EmailJS"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
   },
   {
-    title: "FLUID DYNAMICS",
-    category: "WEBGL / PHYSICS",
-    description: "Highly optimized Navier-Stokes simulations for interactive web environments.",
-    image: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=80&w=800",
+    title: "CampusEats",
+    category: "CAPSTONE PROJECT",
+    description: "Full-stack food delivery system with user registration, food ordering, order management, dasher applications, and secure payments with integrated PayMongo API.",
+    tech: ["React", "JavaScript", "MongoDB", "Spring Boot", "PayMongo"],
+    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800",
   },
   {
-    title: "QUANTUM VAULT",
-    category: "CYBERSECURITY",
-    description: "Encrypted data storage solution utilizing post-quantum cryptographic algorithms.",
-    image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80&w=800",
+    title: "EduSculp",
+    category: "LEARNING PLATFORM",
+    description: "Online learning platform with course offerings. Designed and implemented the contact page and built the finish course feature with feedback and rating functionality.",
+    tech: ["React", "CSS", "Spring Boot"],
+    image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800",
   }
 ];
 
 const SKILLS = [
-  "React / Next.js", "TypeScript", "WebGL / Three.js", 
-  "Node.js", "Rust", "Python", "Docker", "AWS"
+  "HTML", "CSS", "JavaScript", "TypeScript", "Java", "Python", 
+  "ReactJS", "NodeJS", "Spring Boot", "MySQL", "MongoDB", 
+  "TailwindCSS", "GSAP", "Git", "Figma"
 ];
 
-export const Sections: React.FC = () => {
-  return (
-    <div className="space-y-24 md:space-y-32 pb-32">
-      {/* Projects Section */}
-      <section id="projects" className="scroll-mt-32">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6">
-          <div className="max-w-xl">
-            <h2 className="text-white/30 text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-4">Selected Works</h2>
-            <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter leading-tight">
-              CRAFTING PIXELS <br />
-              INTO <span className="text-cyan-400">EMOTION</span>
-            </h3>
-          </div>
-          <div className="hidden md:block w-24 lg:w-32 h-[1px] bg-white/10 mb-6" />
-        </div>
+// Duplicate skills array to make the infinite marquee seamless
+const MARQUEE_SKILLS = [...SKILLS, ...SKILLS, ...SKILLS];
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {PROJECTS.map((project, i) => (
-            <GlassSurface 
-              key={i} 
-              width="100%" 
-              height="auto"
-              borderRadius={32}
-              backgroundOpacity={0.05}
-              brightness={30}
-              blur={15}
-              distortionScale={-60}
-              className="group cursor-pointer hover:-translate-y-2 transition-transform duration-500"
-            >
-              <div className="p-2 w-full">
-                <div className="relative aspect-[4/5] rounded-[24px] overflow-hidden mb-6">
+export const Sections: React.FC = () => {
+  const horizontalPinRef = useRef<HTMLDivElement>(null);
+  const horizontalContainerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    // 1. Horizontal Scroll for Experience Section
+    const horizontalContainer = horizontalContainerRef.current;
+    if (horizontalContainer) {
+      const getScrollAmount = () => -(horizontalContainer.scrollWidth - window.innerWidth);
+      
+      const tween = gsap.to(horizontalContainer, {
+        x: getScrollAmount,
+        ease: "none",
+        scrollTrigger: {
+          trigger: horizontalPinRef.current,
+          start: "top top",
+          end: () => `+=${horizontalContainer.scrollWidth - window.innerWidth}`,
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+        }
+      });
+
+      // Cleanup
+      return () => tween.kill();
+    }
+  });
+
+  useGSAP(() => {
+    // 2. Project Card Clip-Path Reveals
+    const projectCards = gsap.utils.toArray('.project-card') as HTMLElement[];
+    projectCards.forEach((card) => {
+      const img = card.querySelector('.project-img');
+      if (img) {
+        gsap.fromTo(img, 
+          { clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)", scale: 1.1 },
+          {
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+            scale: 1,
+            duration: 1.2,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 80%",
+            }
+          }
+        );
+      }
+    });
+
+    // 3. Simple fade ups for text
+    const fadeUps = gsap.utils.toArray('.fade-up') as HTMLElement[];
+    fadeUps.forEach((elem) => {
+      gsap.fromTo(elem,
+        { y: 50, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: elem, start: "top 85%" }
+        }
+      );
+    });
+  });
+
+  return (
+    <div className="w-full bg-[#F3F4F6] relative z-10">
+      
+      <CoreCapabilities />
+
+      {/* 1. Projects Section (Light Background) */}
+      <section id="projects" className="py-32 px-4 md:px-12 max-w-7xl mx-auto">
+        <h2 className="font-heavy text-5xl md:text-7xl uppercase mb-20 fade-up">Selected Works</h2>
+        
+        <div className="flex flex-col gap-32">
+          {PROJECTS.map((project, idx) => {
+            const isEven = idx % 2 === 0;
+            return (
+              <div key={idx} className={`project-card flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-12`}>
+                
+                {/* Image Container with Clip Path Reveal */}
+                <div className="w-full md:w-[60%] aspect-[4/3] overflow-hidden bg-gray-200">
                   <img 
                     src={project.image} 
                     alt={project.title}
-                    className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-110 group-hover:scale-100"
+                    className="project-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   />
-                  <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-2 block">
-                      {project.category}
-                    </span>
-                    <h4 className="text-lg md:text-xl font-black text-white tracking-tight">{project.title}</h4>
-                  </div>
                 </div>
-                <p className="px-4 pb-4 text-white/40 text-[12px] md:text-[13px] font-medium leading-relaxed">
-                  {project.description}
-                </p>
+                
+                {/* Text Description */}
+                <div className="w-full md:w-[40%] flex flex-col fade-up">
+                  <span className="text-xs uppercase tracking-widest font-bold mb-4">
+                    0{idx + 1} / {project.category}
+                  </span>
+                  <h3 className="font-heavy text-4xl mb-6 uppercase leading-none">{project.title}</h3>
+                  <p className="text-gray-600 mb-8 font-medium">
+                    {project.description}
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {project.tech.map((t, i) => (
+                      <span key={i} className="px-3 py-1 text-[10px] uppercase tracking-widest border border-black rounded-full font-bold">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <button className="flex items-center gap-2 group self-start hover-trigger">
+                    <span className="font-bold uppercase tracking-wider text-sm border-b-2 border-transparent group-hover:border-black transition-all">View Project</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </button>
+                </div>
+
               </div>
-            </GlassSurface>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 2. Skills Marquee Section */}
+      <section className="py-20 overflow-hidden border-y-2 border-black bg-[#F3F4F6]">
+        <div className="flex whitespace-nowrap animate-[marquee_20s_linear_infinite] will-change-transform">
+          {MARQUEE_SKILLS.map((skill, idx) => (
+            <span key={idx} className="text-6xl md:text-8xl font-heavy uppercase mx-8 text-outline">
+              {skill}
+            </span>
           ))}
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="scroll-mt-32">
-        <GlassSurface
-          width="100%"
-          height="auto"
-          borderRadius={40}
-          backgroundOpacity={0.02}
-          blur={10}
-          className="p-8 md:p-20"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 w-full">
-            <div>
-              <h2 className="text-white/30 text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-6">Capabilities</h2>
-              <h3 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-8 leading-tight">
-                TECH STACK <br />
-                FOR THE <span className="text-cyan-400">FUTURE</span>
-              </h3>
-              <p className="text-white/40 text-base md:text-lg font-medium max-w-md">
-                Combining engineering excellence with artistic vision to build 
-                the next generation of web applications.
-              </p>
+      {/* 3. Horizontal Experience Section (Dark Background) */}
+      <div ref={horizontalPinRef} className="h-screen w-full bg-black text-white overflow-hidden relative">
+        <div ref={horizontalContainerRef} className="flex h-full w-[250vw] md:w-[200vw]">
+          
+          <div className="w-screen h-full flex flex-col justify-center px-12 md:px-24 shrink-0 border-r border-white/20 relative overflow-hidden">
+            <h2 className="font-heavy text-6xl md:text-9xl uppercase z-10 text-outline-white">Experience</h2>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 opacity-10 text-[30vw] font-heavy pointer-events-none">
+              WORKS
             </div>
-            
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              {SKILLS.map((skill, i) => (
-                <div key={i} className="px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl bg-white/5 border border-white/5 hover:border-cyan-500/30 transition-colors duration-300">
-                  <span className="text-white/70 font-bold uppercase tracking-widest text-[9px] md:text-[10px]">{skill}</span>
-                </div>
-              ))}
-            </div>
+            <p className="mt-8 max-w-md text-gray-400 font-medium z-10">
+              A journey of creating, solving, and developing digital experiences.
+            </p>
           </div>
-        </GlassSurface>
-      </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="scroll-mt-32 text-center py-10 md:py-20">
-        <h2 className="text-white/30 text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-8">Get In Touch</h2>
-        <h3 className="text-3xl sm:text-4xl md:text-8xl font-black text-white tracking-tighter mb-12 leading-tight">
-          READY TO <br />
-          <span className="text-transparent stroke-white" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>START A PROJECT?</span>
-        </h3>
-        
-        <div className="px-4">
-          <GlassSurface
-            width="auto"
-            height="auto"
-            borderRadius={50}
-            className="inline-block p-1"
-          >
-            <button className="px-8 md:px-12 py-4 md:py-6 rounded-full bg-white text-black font-black uppercase tracking-widest text-base md:text-lg hover:bg-cyan-400 transition-all duration-300 shadow-[0_0_50px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(34,211,238,0.3)]">
-              hi@portfolio.com
-            </button>
-          </GlassSurface>
+          <div className="w-screen h-full flex items-center justify-center shrink-0 px-12 relative border-r border-white/20">
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-heavy opacity-[0.03] pointer-events-none z-0">
+               01
+             </div>
+             <div className="z-10 max-w-2xl w-full">
+               <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-500 block mb-4">Lifewood Data Technology / 2024</span>
+               <h3 className="text-4xl md:text-5xl font-heavy uppercase mb-6">Internship &bull; Web Dev</h3>
+               <p className="text-gray-400 leading-relaxed font-medium">
+                 Developed a responsive JavaScript-based web application using React Vite, Ant Design, EmailJS, and Firebase. Also built interactive browser canvas games using vanilla JS. Created internal tools utilizing Python and Streamlit.
+               </p>
+             </div>
+          </div>
+
+          <div className="w-[50vw] md:w-screen h-full flex flex-col justify-center px-12 md:px-24 shrink-0 bg-[#F3F4F6] text-black">
+             <h2 className="font-heavy text-5xl md:text-7xl uppercase mb-8">What's Next?</h2>
+             <p className="font-medium max-w-lg mb-8">I am currently seeking full-time opportunities where I can contribute my skills to meaningful projects.</p>
+             
+             <a href="mailto:rebadomiarobert@gmail.com" className="inline-flex items-center gap-4 bg-black text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors w-max group hover-trigger">
+               Start a project
+               <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+             </a>
+          </div>
+
         </div>
-      </section>
+      </div>
+
+      {/* 4. Footer */}
+      <footer className="bg-black text-white py-12 px-6 border-t border-white/20">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="font-heavy text-2xl uppercase tracking-widest">Joshua Rebadomia</div>
+          <div className="flex gap-6 text-sm font-bold uppercase tracking-widest text-gray-500">
+            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <a href="mailto:rebadomiarobert@gmail.com" className="hover:text-white transition-colors">Email</a>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 };

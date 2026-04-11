@@ -1,33 +1,120 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(useGSAP);
 
 export const Hero: React.FC = () => {
-  return (
-    <section className="relative min-h-[80vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
-      <div className="relative z-10 max-w-4xl w-full">
-        <h2 className="text-white/40 text-[10px] md:text-xs font-black uppercase tracking-[0.5em] mb-6 animate-fade-in">
-          Creative Developer & Designer
-        </h2>
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLHeadingElement>(null);
+  const imagesRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({ delay: 0.5 });
+    
+    // Animate the main text character by character
+    const chars = textRef.current?.querySelectorAll('.char');
+    if (chars) {
+      gsap.set(chars, { yPercent: 130, opacity: 0 });
+      tl.to(chars, {
+        yPercent: 0,
+        opacity: 1,
+        stagger: 0.05,
+        duration: 1,
+        ease: 'power4.out'
+      });
+    }
+
+    // Floating images parallax effect
+    const images = imagesRef.current?.querySelectorAll('.floating-img');
+    if (images) {
+      gsap.fromTo(images, 
+        { scale: 0, opacity: 0, rotation: () => Math.random() * 20 - 10 },
+        { 
+          scale: 1, 
+          opacity: 1, 
+          stagger: 0.15, 
+          duration: 1.2, 
+          ease: 'back.out(1.5)',
+          clearProps: 'all'
+        }, 
+        "-=0.5"
+      );
+
+      // Mouse movement subtle parallax for images
+      window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 50;
+        const y = (e.clientY / window.innerHeight - 0.5) * 50;
         
-        <h1 className="text-5xl sm:text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
-          BUILDING DIGITAL <br />
-          <span className="text-transparent stroke-white stroke-1" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>
-            EXPERIENCES
+        gsap.to(images, {
+          x: x,
+          y: y,
+          stagger: 0.02,
+          duration: 1,
+          ease: 'power2.out'
+        });
+      });
+    }
+  }, { scope: containerRef });
+
+  // Split text helper to wrap characters in span
+  const splitText = (text: string) => {
+    return text.split('').map((char, i) => (
+      <span key={i} className="char inline-block" style={{ whiteSpace: char === ' ' ? 'pre' : 'normal' }}>
+        {char}
+      </span>
+    ));
+  };
+
+  return (
+    <section id="home" ref={containerRef} className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden bg-[#F3F4F6] px-4 pt-20">
+      
+      {/* Background large text outline */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+        <h1 className="text-[30vw] font-heavy leading-none text-outline whitespace-nowrap">
+          PORTFOLIO
+        </h1>
+      </div>
+
+      <div className="relative z-10 w-full max-w-[90vw] mx-auto text-center flex flex-col items-center">
+        
+        <p className="text-sm md:text-md uppercase tracking-[0.4em] mb-4 font-semibold text-gray-500 overflow-hidden text-center mx-auto max-w-3xl leading-relaxed">
+          <span className="block translate-y-full opacity-0 animate-[slideUp_1s_ease-out_1s_forwards]">
+            Agentics - AI Integration · Full Stack Developer · Web Developer · App Developer
           </span>
+        </p>
+
+        <h1 ref={textRef} className="font-heavy text-[9vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-black uppercase flex flex-wrap justify-center overflow-hidden">
+          {splitText("JOSHUA ROBERT REBADOMIA")}
         </h1>
         
-        <p className="max-w-xl mx-auto text-white/50 text-base md:text-lg font-medium leading-relaxed mb-12">
-          Specializing in high-performance web applications with a focus on 
-          premium aesthetics and interactive motion design.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-          <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-white/80 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:-translate-y-1">
-            View Projects
-          </button>
-          <button className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-white/5 text-white font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
-            Resume
-          </button>
+        <div className="mt-8 overflow-hidden">
+          <p className="max-w-md mx-auto text-sm md:text-base text-gray-600 font-medium translate-y-full opacity-0 animate-[slideUp_1s_ease-out_1.5s_forwards]">
+            I am a passionate IT professional focused on building impactful digital solutions. Specializing in modern web development.
+          </p>
         </div>
+      </div>
+
+      {/* Floating profile images */}
+      <div ref={imagesRef} className="absolute inset-0 pointer-events-none flex justify-center items-center">
+        {/* Top Left */}
+        <div className="floating-img absolute top-[15%] left-[10%] w-[15vw] max-w-[200px] aspect-[3/4] rotate-[-10deg]">
+          <img src="/joshua.jpg" alt="Profile" className="w-full h-full object-cover grayscale brightness-90 contrast-125 object-top border-4 border-white shadow-2xl" />
+        </div>
+        
+        {/* Bottom Right */}
+        <div className="floating-img absolute bottom-[15%] right-[10%] w-[18vw] max-w-[240px] aspect-square rotate-[5deg]">
+          <img src="/joshua.jpg" alt="Profile" className="w-full h-full object-cover grayscale brightness-90 contrast-125 object-center border-4 border-white shadow-2xl" />
+        </div>
+
+        {/* Top Right (Small) */}
+        <div className="floating-img absolute top-[25%] right-[20%] w-[10vw] max-w-[140px] aspect-[4/5] rotate-[15deg]">
+          <img src="/joshua.jpg" alt="Profile" className="w-full h-full object-cover grayscale opacity-80 object-bottom border-4 border-white shadow-xl" />
+        </div>
+      </div>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <span className="text-xs uppercase tracking-widest font-semibold text-gray-400">Scroll Down</span>
       </div>
     </section>
   );

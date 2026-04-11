@@ -2,48 +2,72 @@
 
 @layer base {
   body {
-    @apply bg-slate-950;
+    background-color: #F3F4F6;
+    color: #000000;
+    font-family: 'Inter', sans-serif;
+    cursor: none; /* Replaced by custom GSAP cursor */
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+  }
+
+  @media (pointer: coarse) {
+    body {
+      cursor: auto;
+    }
+  }
+
+  /* Lenis scroll */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
   }
 }
 
 @theme {
-  @keyframes blob {
-    0% { transform: translate(0px, 0px) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
-    100% { transform: translate(0px, 0px) scale(1); }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
-  --animate-blob: blob 7s infinite;
+  
+  --animate-marquee: marquee 15s linear infinite;
 }
 
 @layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
+  .text-outline {
+    -webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.4);
+    color: transparent;
   }
-  
-  .animate-slide-infinite {
-    animation: slideInfinite 1.5s ease-in-out infinite;
+  .text-outline-white {
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
+    color: transparent;
+  }
+  .font-heavy {
+    font-weight: 900;
+    letter-spacing: -0.04em;
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+::-webkit-scrollbar {
+  display: none;
 }
-
-@keyframes slideInfinite {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-.canvas-mirror {
-  transform: scaleX(-1);
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
