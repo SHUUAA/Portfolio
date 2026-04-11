@@ -28,7 +28,7 @@ export const Hero: React.FC = () => {
     // Floating images parallax effect
     const images = imagesRef.current?.querySelectorAll('.floating-img');
     if (images) {
-      gsap.fromTo(images, 
+      tl.fromTo(images, 
         { scale: 0, opacity: 0, rotation: () => Math.random() * 20 - 10 },
         { 
           scale: 1, 
