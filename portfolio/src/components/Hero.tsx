@@ -57,11 +57,15 @@ export const Hero: React.FC = () => {
     }
   }, { scope: containerRef });
 
-  // Split text helper to wrap characters in span
+  // Split text helper to wrap words so they don't break across lines
   const splitText = (text: string) => {
-    return text.split('').map((char, i) => (
-      <span key={i} className="char inline-block" style={{ whiteSpace: char === ' ' ? 'pre' : 'normal' }}>
-        {char}
+    return text.split(' ').map((word, wordIndex) => (
+      <span key={wordIndex} className="inline-flex overflow-hidden">
+        {word.split('').map((char, i) => (
+          <span key={i} className="char inline-block">
+            {char}
+          </span>
+        ))}
       </span>
     ));
   };
@@ -84,7 +88,7 @@ export const Hero: React.FC = () => {
           </span>
         </p>
 
-        <h1 ref={textRef} className="font-heavy text-[9vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-black uppercase flex flex-wrap justify-center overflow-hidden">
+        <h1 ref={textRef} className="font-heavy text-[9vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-black uppercase flex flex-wrap justify-center overflow-hidden gap-[0.25em]">
           {splitText("JOSHUA ROBERT REBADOMIA")}
         </h1>
         
