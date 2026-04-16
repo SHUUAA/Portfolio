@@ -37,6 +37,27 @@ const SKILLS = [
   "TailwindCSS", "GSAP", "Git", "Figma"
 ];
 
+export const EXPERIENCE = [
+  {
+    company: "Lifewood Data Technology Ltd.",
+    role: "AI Executive & Project Coordinator",
+    period: "Apr 2025 - Present",
+    duration: "1 yr 1 mo",
+    description: "Responsible for coordinating AI-driven projects and supporting the integration of advanced tools across teams. Manage timelines, ensure quality delivery, and facilitate collaboration between technical and operational units. Lead training programs, oversee data workflows, and contribute to the successful execution of global AI initiatives.",
+    location: "Cebu, Philippines • On-site",
+    color: "black"
+  },
+  {
+    company: "Lifewood Data Technology Ltd.",
+    role: "Intern",
+    period: "Jan 2025 - Mar 2025",
+    duration: "3 mos",
+    description: "Managed data processing tasks alongside web development projects and collection of text and object data while maintaining websites. Focused on website maintenance and dataset accuracy management, covering entry-level data management and web development support.",
+    location: "Cebu, Philippines • On-site",
+    color: "black"
+  }
+];
+
 // Duplicate skills array to make the infinite marquee seamless
 const MARQUEE_SKILLS = [...SKILLS, ...SKILLS, ...SKILLS];
 
@@ -170,34 +191,55 @@ export const Sections: React.FC = () => {
 
       {/* 3. Horizontal Experience Section (Dark Background) */}
       <div ref={horizontalPinRef} className="h-screen w-full bg-black text-white overflow-hidden relative">
-        <div ref={horizontalContainerRef} className="flex h-full w-[250vw] md:w-[200vw]">
+        <div ref={horizontalContainerRef} className="flex h-full" style={{ width: `${(EXPERIENCE.length + 2) * 100}vw` }}>
           
+          {/* Header Slide */}
           <div className="w-screen h-full flex flex-col justify-center px-12 md:px-24 shrink-0 border-r border-white/20 relative overflow-hidden">
             <h2 className="font-heavy text-6xl md:text-9xl uppercase z-10 text-outline-white">Experience</h2>
             <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 opacity-10 text-[30vw] font-heavy pointer-events-none">
               WORKS
             </div>
             <p className="mt-8 max-w-md text-gray-400 font-medium z-10">
-              A journey of creating, solving, and developing digital experiences.
+              A journey of coordinating AI initiatives, developing digital experiences, and managing global data workflows.
             </p>
           </div>
 
-          <div className="w-screen h-full flex items-center justify-center shrink-0 px-12 relative border-r border-white/20">
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-heavy opacity-[0.03] pointer-events-none z-0">
-               01
-             </div>
-             <div className="z-10 max-w-2xl w-full">
-               <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-500 block mb-4">Lifewood Data Technology / 2024</span>
-               <h3 className="text-4xl md:text-5xl font-heavy uppercase mb-6">Internship &bull; Web Dev</h3>
-               <p className="text-gray-400 leading-relaxed font-medium">
-                 Developed a responsive JavaScript-based web application using React Vite, Ant Design, EmailJS, and Firebase. Also built interactive browser canvas games using vanilla JS. Created internal tools utilizing Python and Streamlit.
-               </p>
-             </div>
-          </div>
+          {/* Experience Slides */}
+          {EXPERIENCE.map((exp, idx) => (
+            <div key={idx} className="w-screen h-full flex items-center justify-center shrink-0 px-12 relative border-r border-white/20">
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-heavy opacity-[0.03] pointer-events-none z-0">
+                 0{idx + 1}
+               </div>
+               <div className="z-10 max-w-2xl w-full">
+                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+                   <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-500 block">
+                     {exp.company} / {exp.period}
+                   </span>
+                   <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 border border-white/20 rounded-full text-gray-400 w-fit">
+                     {exp.duration}
+                   </span>
+                 </div>
+                 <h3 className="text-4xl md:text-6xl font-heavy uppercase mb-6 leading-tight">
+                   {exp.role.split('&').map((part, i) => (
+                     <React.Fragment key={i}>
+                       {part} {i === 0 && exp.role.includes('&') && <span className="text-outline-white text-3xl md:text-5xl">&</span>}
+                     </React.Fragment>
+                   ))}
+                 </h3>
+                 <p className="text-gray-400 leading-relaxed font-medium mb-6 text-lg">
+                   {exp.description}
+                 </p>
+                 <div className="text-xs font-bold tracking-widest uppercase text-white/40">
+                   {exp.location}
+                 </div>
+               </div>
+            </div>
+          ))}
 
-          <div className="w-[50vw] md:w-screen h-full flex flex-col justify-center px-12 md:px-24 shrink-0 bg-[#F3F4F6] text-black">
+          {/* CTA Slide */}
+          <div className="w-screen h-full flex flex-col justify-center px-12 md:px-24 shrink-0 bg-[#F3F4F6] text-black">
              <h2 className="font-heavy text-5xl md:text-7xl uppercase mb-8">What's Next?</h2>
-             <p className="font-medium max-w-lg mb-8">I am currently seeking full-time opportunities where I can contribute my skills to meaningful projects.</p>
+             <p className="font-medium max-w-lg mb-8 text-xl">I am currently leading AI initiatives and coordinating global projects, always open to discussing new innovations and collaborations.</p>
              
              <a href="mailto:rebadomiarobert@gmail.com" className="inline-flex items-center gap-4 bg-black text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors w-max group hover-trigger">
                Start a project
