@@ -2,39 +2,37 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 export const CustomCursor: React.FC = () => {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const followerRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   useEffect(() => {
-    const cursor = cursorRef.current;
-    const follower = followerRef.current;
-    if (!cursor || !follower) return;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
 
-    gsap.set(cursor, { xPercent: -50, yPercent: -50 });
-    gsap.set(follower, { xPercent: -50, yPercent: -50 });
+    gsap.set(dot, { xPercent: -50, yPercent: -50 });
+    gsap.set(ring, { xPercent: -50, yPercent: -50 });
 
-    const xToCursor = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
-    const yToCursor = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
-    
-    const xToFollower = gsap.quickTo(follower, "x", { duration: 0.6, ease: "power3" });
-    const yToFollower = gsap.quickTo(follower, "y", { duration: 0.6, ease: "power3" });
+    const xToDot = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power3' });
+    const yToDot = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power3' });
+    const xToRing = gsap.quickTo(ring, 'x', { duration: 0.5, ease: 'power3' });
+    const yToRing = gsap.quickTo(ring, 'y', { duration: 0.5, ease: 'power3' });
 
     const moveCursor = (e: MouseEvent) => {
-      xToCursor(e.clientX);
-      yToCursor(e.clientY);
-      xToFollower(e.clientX);
-      yToFollower(e.clientY);
+      xToDot(e.clientX);
+      yToDot(e.clientY);
+      xToRing(e.clientX);
+      yToRing(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
-        target.tagName === 'A' || 
-        target.tagName === 'BUTTON' || 
-        target.closest('a') || 
+        target.tagName === 'A' ||
+        target.tagName === 'BUTTON' ||
+        target.closest('a') ||
         target.closest('button') ||
-        target.classList.contains('magnetic') ||
         target.classList.contains('hover-trigger')
       ) {
         setIsHovered(true);
@@ -43,26 +41,32 @@ export const CustomCursor: React.FC = () => {
       }
     };
 
-    window.addEventListener("mousemove", moveCursor);
-    document.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener('mousemove', moveCursor);
+    document.addEventListener('mouseover', handleMouseOver);
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      document.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener('mousemove', moveCursor);
+      document.removeEventListener('mouseover', handleMouseOver);
     };
   }, []);
 
   return (
     <>
-      <div 
-        ref={cursorRef} 
-        className="fixed top-0 left-0 w-2 h-2 bg-black rounded-full pointer-events-none z-[9999]"
-        style={{ mixBlendMode: 'difference', backgroundColor: 'white' }}
-      />
-      <div 
-        ref={followerRef} 
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[9998] transition-all duration-300 ease-out border ${isHovered ? 'w-16 h-16 border-transparent bg-white/20 backdrop-blur-sm' : 'w-8 h-8 border-white bg-transparent'}`}
+      {/* Sharp center dot */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white pointer-events-none z-[9999]"
         style={{ mixBlendMode: 'difference' }}
+      />
+      {/* Square ring — expands and turns red on interactive elements */}
+      <div
+        ref={ringRef}
+        className={`fixed top-0 left-0 pointer-events-none z-[9998] transition-all duration-200 ease-out border-2 ${
+          isHovered
+            ? 'w-12 h-12 border-[#FF3000] bg-[#FF3000]/10'
+            : 'w-6 h-6 border-white bg-transparent'
+        }`}
+        style={{ mixBlendMode: isHovered ? 'normal' : 'difference' }}
       />
     </>
   );

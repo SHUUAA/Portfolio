@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
+
+gsap.registerPlugin(ScrollTrigger);
 import { Hero } from './components/Hero';
 import { Sections } from './components/Sections';
 import { CustomCursor } from './components/CustomCursor';
 import { Preloader } from './components/Preloader';
-import { WebglBackground } from './components/WebglBackground';
+import { Projects } from './pages/Projects';
+import { ScrollProgress } from './components/ScrollProgress';
+import { useTheme } from './hooks/useTheme';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+
+  // Initialize theme — applies .dark class to <html> and persists choice
+  useTheme();
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -22,34 +31,34 @@ export default function App() {
       touchMultiplier: 2,
     });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    // Sync Lenis with GSAP ScrollTrigger so scroll-triggered animations
+    // and the velocity hook fire correctly under smooth scroll.
+    lenis.on('scroll', ScrollTrigger.update);
+    const tickerCb = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(tickerCb);
+    gsap.ticker.lagSmoothing(0);
 
-    requestAnimationFrame(raf);
-
-    // Provide Lenis to global scope for ScrollTrigger sync if needed
     (window as any).lenis = lenis;
 
     return () => {
+      gsap.ticker.remove(tickerCb);
       lenis.destroy();
       delete (window as any).lenis;
     };
   }, []);
 
   return (
-    <div className="relative w-full bg-[#F3F4F6] text-black overflow-hidden font-sans min-h-screen">
+    <div className="relative w-full bg-bg text-fg overflow-hidden font-sans min-h-screen transition-colors duration-300">
       <CustomCursor />
-      
+
       {loading && <Preloader onComplete={() => setLoading(false)} />}
-      
-      <div 
+
+      <div
         className={`transition-opacity duration-1000 ${loading ? 'opacity-0 h-screen overflow-hidden' : 'opacity-100'}`}
       >
-        <WebglBackground />
+        <ScrollProgress />
         <Navbar />
-        
+
         <Routes>
           <Route path="/" element={
             <main>
@@ -57,6 +66,7 @@ export default function App() {
               <Sections />
             </main>
           } />
+          <Route path="/projects" element={<Projects />} />
         </Routes>
       </div>
     </div>

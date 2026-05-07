@@ -1,124 +1,216 @@
 import React, { useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { ArrowDown, ArrowRight, Download } from 'lucide-react';
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 export const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
-  const imagesRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const compositionRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    const tl = gsap.timeline({ delay: 0.5 });
-    
-    // Animate the main text character by character
-    const chars = textRef.current?.querySelectorAll('.char');
+    const tl = gsap.timeline({ delay: 0.4 });
+
+    const chars = headlineRef.current?.querySelectorAll('.char');
     if (chars) {
-      gsap.set(chars, { yPercent: 130, opacity: 0 });
+      gsap.set(chars, { yPercent: 110, opacity: 0 });
       tl.to(chars, {
         yPercent: 0,
         opacity: 1,
-        stagger: 0.05,
-        duration: 1,
-        ease: 'power4.out'
+        stagger: 0.04,
+        duration: 0.9,
+        ease: 'power4.out',
       });
     }
 
-    // Floating images parallax effect
-    const images = imagesRef.current?.querySelectorAll('.floating-img');
-    if (images) {
-      tl.fromTo(images, 
-        { scale: 0, opacity: 0, rotation: () => Math.random() * 20 - 10 },
-        { 
-          scale: 1, 
-          opacity: 1, 
-          stagger: 0.15, 
-          duration: 1.2, 
-          ease: 'back.out(1.5)',
-          clearProps: 'all'
-        }, 
-        "-=0.5"
-      );
+    if (compositionRef.current) {
+      gsap.to(compositionRef.current, {
+        yPercent: -20,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.5,
+        },
+      });
+    }
 
-      // Mouse movement subtle parallax for images
-      window.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 50;
-        const y = (e.clientY / window.innerHeight - 0.5) * 50;
-        
-        gsap.to(images, {
-          x: x,
-          y: y,
-          stagger: 0.02,
-          duration: 1,
-          ease: 'power2.out'
-        });
+    if (contentRef.current) {
+      gsap.to(contentRef.current, {
+        yPercent: 10,
+        opacity: 0.5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.5,
+        },
       });
     }
   }, { scope: containerRef });
 
-  // Split text helper to wrap words so they don't break across lines
-  const splitText = (text: string) => {
-    return text.split(' ').map((word, wordIndex) => (
-      <span key={wordIndex} className="inline-flex overflow-hidden">
-        {word.split('').map((char, i) => (
-          <span key={i} className="char inline-block">
-            {char}
-          </span>
-        ))}
-      </span>
-    ));
-  };
+  const splitChars = (text: string) =>
+    text.split('').map((c, i) =>
+      c === ' ' ? (
+        <span key={i} className="inline-block w-[0.3em]" />
+      ) : (
+        <span key={i} className="inline-flex overflow-hidden">
+          <span className="char inline-block">{c}</span>
+        </span>
+      )
+    );
 
   return (
-    <section id="home" ref={containerRef} className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden bg-[#F3F4F6] px-4 pt-20">
-      
-      {/* Background large text outline */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-        <h1 className="text-[30vw] font-heavy leading-none text-outline whitespace-nowrap">
-          PORTFOLIO
-        </h1>
+    <section
+      id="home"
+      ref={containerRef}
+      className="relative min-h-[100svh] w-full overflow-hidden bg-bg text-fg"
+    >
+      {/* Grid pattern background */}
+      <div className="absolute inset-0 swiss-pattern-grid text-fg opacity-[0.05] pointer-events-none" />
+      {/* Subtle paper noise */}
+      <div className="absolute inset-0 swiss-pattern-noise opacity-[0.04] pointer-events-none mix-blend-multiply" />
+
+      {/* Top meta strip — flush to grid, aligned by columns */}
+      <div className="relative z-10 grid grid-cols-12 border-b-2 border-border pt-24 pb-4 px-6 md:px-10">
+        <div className="col-span-6 md:col-span-3 flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold">
+          <span className="text-accent">00 / Index</span>
+          <span className="text-fg-subtle">Cebu, Philippines · 10.31°N 123.89°E</span>
+        </div>
+        <div className="hidden md:flex col-span-3 flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+          <span>Edition</span>
+          <span className="text-fg">Portfolio · Vol. 04 / 2026</span>
+        </div>
+        <div className="hidden md:flex col-span-3 flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+          <span>Issued</span>
+          <span className="text-fg">May 2026</span>
+        </div>
+        <div className="col-span-6 md:col-span-3 flex md:justify-end items-start gap-2.5 text-[10px] uppercase tracking-[0.25em] font-bold">
+          <span className="relative inline-flex h-2 w-2 mt-1 bg-accent">
+            <span className="absolute inset-0 bg-accent" style={{ animation: 'blink 1.4s infinite' }} />
+          </span>
+          <span className="text-fg">Available for work · 2026</span>
+        </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-[90vw] mx-auto text-center flex flex-col items-center">
-        
-        <p className="text-sm md:text-md uppercase tracking-[0.4em] mb-4 font-semibold text-gray-500 overflow-hidden text-center mx-auto max-w-3xl leading-relaxed">
-          <span className="block translate-y-full opacity-0 animate-[slideUp_1s_ease-out_1s_forwards]">
-            Agentics - AI Integration · Full Stack Developer · Web Developer · App Developer
-          </span>
-        </p>
+      {/* Main composition — asymmetric 12-col grid */}
+      <div ref={contentRef} className="relative z-10 grid grid-cols-12 gap-0 px-6 md:px-10 pt-12 md:pt-16">
+        {/* Left column — headline */}
+        <div className="col-span-12 md:col-span-9">
+          <h1
+            ref={headlineRef}
+            className="font-heavy uppercase leading-[0.82] tracking-tighter text-fg flex flex-col gap-0"
+          >
+            <span className="text-[18vw] md:text-[15vw] flex flex-wrap">{splitChars('JOSHUA')}</span>
+            <span className="text-[18vw] md:text-[15vw] flex flex-wrap">
+              {splitChars('REBADOMIA')}
+              <span className="inline-block w-[0.6em] h-[0.6em] bg-accent ml-[0.15em] mt-[0.18em] shrink-0" aria-hidden="true" />
+            </span>
+          </h1>
+        </div>
 
-        <h1 ref={textRef} className="font-heavy text-[9vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-black uppercase flex flex-wrap justify-center overflow-hidden gap-[0.25em]">
-          {splitText("JOSHUA ROBERT REBADOMIA")}
-        </h1>
-        
-        <div className="mt-8 overflow-hidden">
-          <p className="max-w-md mx-auto text-sm md:text-base text-gray-600 font-medium translate-y-full opacity-0 animate-[slideUp_1s_ease-out_1.5s_forwards]">
-            I am a passionate IT professional focused on building impactful digital solutions. Specializing in modern web development.
+        {/* Right column — Bauhaus geometric composition */}
+        <div className="hidden md:flex col-span-3 relative items-start justify-end pl-6">
+          <div ref={compositionRef} className="relative w-full aspect-square max-w-[280px] border-2 border-border bg-bg">
+            {/* Internal grid pattern */}
+            <div className="absolute inset-0 swiss-pattern-grid text-fg opacity-[0.06]" />
+            {/* Red circle */}
+            <div className="absolute top-[18%] left-[18%] w-[42%] aspect-square rounded-full bg-accent" />
+            {/* Black bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-[18%] bg-fg" />
+            {/* Diagonal line */}
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
+              <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="1" className="text-fg" />
+            </svg>
+            {/* Corner label */}
+            <div className="absolute top-2 right-2 text-[9px] uppercase tracking-[0.25em] font-bold text-fg">
+              Fig. 01
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Subtitle row — divides via thick line */}
+      <div className="relative z-10 mt-12 md:mt-16 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-8">
+        <div className="col-span-12 md:col-span-4 flex flex-col gap-2">
+          <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">A. Discipline</span>
+          <p className="text-base md:text-lg font-bold uppercase leading-tight text-fg">
+            AI Executive<br />& Full-Stack Developer
           </p>
         </div>
+
+        <div className="col-span-12 md:col-span-5 mt-6 md:mt-0 md:pl-8 md:border-l-2 md:border-border flex flex-col gap-2">
+          <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">B. Statement</span>
+          <p className="text-sm md:text-base font-medium leading-snug text-fg-muted max-w-prose">
+            Building intelligent systems that bridge AI and real-world business needs — from agentic
+            automation pipelines to full-stack web &amp; mobile applications.
+          </p>
+        </div>
+
+        <div className="col-span-12 md:col-span-3 mt-6 md:mt-0 md:pl-8 md:border-l-2 md:border-border flex flex-col gap-2">
+          <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">C. Method</span>
+          <ul className="text-[11px] md:text-xs font-bold uppercase tracking-wider text-fg flex flex-col gap-1">
+            <li>— Agentic Automation</li>
+            <li>— Full-Stack Engineering</li>
+            <li>— Hardware/IoT Integration</li>
+            <li>— Workflow Engineering</li>
+          </ul>
+        </div>
       </div>
 
-      {/* Floating profile images */}
-      <div ref={imagesRef} className="absolute inset-0 pointer-events-none flex justify-center items-center">
-        {/* Top Left */}
-        <div className="floating-img absolute top-[15%] left-[10%] w-[15vw] max-w-[200px] aspect-[3/4] rotate-[-10deg]">
-          <img src="/joshua.jpg" alt="Profile" className="w-full h-full object-cover grayscale brightness-90 contrast-125 object-top border-4 border-white shadow-2xl" />
-        </div>
-        
-        {/* Bottom Right */}
-        <div className="floating-img absolute bottom-[15%] right-[10%] w-[18vw] max-w-[240px] aspect-square rotate-[5deg]">
-          <img src="/joshua.jpg" alt="Profile" className="w-full h-full object-cover grayscale brightness-90 contrast-125 object-center border-4 border-white shadow-2xl" />
-        </div>
-
-        {/* Top Right (Small) */}
-        <div className="floating-img absolute top-[25%] right-[20%] w-[10vw] max-w-[140px] aspect-[4/5] rotate-[15deg]">
-          <img src="/joshua.jpg" alt="Profile" className="w-full h-full object-cover grayscale opacity-80 object-bottom border-4 border-white shadow-xl" />
-        </div>
+      {/* CTA row — strict rectangles, full-width on mobile */}
+      <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border">
+        <a
+          href="/projects"
+          className="hover-trigger col-span-12 md:col-span-4 flex items-center justify-between gap-4 bg-fg text-bg hover:bg-accent transition-colors duration-200 px-6 md:px-10 py-7 group"
+        >
+          <span className="text-sm md:text-base font-bold uppercase tracking-[0.2em]">View Projects</span>
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+        </a>
+        <a
+          href="mailto:rebadomiarobert@gmail.com"
+          className="hover-trigger col-span-6 md:col-span-4 flex items-center justify-between gap-4 bg-bg text-fg border-t-2 md:border-t-0 md:border-l-2 border-border hover:bg-fg hover:text-bg transition-colors duration-200 px-6 md:px-10 py-7 group"
+        >
+          <span className="text-sm md:text-base font-bold uppercase tracking-[0.2em]">Contact</span>
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+        </a>
+        <a
+          href="/Joshua_Rebadomia_Resume.pdf"
+          download
+          className="hover-trigger col-span-6 md:col-span-4 flex items-center justify-between gap-4 bg-bg text-fg border-t-2 md:border-t-0 md:border-l-2 border-border hover:bg-accent hover:text-white hover:border-accent transition-colors duration-200 px-6 md:px-10 py-7 group"
+        >
+          <span className="text-sm md:text-base font-bold uppercase tracking-[0.2em]">Resume</span>
+          <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-200" />
+        </a>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <span className="text-xs uppercase tracking-widest font-semibold text-gray-400">Scroll Down</span>
+      {/* Bottom info ledger */}
+      <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-4">
+        <div className="col-span-6 md:col-span-3 flex flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+          <span>Currently</span>
+          <span className="text-fg">AI Executive · Lifewood</span>
+        </div>
+        <div className="hidden md:flex col-span-3 flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+          <span>Selected works</span>
+          <span className="text-fg">2023 — 2026</span>
+        </div>
+        <div className="hidden md:flex col-span-3 flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+          <span>Stack</span>
+          <span className="text-fg">React · TypeScript · n8n · Claude</span>
+        </div>
+        <div className="col-span-6 md:col-span-3 flex flex-col items-end gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+          <span className="inline-flex items-center gap-1.5">
+            <ArrowDown className="w-3 h-3 text-accent" />
+            Scroll
+          </span>
+          <span className="text-fg">Section 01 — Subject</span>
+        </div>
       </div>
     </section>
   );
