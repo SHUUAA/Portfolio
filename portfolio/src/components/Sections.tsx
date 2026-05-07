@@ -390,7 +390,7 @@ export const Sections: React.FC = () => {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-0 border-2 border-border">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 border-2 border-border">
                       <a
                         href={project.live}
                         className="hover-trigger flex items-center justify-between gap-2 px-4 py-3 bg-fg text-bg hover:bg-accent hover:text-white transition-colors duration-200 group"
@@ -402,7 +402,7 @@ export const Sections: React.FC = () => {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover-trigger flex items-center justify-between gap-2 px-4 py-3 bg-bg text-fg border-l-2 border-border hover:bg-fg hover:text-bg transition-colors duration-200 group"
+                        className="hover-trigger flex items-center justify-between gap-2 px-4 py-3 bg-bg text-fg border-t-2 sm:border-t-0 sm:border-l-2 border-border hover:bg-fg hover:text-bg transition-colors duration-200 group"
                       >
                         <span className="text-xs font-bold uppercase tracking-[0.2em]">Source</span>
                         <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-200" strokeWidth={2.5} />
@@ -431,7 +431,7 @@ export const Sections: React.FC = () => {
         <div className="absolute inset-0 swiss-pattern-grid text-bg opacity-[0.05] pointer-events-none" />
         <div className="relative px-6 md:px-10 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] font-bold opacity-70">
           <span className="text-accent">Section 04 — System</span>
-          <span>Stack & Tooling · 25+</span>
+          <span className="hidden sm:inline">Stack & Tooling · 25+</span>
         </div>
         <div ref={marqueeRef} className="relative flex whitespace-nowrap will-change-transform">
           {MARQUEE_SKILLS.map((skill, idx) => (
@@ -453,7 +453,7 @@ export const Sections: React.FC = () => {
 
       {/* 05 — Trajectory (Experience horizontal scroll) — inverted */}
       <div ref={horizontalPinRef} className="relative h-screen w-full bg-bg text-fg overflow-hidden border-b-2 border-border">
-        <div ref={horizontalContainerRef} className="flex h-full" style={{ width: `${(EXPERIENCE.length + 2) * 100}vw` }}>
+        <div ref={horizontalContainerRef} className="flex h-full" style={{ width: `${(EXPERIENCE.length + 1) * 100}vw` }}>
 
           {/* Header slide */}
           <div className="w-screen h-full shrink-0 grid grid-cols-12 border-r-2 border-border relative overflow-hidden">
@@ -525,14 +525,19 @@ export const Sections: React.FC = () => {
             </div>
           ))}
 
-          {/* CTA Slide */}
-          <div className="w-screen h-full shrink-0 grid grid-cols-12 relative overflow-hidden">
+        </div>
+      </div>
+
+      {/* 06 — Contact (vertical section, anchor target) */}
+      <section id="contact" className="relative w-full bg-bg text-fg border-b-2 border-border">
+        <div className="grid grid-cols-12 min-h-[80vh] md:min-h-[70vh]">
+          <div className="relative col-span-12 md:col-span-8 flex flex-col justify-center px-6 md:px-12 py-16 md:py-24 border-b-2 md:border-b-0 md:border-r-2 border-border overflow-hidden">
             <div className="absolute inset-0 swiss-pattern-grid text-fg opacity-[0.06]" />
-            <div className="relative col-span-12 md:col-span-8 flex flex-col justify-center px-6 md:px-12">
+            <div className="relative">
               <span className="text-[11px] uppercase tracking-[0.3em] font-bold text-accent">
                 Section 06 — Contact
               </span>
-              <h2 data-reveal="mask" className="font-heavy text-6xl md:text-[12vw] uppercase leading-[0.85] tracking-tighter mt-6 text-fg">
+              <h2 data-reveal="mask" className="font-heavy text-6xl sm:text-7xl md:text-9xl lg:text-[12vw] uppercase leading-[0.85] tracking-tighter mt-6 text-fg break-words">
                 What's<br />Next?
               </h2>
               <p className="mt-8 max-w-lg text-base md:text-lg font-medium text-fg-muted leading-snug">
@@ -540,28 +545,27 @@ export const Sections: React.FC = () => {
                 Lifewood — always open to discussing new innovations and collaborations.
               </p>
             </div>
-
-            <a
-              id="contact"
-              href="mailto:rebadomiarobert@gmail.com"
-              className="hover-trigger relative col-span-12 md:col-span-4 flex flex-col justify-between p-6 md:p-10 bg-accent text-white border-l-0 md:border-l-2 border-border group"
-            >
-              <span className="text-[10px] uppercase tracking-[0.3em] font-bold opacity-70">
-                Inquiry
-              </span>
-              <div>
-                <ArrowUpRight className="w-12 h-12 md:w-16 md:h-16 group-hover:rotate-45 transition-transform duration-200" strokeWidth={2} />
-                <div className="mt-6 font-heavy text-3xl md:text-5xl uppercase leading-[0.9] tracking-tighter">
-                  Start<br />Project
-                </div>
-                <div className="mt-3 text-[10px] uppercase tracking-[0.25em] font-bold opacity-90">
-                  rebadomiarobert@gmail.com
-                </div>
-              </div>
-            </a>
           </div>
+
+          <a
+            href="mailto:rebadomiarobert@gmail.com"
+            className="hover-trigger relative col-span-12 md:col-span-4 flex flex-col justify-between gap-12 p-6 md:p-10 bg-accent text-white group min-h-[320px]"
+          >
+            <span className="text-[10px] uppercase tracking-[0.3em] font-bold opacity-70">
+              Inquiry
+            </span>
+            <div>
+              <ArrowUpRight className="w-12 h-12 md:w-16 md:h-16 group-hover:rotate-45 transition-transform duration-200" strokeWidth={2} />
+              <div className="mt-6 font-heavy text-3xl md:text-5xl uppercase leading-[0.9] tracking-tighter">
+                Start<br />Project
+              </div>
+              <div className="mt-3 text-[10px] uppercase tracking-[0.25em] font-bold opacity-90 break-all">
+                rebadomiarobert@gmail.com
+              </div>
+            </div>
+          </a>
         </div>
-      </div>
+      </section>
 
       {/* Footer — Swiss ledger */}
       <footer className="bg-bg text-fg border-t-2 border-border">
@@ -576,7 +580,7 @@ export const Sections: React.FC = () => {
             </p>
           </div>
 
-          <div className="col-span-6 md:col-span-3 px-6 md:px-10 py-10 md:py-16 border-r-2 border-border">
+          <div className="col-span-12 md:col-span-3 px-6 md:px-10 py-10 md:py-16 border-b-2 md:border-b-0 md:border-r-2 border-border">
             <div className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-6">
               Navigation
             </div>
@@ -597,7 +601,7 @@ export const Sections: React.FC = () => {
             </ul>
           </div>
 
-          <div className="col-span-6 md:col-span-4 px-6 md:px-10 py-10 md:py-16">
+          <div className="col-span-12 md:col-span-4 px-6 md:px-10 py-10 md:py-16">
             <div className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-6">
               Channels
             </div>

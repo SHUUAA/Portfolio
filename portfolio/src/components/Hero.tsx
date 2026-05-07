@@ -78,10 +78,10 @@ export const Hero: React.FC = () => {
       <div className="absolute inset-0 swiss-pattern-noise opacity-[0.04] pointer-events-none mix-blend-multiply" />
 
       {/* Top meta strip — flush to grid, aligned by columns */}
-      <div className="relative z-10 grid grid-cols-12 border-b-2 border-border pt-24 pb-4 px-6 md:px-10">
+      <div className="relative z-10 grid grid-cols-12 border-b-2 border-border pt-20 md:pt-24 pb-4 px-6 md:px-10">
         <div className="col-span-6 md:col-span-3 flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold">
           <span className="text-accent">00 / Index</span>
-          <span className="text-fg-subtle">Cebu, Philippines · 10.31°N 123.89°E</span>
+          <span className="text-fg-subtle truncate"><span className="md:hidden">Cebu, PH</span><span className="hidden md:inline">Cebu · 10.31°N 123.89°E</span></span>
         </div>
         <div className="hidden md:flex col-span-3 flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
           <span>Edition</span>
@@ -91,11 +91,11 @@ export const Hero: React.FC = () => {
           <span>Issued</span>
           <span className="text-fg">May 2026</span>
         </div>
-        <div className="col-span-6 md:col-span-3 flex md:justify-end items-start gap-2.5 text-[10px] uppercase tracking-[0.25em] font-bold">
-          <span className="relative inline-flex h-2 w-2 mt-1 bg-accent">
+        <div className="col-span-6 md:col-span-3 flex md:justify-end items-start gap-2 text-[10px] uppercase tracking-[0.25em] font-bold min-w-0">
+          <span className="relative inline-flex h-2 w-2 mt-1 bg-accent shrink-0">
             <span className="absolute inset-0 bg-accent" style={{ animation: 'blink 1.4s infinite' }} />
           </span>
-          <span className="text-fg">Available for work · 2026</span>
+          <span className="text-fg truncate"><span className="md:hidden">Available · 2026</span><span className="hidden md:inline">Available for work · 2026</span></span>
         </div>
       </div>
 
@@ -107,10 +107,10 @@ export const Hero: React.FC = () => {
             ref={headlineRef}
             className="font-heavy uppercase leading-[0.82] tracking-tighter text-fg flex flex-col gap-0"
           >
-            <span className="text-[18vw] md:text-[15vw] flex flex-wrap">{splitChars('JOSHUA')}</span>
-            <span className="text-[18vw] md:text-[15vw] flex flex-wrap">
+            <span className="text-[16vw] md:text-[15vw] flex flex-wrap">{splitChars('JOSHUA')}</span>
+            <span className="text-[13vw] md:text-[15vw] flex flex-wrap items-center">
               {splitChars('REBADOMIA')}
-              <span className="inline-block w-[0.6em] h-[0.6em] bg-accent ml-[0.15em] mt-[0.18em] shrink-0" aria-hidden="true" />
+              <span className="inline-block w-[0.55em] h-[0.55em] bg-accent ml-[0.15em] shrink-0" aria-hidden="true" />
             </span>
           </h1>
         </div>
@@ -192,9 +192,9 @@ export const Hero: React.FC = () => {
 
       {/* Bottom info ledger */}
       <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-4">
-        <div className="col-span-6 md:col-span-3 flex flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+        <div className="col-span-6 md:col-span-3 flex flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle min-w-0">
           <span>Currently</span>
-          <span className="text-fg">AI Executive · Lifewood</span>
+          <span className="text-fg truncate"><span className="md:hidden">AI Executive</span><span className="hidden md:inline">AI Executive · Lifewood</span></span>
         </div>
         <div className="hidden md:flex col-span-3 flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
           <span>Selected works</span>
@@ -204,12 +204,12 @@ export const Hero: React.FC = () => {
           <span>Stack</span>
           <span className="text-fg">React · TypeScript · n8n · Claude</span>
         </div>
-        <div className="col-span-6 md:col-span-3 flex flex-col items-end gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+        <div className="col-span-6 md:col-span-3 flex flex-col items-end gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle min-w-0">
           <span className="inline-flex items-center gap-1.5">
             <ArrowDown className="w-3 h-3 text-accent" />
             Scroll
           </span>
-          <span className="text-fg">Section 01 — Subject</span>
+          <span className="text-fg truncate"><span className="md:hidden">01 — Subject</span><span className="hidden md:inline">Section 01 — Subject</span></span>
         </div>
       </div>
     </section>

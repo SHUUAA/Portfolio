@@ -258,10 +258,10 @@ export const Projects: React.FC = () => {
           </div>
         </div>
         <div className="col-span-12 md:col-span-7 grid grid-cols-2 md:grid-cols-4">
-          <Stat label="Total" value={PROJECTS.length.toString().padStart(2, '0')} />
-          <Stat label="Years" value={`${years[years.length - 1]}—${years[0].slice(2)}`} />
-          <Stat label="Stacks" value={techCount.toString()} />
-          <Stat label="Status" value="Active" accent />
+          <Stat index={0} label="Total" value={PROJECTS.length.toString().padStart(2, '0')} />
+          <Stat index={1} label="Years" value={`${years[years.length - 1]}—${years[0].slice(2)}`} />
+          <Stat index={2} label="Stacks" value={techCount.toString()} />
+          <Stat index={3} label="Status" value="Active" accent />
         </div>
       </div>
 
@@ -353,7 +353,7 @@ export const Projects: React.FC = () => {
   );
 };
 
-const Stat: React.FC<{ label: string; value: string; accent?: boolean }> = ({ label, value, accent }) => {
+const Stat: React.FC<{ index: number; label: string; value: string; accent?: boolean }> = ({ index, label, value, accent }) => {
   const valueRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(() => {
@@ -385,14 +385,21 @@ const Stat: React.FC<{ label: string; value: string; accent?: boolean }> = ({ la
     );
   }, []);
 
+  const borderClass = [
+    'border-border',
+    index < 2 ? 'border-b-2 md:border-b-0' : '',
+    index % 2 === 0 ? 'border-r-2' : '',
+    index === 3 ? '' : 'md:border-r-2',
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className="flex flex-col justify-between gap-3 px-6 md:px-8 py-6 md:py-10 border-r-2 border-b-2 md:border-b-0 border-border last:border-r-0 min-h-[120px] md:min-h-[180px]">
+    <div className={`flex flex-col justify-between gap-3 px-4 sm:px-6 md:px-8 py-6 md:py-10 ${borderClass} min-h-[120px] md:min-h-[180px]`}>
       <span className="text-[10px] uppercase tracking-[0.3em] text-fg-subtle font-bold">
         / {label}
       </span>
       <span
         ref={valueRef}
-        className={`font-heavy text-3xl md:text-5xl tabular-nums tracking-tighter leading-none ${accent ? 'text-accent' : 'text-fg'}`}
+        className={`font-heavy text-2xl sm:text-3xl md:text-5xl tabular-nums tracking-tighter leading-none break-words ${accent ? 'text-accent' : 'text-fg'}`}
       >
         {value}
       </span>

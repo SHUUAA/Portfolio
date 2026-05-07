@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,6 +14,26 @@ import { Preloader } from './components/Preloader';
 import { Projects } from './pages/Projects';
 import { ScrollProgress } from './components/ScrollProgress';
 import { useTheme } from './hooks/useTheme';
+
+// Smoothly scroll to the URL hash via Lenis after route changes.
+// The setTimeout gives the route's content time to mount before measuring.
+const ScrollToHash: React.FC = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) return;
+    const target = location.hash;
+    const id = window.setTimeout(() => {
+      const lenis = (window as any).lenis;
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(target, { offset: -56 });
+      } else {
+        document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 120);
+    return () => window.clearTimeout(id);
+  }, [location.pathname, location.hash]);
+  return null;
+};
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -58,6 +78,7 @@ export default function App() {
       >
         <ScrollProgress />
         <Navbar />
+        <ScrollToHash />
 
         <Routes>
           <Route path="/" element={

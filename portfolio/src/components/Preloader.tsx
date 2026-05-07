@@ -90,11 +90,12 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
       {/* Bottom ledger */}
       <div className="grid grid-cols-12 border-t-2 border-border">
-        <div className="col-span-6 md:col-span-6 px-6 md:px-10 py-5 border-r-2 border-border text-[10px] uppercase tracking-[0.3em] font-bold text-fg">
-          AI Executive · Full-Stack Developer
+        <div className="col-span-12 md:col-span-8 px-6 md:px-10 py-5 border-b-2 md:border-b-0 md:border-r-2 border-border text-[10px] uppercase tracking-[0.3em] font-bold text-fg truncate">
+          <span className="md:hidden">AI Exec · Full-Stack Dev</span>
+          <span className="hidden md:inline">AI Executive · Full-Stack Developer</span>
         </div>
-        <div className="col-span-6 md:col-span-6 flex items-center justify-end gap-3 px-6 md:px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
-          <span className="relative inline-flex h-2 w-2 bg-accent" style={{ animation: 'blink 1.4s infinite' }} />
+        <div className="col-span-12 md:col-span-4 flex items-center justify-between md:justify-end gap-3 px-6 md:px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
+          <span className="relative inline-flex h-2 w-2 bg-accent shrink-0" style={{ animation: 'blink 1.4s infinite' }} />
           <span>Loading System</span>
         </div>
       </div>

@@ -59,7 +59,7 @@ export const CoreCapabilities: React.FC = () => {
             <span className="text-[11px] uppercase tracking-[0.3em] font-bold text-accent">
               Section 02 — System
             </span>
-            <h2 className="font-heavy text-5xl md:text-7xl uppercase mt-4 leading-[0.85] tracking-tighter">
+            <h2 className="font-heavy text-4xl sm:text-5xl md:text-7xl uppercase mt-4 leading-[0.85] tracking-tighter break-words">
               Core<br />Capabilities
             </h2>
           </div>

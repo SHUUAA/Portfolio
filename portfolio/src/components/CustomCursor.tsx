@@ -52,16 +52,16 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <>
-      {/* Sharp center dot */}
+      {/* Sharp center dot — desktop only */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white pointer-events-none z-[9999]"
+        className="hidden md:block fixed top-0 left-0 w-1.5 h-1.5 bg-white pointer-events-none z-[9999]"
         style={{ mixBlendMode: 'difference' }}
       />
       {/* Square ring — expands and turns red on interactive elements */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[9998] transition-all duration-200 ease-out border-2 ${
+        className={`hidden md:block fixed top-0 left-0 pointer-events-none z-[9998] transition-all duration-200 ease-out border-2 ${
           isHovered
             ? 'w-12 h-12 border-[#FF3000] bg-[#FF3000]/10'
             : 'w-6 h-6 border-white bg-transparent'
