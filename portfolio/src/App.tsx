@@ -13,6 +13,7 @@ import { CustomCursor } from './components/CustomCursor';
 import { Preloader } from './components/Preloader';
 import { Projects } from './pages/Projects';
 import { ScrollProgress } from './components/ScrollProgress';
+import { Chatbot } from './components/Chatbot';
 import { useTheme } from './hooks/useTheme';
 
 // Smoothly scroll to the URL hash via Lenis after route changes.
@@ -89,6 +90,8 @@ export default function App() {
           } />
           <Route path="/projects" element={<Projects />} />
         </Routes>
+
+        <Chatbot />
       </div>
     </div>
   );
