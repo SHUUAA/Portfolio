@@ -107,8 +107,8 @@ export const Hero: React.FC = () => {
             ref={headlineRef}
             className="font-heavy uppercase leading-[0.82] tracking-tighter text-fg flex flex-col gap-0"
           >
-            <span className="text-[16vw] md:text-[15vw] flex flex-wrap">{splitChars('JOSHUA')}</span>
-            <span className="text-[13vw] md:text-[15vw] flex flex-wrap items-center">
+            <span className="text-[16vw] md:text-[15vw] flex flex-nowrap whitespace-nowrap">{splitChars('JOSHUA')}</span>
+            <span className="text-[13vw] md:text-[10vw] flex flex-nowrap whitespace-nowrap items-center">
               {splitChars('REBADOMIA')}
               <span className="inline-block w-[0.55em] h-[0.55em] bg-accent ml-[0.15em] shrink-0" aria-hidden="true" />
             </span>

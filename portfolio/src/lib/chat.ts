@@ -1,9 +1,28 @@
 export type ChatRole = 'user' | 'assistant';
 
+export type NavTarget =
+  | 'about'
+  | 'capabilities'
+  | 'projects'
+  | 'works'
+  | 'contact'
+  | 'resume';
+
+export const NAV_TARGETS: NavTarget[] = [
+  'about',
+  'capabilities',
+  'projects',
+  'works',
+  'contact',
+  'resume',
+];
+
 export interface ChatMessage {
   id: string;
   role: ChatRole;
   content: string;
+  // UI-only — derived from the bot's [GO:section] directive. Not sent back to the API.
+  nav?: NavTarget;
 }
 
 export async function sendChatMessage(

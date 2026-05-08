@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageSquare, Send, X } from 'lucide-react';
-import { sendChatMessage, type ChatMessage } from '../lib/chat';
+import { sendChatMessage, type ChatMessage, type NavTarget } from '../lib/chat';
 
 const greeting: ChatMessage = {
   id: 'greeting',
@@ -15,7 +16,28 @@ const SUGGESTIONS = [
   'How can I contact him?',
 ];
 
+const NAV_LABELS: Record<NavTarget, string> = {
+  about: 'About',
+  capabilities: 'Capabilities',
+  projects: 'Featured Projects',
+  works: 'All Works',
+  contact: 'Contact',
+  resume: 'Resume',
+};
+
+const NAV_REGEX = /\[GO:(about|capabilities|projects|works|contact|resume)\]/i;
+
+function parseNav(raw: string): { content: string; nav?: NavTarget } {
+  const match = raw.match(NAV_REGEX);
+  const content = raw.replace(NAV_REGEX, '').trim();
+  if (!match) return { content };
+  return { content, nav: match[1].toLowerCase() as NavTarget };
+}
+
 export const Chatbot: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([greeting]);
   const [input, setInput] = useState('');
@@ -47,6 +69,31 @@ export const Chatbot: React.FC = () => {
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  const goTo = (target: NavTarget) => {
+    setOpen(false);
+
+    if (target === 'works') {
+      navigate('/projects');
+      return;
+    }
+    if (target === 'resume') {
+      window.open('/Joshua_Rebadomia_Resume.pdf', '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    const hash = `#${target}`;
+    if (location.pathname === '/') {
+      const lenis = (window as any).lenis;
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(hash, { offset: -56 });
+      } else {
+        document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(`/${hash}`);
+    }
+  };
+
   const send = async (override?: string) => {
     const text = (override ?? input).trim();
     if (!text || pending) return;
@@ -68,9 +115,10 @@ export const Chatbot: React.FC = () => {
 
     try {
       const reply = await sendChatMessage(next, ctrl.signal);
+      const { content, nav } = parseNav(reply);
       setMessages((m) => [
         ...m,
-        { id: `${Date.now()}-a`, role: 'assistant', content: reply || '...' },
+        { id: `${Date.now()}-a`, role: 'assistant', content: content || '...', nav },
       ]);
     } catch (err) {
       if ((err as Error).name === 'AbortError') return;
@@ -126,7 +174,7 @@ export const Chatbot: React.FC = () => {
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3 no-scrollbar">
           {messages.map((m, i) => (
-            <Bubble key={m.id} message={m} index={i} />
+            <Bubble key={m.id} message={m} index={i} onNavigate={goTo} />
           ))}
 
           {messages.length === 1 && !pending && (
@@ -194,7 +242,11 @@ export const Chatbot: React.FC = () => {
   );
 };
 
-const Bubble: React.FC<{ message: ChatMessage; index: number }> = ({ message, index }) => {
+const Bubble: React.FC<{
+  message: ChatMessage;
+  index: number;
+  onNavigate: (t: NavTarget) => void;
+}> = ({ message, index, onNavigate }) => {
   const isUser = message.role === 'user';
   return (
     <div className={`flex flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}>
@@ -210,6 +262,16 @@ const Bubble: React.FC<{ message: ChatMessage; index: number }> = ({ message, in
       >
         {message.content}
       </div>
+      {!isUser && message.nav && (
+        <button
+          type="button"
+          onClick={() => onNavigate(message.nav!)}
+          className="hover-trigger group inline-flex items-center gap-2 mt-1 px-3 py-1.5 border-2 border-fg bg-fg text-bg text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-accent hover:border-accent hover:text-white transition-colors duration-200"
+        >
+          <span>Take me to {NAV_LABELS[message.nav]}</span>
+          <span>→</span>
+        </button>
+      )}
     </div>
   );
 };
