@@ -1,7 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MessageSquare, Send, X } from 'lucide-react';
+import { Loader2, MessageSquare, Mic, Send, Square, X } from 'lucide-react';
 import { sendChatMessage, type ChatMessage, type NavTarget } from '../lib/chat';
+
+const canRecord =
+  typeof window !== 'undefined' &&
+  typeof navigator !== 'undefined' &&
+  !!navigator.mediaDevices?.getUserMedia &&
+  typeof window.MediaRecorder !== 'undefined';
+
+async function transcribeBlob(blob: Blob): Promise<string> {
+  const res = await fetch('/api/transcribe', {
+    method: 'POST',
+    headers: { 'Content-Type': blob.type || 'audio/webm' },
+    body: blob,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Transcribe failed (${res.status})`);
+  return (data.text ?? '').trim();
+}
+
+function formatTime(s: number): string {
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${r.toString().padStart(2, '0')}`;
+}
 
 const greeting: ChatMessage = {
   id: 'greeting',
@@ -44,9 +67,17 @@ export const Chatbot: React.FC = () => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [recording, setRecording] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [recordSeconds, setRecordSeconds] = useState(0);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -67,7 +98,89 @@ export const Chatbot: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  useEffect(() => () => abortRef.current?.abort(), []);
+  useEffect(() => () => {
+    abortRef.current?.abort();
+    if (timerRef.current) window.clearInterval(timerRef.current);
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    if (recorderRef.current && recorderRef.current.state !== 'inactive') {
+      try { recorderRef.current.stop(); } catch { /* noop */ }
+    }
+  }, []);
+
+  const cleanupRecorder = () => {
+    if (timerRef.current) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    recorderRef.current = null;
+    chunksRef.current = [];
+  };
+
+  const startRecording = async () => {
+    if (recording || transcribing || pending) return;
+    setError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      chunksRef.current = [];
+
+      const recorder = new MediaRecorder(stream);
+      recorderRef.current = recorder;
+
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      recorder.onstop = async () => {
+        const chunks = chunksRef.current;
+        const type = recorder.mimeType || 'audio/webm';
+        cleanupRecorder();
+        setRecording(false);
+        setRecordSeconds(0);
+        if (chunks.length === 0) return;
+        const blob = new Blob(chunks, { type });
+        setTranscribing(true);
+        try {
+          const text = await transcribeBlob(blob);
+          if (text) {
+            setInput((prev) => (prev ? `${prev} ${text}` : text));
+            window.setTimeout(() => inputRef.current?.focus(), 50);
+          }
+        } catch (err) {
+          setError((err as Error).message || 'Transcription failed.');
+        } finally {
+          setTranscribing(false);
+        }
+      };
+
+      recorder.start();
+      setRecording(true);
+      setRecordSeconds(0);
+      timerRef.current = window.setInterval(() => {
+        setRecordSeconds((s) => s + 1);
+      }, 1000);
+    } catch (err) {
+      cleanupRecorder();
+      setRecording(false);
+      const msg =
+        (err as Error).name === 'NotAllowedError'
+          ? 'Microphone access was blocked. Allow it in your browser settings to use voice input.'
+          : (err as Error).message || 'Could not access microphone.';
+      setError(msg);
+    }
+  };
+
+  const stopRecording = () => {
+    const r = recorderRef.current;
+    if (r && r.state !== 'inactive') {
+      try { r.stop(); } catch { /* noop */ }
+    } else {
+      cleanupRecorder();
+      setRecording(false);
+      setRecordSeconds(0);
+    }
+  };
 
   const goTo = (target: NavTarget) => {
     setOpen(false);
@@ -214,22 +327,60 @@ export const Chatbot: React.FC = () => {
         </div>
 
         <div className="border-t-2 border-border shrink-0">
-          <div className="flex items-end gap-0">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={onKeyDown}
-              placeholder="Type a message…"
-              rows={1}
-              disabled={pending}
-              className="flex-1 resize-none bg-bg text-fg placeholder:text-fg-subtle px-4 py-3 text-sm leading-snug outline-none disabled:opacity-50"
-              style={{ maxHeight: 120 }}
-            />
+          <div className="flex items-stretch gap-0">
+            {canRecord && (
+              <button
+                type="button"
+                onClick={recording ? stopRecording : startRecording}
+                disabled={pending || transcribing}
+                aria-label={recording ? 'Stop recording' : 'Record voice message'}
+                aria-pressed={recording}
+                className={`hover-trigger flex items-center justify-center w-12 border-r-2 border-border transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 ${
+                  recording
+                    ? 'bg-accent text-white'
+                    : transcribing
+                      ? 'bg-bg text-fg-subtle'
+                      : 'bg-bg text-fg hover:bg-fg hover:text-bg'
+                }`}
+              >
+                {transcribing ? (
+                  <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2.5} />
+                ) : recording ? (
+                  <Square className="w-4 h-4" strokeWidth={2.5} fill="currentColor" />
+                ) : (
+                  <Mic className="w-4 h-4" strokeWidth={2.5} />
+                )}
+              </button>
+            )}
+
+            {recording ? (
+              <div className="flex-1 flex items-center gap-3 px-4 py-3 text-sm">
+                <span className="relative inline-flex h-2 w-2 bg-accent shrink-0" style={{ animation: 'blink 1s infinite' }} />
+                <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+                  Recording
+                </span>
+                <span className="font-mono-tight text-xs font-bold text-fg tabular-nums">
+                  {formatTime(recordSeconds)}
+                </span>
+              </div>
+            ) : (
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={onKeyDown}
+                placeholder={transcribing ? 'Transcribing…' : 'Type a message…'}
+                rows={1}
+                disabled={pending || transcribing}
+                className="flex-1 resize-none bg-bg text-fg placeholder:text-fg-subtle px-4 py-3 text-sm leading-snug outline-none disabled:opacity-50"
+                style={{ maxHeight: 120 }}
+              />
+            )}
+
             <button
               type="button"
               onClick={() => void send()}
-              disabled={!input.trim() || pending}
+              disabled={!input.trim() || pending || recording || transcribing}
               aria-label="Send message"
               className="hover-trigger flex items-center justify-center w-12 h-12 border-l-2 border-border bg-fg text-bg hover:bg-accent hover:text-white transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-fg disabled:hover:text-bg shrink-0"
             >
