@@ -27,13 +27,20 @@ export const Navbar: React.FC = () => {
     return () => window.clearInterval(id);
   }, []);
 
-  // Lock page scroll while mobile menu is open
+  // Lock page scroll while mobile menu is open + flag <html> so other floating
+  // UI (e.g. the chatbot) can hide itself while the drawer is up.
   useEffect(() => {
     const root = document.documentElement;
-    if (open) root.style.overflow = 'hidden';
-    else root.style.overflow = '';
+    if (open) {
+      root.style.overflow = 'hidden';
+      root.dataset.navMenu = 'open';
+    } else {
+      root.style.overflow = '';
+      delete root.dataset.navMenu;
+    }
     return () => {
       root.style.overflow = '';
+      delete root.dataset.navMenu;
     };
   }, [open]);
 

@@ -70,6 +70,7 @@ export const Chatbot: React.FC = () => {
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
   const [recordSeconds, setRecordSeconds] = useState(0);
+  const [navMenuOpen, setNavMenuOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -96,6 +97,17 @@ export const Chatbot: React.FC = () => {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Hide the chatbot while the mobile nav drawer is open — the drawer is
+  // fullscreen and the floating chat button otherwise covers the theme toggle.
+  useEffect(() => {
+    const html = document.documentElement;
+    const update = () => setNavMenuOpen(html.dataset.navMenu === 'open');
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(html, { attributes: true, attributeFilter: ['data-nav-menu'] });
+    return () => obs.disconnect();
   }, []);
 
   useEffect(() => () => {
@@ -255,7 +267,11 @@ export const Chatbot: React.FC = () => {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? 'Close chat' : 'Open chat'}
         aria-expanded={open}
-        className={`hover-trigger fixed z-[120] bottom-4 right-4 sm:bottom-6 sm:right-6 inline-flex items-center gap-2 h-12 px-4 border-2 border-border font-bold uppercase tracking-[0.2em] text-xs transition-colors duration-200 ${
+        aria-hidden={navMenuOpen}
+        tabIndex={navMenuOpen ? -1 : 0}
+        className={`hover-trigger fixed z-[120] bottom-4 right-4 sm:bottom-6 sm:right-6 inline-flex items-center gap-2 h-12 px-4 border-2 border-border font-bold uppercase tracking-[0.2em] text-xs transition-all duration-300 ease-out ${
+          navMenuOpen ? 'opacity-0 scale-90 translate-y-3 pointer-events-none' : 'opacity-100 scale-100 translate-y-0'
+        } ${
           open ? 'bg-accent text-white' : 'bg-fg text-bg hover:bg-accent hover:text-white'
         }`}
       >
@@ -266,10 +282,11 @@ export const Chatbot: React.FC = () => {
       <div
         role="dialog"
         aria-label="Chat assistant"
-        aria-hidden={!open}
+        aria-hidden={!open || navMenuOpen}
+        inert={navMenuOpen}
         data-lenis-prevent
-        className={`fixed z-[110] bottom-20 right-4 sm:bottom-24 sm:right-6 w-[calc(100vw-2rem)] sm:w-[380px] max-w-[420px] h-[70vh] sm:h-[520px] max-h-[calc(100vh-7rem)] bg-bg border-2 border-border flex flex-col origin-bottom-right transition-all duration-200 ease-out ${
-          open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
+        className={`fixed z-[110] bottom-20 right-4 sm:bottom-24 sm:right-6 w-[calc(100vw-2rem)] sm:w-[380px] max-w-[420px] h-[70vh] sm:h-[520px] max-h-[calc(100vh-7rem)] bg-bg border-2 border-border flex flex-col origin-bottom-right transition-all duration-300 ease-out ${
+          open && !navMenuOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
         <div className="flex items-center justify-between gap-3 px-4 h-12 border-b-2 border-border shrink-0">
