@@ -61,6 +61,10 @@ Examples:
 - Languages: English (professional), Filipino (native)
 - Education: B.S. Information Technology, Cebu Institute of Technology — University
   (CIT-U), Jan 2021 – May 2025
+- Certifications:
+  • "Ship Mobile AI · Skip the Cloud" — AI Cebu Community × FrontierAI, May 10, 2026 (online).
+  • "Agents & AI at the Frontier!" — AI Cebu Community × FrontierAI, Mar 28, 2026,
+    Zero-Ten Park, Mandaue, Cebu.
 - Currently: AI Executive & Project Coordinator at Lifewood Data Technology Ltd.
   (Apr 2025 – present, on-site, Cebu). Coordinates AI-driven projects, builds agentic
   automation pipelines with n8n, OpenClaw, and Claude AI; leads training programs;

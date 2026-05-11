@@ -2,8 +2,10 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, GraduationCap, Calendar, MapPin } from 'lucide-react';
+import { ArrowUpRight, GraduationCap, Calendar, MapPin, Mail, Phone } from 'lucide-react';
+import { SiGithub } from 'react-icons/si';
 import { CoreCapabilities } from './CoreCapabilities';
+import { TechIcon } from './TechIcon';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,8 +15,8 @@ export const PROJECTS = [
     category: 'RFID & IOT SYSTEM',
     year: '2025',
     description:
-      'Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, and WiFi sync. Includes a React 19 admin dashboard with DTR, analytics, and accounting modules, plus a React Native (Expo) mobile app for leave requests and push notifications.',
-    tech: ['React 19', 'TypeScript', 'Supabase', 'React Native', 'ESP32', 'Three.js'],
+      'Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, and WiFi sync. Includes a React admin dashboard with DTR, analytics, and accounting modules, plus a React Native (Expo) mobile app for leave requests and push notifications.',
+    tech: ['React', 'TypeScript', 'Supabase', 'React Native', 'ESP32', 'Three.js'],
     image: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800',
     github: 'https://github.com/SHUUAA',
     live: '#',
@@ -25,7 +27,7 @@ export const PROJECTS = [
     year: '2025',
     description:
       'Timed exam and annotation platform for historical record transcription across five exam types. Users annotate scanned documents into structured tables with automatic scoring, retake support, and an admin panel for managing images, answer keys, and progress.',
-    tech: ['React 19', 'TypeScript', 'Supabase', 'Chart.js', 'TailwindCSS', 'Vercel'],
+    tech: ['React', 'TypeScript', 'Supabase', 'Chart.js', 'TailwindCSS', 'Vercel'],
     image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800',
     github: 'https://github.com/SHUUAA',
     live: '#',
@@ -36,7 +38,7 @@ export const PROJECTS = [
     year: '2025',
     description:
       "AI pre-screening platform where candidates submit applications with CV upload and engage in a real-time 10-minute voice interview with ElevenLabs AI agent 'Cebee.' Transcripts are auto-processed and logged via Google Sheets integration.",
-    tech: ['Next.js 16', 'TypeScript', 'React 19', 'ElevenLabs AI', 'Google Sheets API'],
+    tech: ['Next.js 16', 'TypeScript', 'React', 'ElevenLabs AI', 'Google Sheets API'],
     image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800',
     github: 'https://github.com/PierceBorinaga/AI_Interviewer_V2_PH',
     live: '#',
@@ -47,7 +49,7 @@ const SKILLS = [
   'React', 'Next.js', 'TypeScript', 'JavaScript', 'Python', 'Java',
   'Node.js', 'Spring Boot', 'React Native', 'Vite',
   'Supabase', 'Firebase', 'MongoDB', 'MySQL',
-  'n8n', 'Claude AI', 'LLM Integration', 'Prompt Engineering',
+  'n8n', 'OpenClaw', 'Claude AI', 'LLM Integration', 'Prompt Engineering',
   'TailwindCSS', 'Three.js', 'GSAP', 'Git', 'Figma', 'Power BI', 'Postman',
 ];
 
@@ -69,6 +71,23 @@ export const EXPERIENCE = [
     description:
       'Built responsive apps using React Vite, Ant Design, Firebase, and EmailJS, including a Python/Streamlit file converter. Maintained websites, ensured dataset accuracy, and supported data management and IT operations.',
     location: 'Cebu, Philippines · On-site',
+  },
+];
+
+export const CERTIFICATES = [
+  {
+    title: 'Ship Mobile AI · Skip the Cloud',
+    issuer: 'AI Cebu Community × FrontierAI',
+    date: 'May 10, 2026',
+    location: 'Online',
+    image: '/Certificate%20-%20Joshua%20Robert%20Rebadomia_page-0001.jpg',
+  },
+  {
+    title: 'Agents & AI at the Frontier!',
+    issuer: 'AI Cebu Community × FrontierAI',
+    date: 'Mar 28, 2026',
+    location: 'Zero-Ten Park, Mandaue',
+    image: '/Certificate%20-%20Joshua%20Robert%20Rebadomia%20(1)_page-0001.jpg',
   },
 ];
 
@@ -218,8 +237,8 @@ export const Sections: React.FC = () => {
             <p className="text-base md:text-lg font-medium text-fg-muted leading-snug max-w-2xl fade-up">
               I'm an AI Executive & Full-Stack Developer based in Cebu, Philippines. I bridge the gap
               between cutting-edge AI technology and real-world business needs — from building agentic
-              automation pipelines with n8n and Claude AI, to shipping production-grade web & mobile
-              applications.
+              automation pipelines with n8n, OpenClaw, and Claude AI, to shipping production-grade
+              web & mobile applications.
             </p>
             <p className="text-base md:text-lg font-medium text-fg-muted leading-snug max-w-2xl fade-up">
               With expertise spanning LLM integration, prompt engineering, hardware-software systems
@@ -304,6 +323,74 @@ export const Sections: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Certifications — image cards */}
+        <div id="certifications" className="grid grid-cols-12 border-b-2 border-border">
+          <div className="col-span-12 md:col-span-3 px-6 md:px-10 py-6 border-b-2 md:border-b-0 md:border-r-2 border-border flex items-start md:items-center">
+            <span className="text-[11px] uppercase tracking-[0.3em] font-bold text-accent">
+              Credentials / Certifications
+            </span>
+          </div>
+          <div className="col-span-12 md:col-span-9 grid grid-cols-1 md:grid-cols-2">
+            {CERTIFICATES.map((cert, i) => (
+              <a
+                key={cert.title}
+                href={cert.image}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`hover-trigger group relative flex flex-col bg-bg hover:bg-accent transition-colors duration-200 fade-up ${
+                  i === 0 ? 'border-b-2 md:border-b-0 md:border-r-2 border-border' : ''
+                }`}
+              >
+                {/* Image */}
+                <div className="relative aspect-[16/11] overflow-hidden bg-bg-elevated border-b-2 border-border">
+                  <img
+                    src={cert.image}
+                    alt={cert.title}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute top-0 left-0 px-3 py-1.5 bg-bg border-b-2 border-r-2 border-border">
+                    <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg">
+                      Cert. 0{i + 1}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-0 right-0 px-3 py-1.5 bg-accent">
+                    <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-white">
+                      2026
+                    </span>
+                  </div>
+                </div>
+
+                {/* Meta */}
+                <div className="flex flex-col gap-2 px-6 md:px-8 py-6 flex-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-heavy text-base md:text-lg uppercase leading-tight tracking-tight text-fg group-hover:text-white transition-colors duration-200">
+                      {cert.title}
+                    </h3>
+                    <ArrowUpRight
+                      className="w-5 h-5 text-fg group-hover:text-white shrink-0 transition-all duration-200 group-hover:rotate-45"
+                      strokeWidth={2.5}
+                    />
+                  </div>
+                  <p className="text-xs font-bold text-fg-muted group-hover:text-white transition-colors duration-200">
+                    {cert.issuer}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle group-hover:text-white transition-colors duration-200">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3" strokeWidth={2.5} />
+                      {cert.date}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <MapPin className="w-3 h-3" strokeWidth={2.5} />
+                      {cert.location}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* 02 — Method (Core Capabilities) */}
@@ -342,7 +429,7 @@ export const Sections: React.FC = () => {
                 className={`project-card grid grid-cols-12 border-b-2 border-border ${isEven ? '' : 'md:[&>*:first-child]:order-2'}`}
               >
                 {/* Image block */}
-                <div className="col-span-12 md:col-span-7 relative aspect-[16/10] md:aspect-auto md:min-h-[520px] overflow-hidden bg-bg-elevated border-b-2 md:border-b-0 md:border-r-2 border-border">
+                <div className={`col-span-12 md:col-span-7 relative aspect-[16/10] md:aspect-auto md:min-h-[520px] overflow-hidden bg-bg-elevated border-b-2 md:border-b-0 ${isEven ? 'md:border-r-2' : 'md:border-l-2'} border-border`}>
                   <img
                     src={project.image}
                     alt={project.title}
@@ -383,8 +470,9 @@ export const Sections: React.FC = () => {
                       {project.tech.map((t) => (
                         <span
                           key={t}
-                          className="text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 border-2 border-border text-fg"
+                          className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 border-2 border-border text-fg"
                         >
+                          <TechIcon name={t} className="w-3 h-3" />
                           {t}
                         </span>
                       ))}
@@ -607,18 +695,21 @@ export const Sections: React.FC = () => {
             </div>
             <ul className="flex flex-col gap-3">
               <li>
-                <a href="https://github.com/SHUUAA" target="_blank" rel="noopener noreferrer" className="hover-trigger text-sm font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors duration-200">
-                  — GitHub / SHUUAA
+                <a href="https://github.com/SHUUAA" target="_blank" rel="noopener noreferrer" className="hover-trigger inline-flex items-center gap-2.5 text-sm font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors duration-200">
+                  <SiGithub className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  GitHub / SHUUAA
                 </a>
               </li>
               <li>
-                <a href="mailto:rebadomiarobert@gmail.com" className="hover-trigger text-sm font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors duration-200">
-                  — Email
+                <a href="mailto:rebadomiarobert@gmail.com" className="hover-trigger inline-flex items-center gap-2.5 text-sm font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors duration-200">
+                  <Mail className="w-4 h-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                  Email
                 </a>
               </li>
               <li>
-                <a href="tel:+639972878044" className="hover-trigger text-sm font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors duration-200">
-                  — +63 997 287 8044
+                <a href="tel:+639972878044" className="hover-trigger inline-flex items-center gap-2.5 text-sm font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors duration-200">
+                  <Phone className="w-4 h-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                  +63 997 287 8044
                 </a>
               </li>
             </ul>

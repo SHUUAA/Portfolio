@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ArrowUpRight } from 'lucide-react';
+import { TechIcon } from '../components/TechIcon';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,8 +19,8 @@ interface Project {
 const PROJECTS: Project[] = [
   {
     title: "LifeScan",
-    description: "Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, WiFi sync, a React 19 admin dashboard (DTR, analytics, accounting), and a React Native (Expo) mobile app.",
-    tech: ["React 19", "TypeScript", "Supabase", "React Native", "ESP32", "Three.js"],
+    description: "Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, WiFi sync, a React admin dashboard (DTR, analytics, accounting), and a React Native (Expo) mobile app.",
+    tech: ["React", "TypeScript", "Supabase", "React Native", "ESP32", "Three.js"],
     date: "2026-04-15",
     repo: "SHUUAA/LifeScan",
     image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800"
@@ -27,7 +28,7 @@ const PROJECTS: Project[] = [
   {
     title: "LiftApp",
     description: "Timed exam and annotation platform for historical record transcription across five exam types with automatic scoring, retake support, and an admin panel for managing content.",
-    tech: ["React 19", "TypeScript", "Supabase", "Chart.js", "TailwindCSS", "Vercel"],
+    tech: ["React", "TypeScript", "Supabase", "Chart.js", "TailwindCSS", "Vercel"],
     date: "2026-04-12",
     repo: "SHUUAA/LiftApp",
     image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800"
@@ -35,7 +36,7 @@ const PROJECTS: Project[] = [
   {
     title: "LifeChat (AI Interviewer V2)",
     description: "AI pre-screening platform with CV upload and real-time 10-minute voice interview using ElevenLabs AI agent 'Cebee.' Transcripts auto-processed via Google Sheets.",
-    tech: ["Next.js 16", "TypeScript", "React 19", "ElevenLabs AI", "Google Sheets API"],
+    tech: ["Next.js 16", "TypeScript", "React", "ElevenLabs AI", "Google Sheets API"],
     date: "2026-02-20",
     repo: "PierceBorinaga/AI_Interviewer_V2_PH",
     image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800"
@@ -138,7 +139,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: "Portfolio",
-    description: "This portfolio — built with React 19, TypeScript, GSAP animations, Three.js, Lenis smooth scroll, and TailwindCSS.",
+    description: "This portfolio — built with React, TypeScript, GSAP animations, Three.js, Lenis smooth scroll, and TailwindCSS.",
     tech: ["React", "TypeScript", "GSAP", "Three.js", "TailwindCSS"],
     date: "2024-12-15",
     repo: "SHUUAA/Portfolio",
@@ -313,8 +314,9 @@ export const Projects: React.FC = () => {
               {project.tech.slice(0, 3).map((t) => (
                 <span
                   key={t}
-                  className="text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 border-2 border-border text-fg group-hover:border-white group-hover:text-white transition-colors duration-200"
+                  className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 border-2 border-border text-fg group-hover:border-white group-hover:text-white transition-colors duration-200"
                 >
+                  <TechIcon name={t} className="w-2.5 h-2.5" />
                   {t}
                 </span>
               ))}

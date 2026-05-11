@@ -202,7 +202,7 @@ export const Hero: React.FC = () => {
         </div>
         <div className="hidden md:flex col-span-3 flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
           <span>Stack</span>
-          <span className="text-fg">React · TypeScript · n8n · Claude</span>
+          <span className="text-fg">React · TypeScript · n8n · OpenClaw · Claude</span>
         </div>
         <div className="col-span-6 md:col-span-3 flex flex-col items-end gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle min-w-0">
           <span className="inline-flex items-center gap-1.5">

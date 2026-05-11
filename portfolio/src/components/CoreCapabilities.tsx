@@ -2,10 +2,11 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ArrowUpRight } from 'lucide-react';
+import { TechIcon } from './TechIcon';
 
 const CAPABILITIES = [
-  { title: 'Agentics & AI Integration', desc: 'Building agentic automation pipelines with n8n, Claude AI, and OpenClaw — from prompt engineering and LLM integration to fully autonomous task workflows.', tags: ['n8n', 'Claude AI', 'LLM'] },
-  { title: 'Full Stack Development', desc: 'End-to-end architecture with React 19, Next.js, TypeScript, Supabase, and Spring Boot — designing scalable systems from database to deployment.', tags: ['React 19', 'Next.js', 'Supabase'] },
+  { title: 'Agentics & AI Integration', desc: 'Building agentic automation pipelines with n8n, OpenClaw, and Claude AI — from prompt engineering and LLM integration to fully autonomous task workflows.', tags: ['n8n', 'OpenClaw', 'Claude AI', 'LLM'] },
+  { title: 'Full Stack Development', desc: 'End-to-end architecture with React, Next.js, TypeScript, Supabase, and Spring Boot — designing scalable systems from database to deployment.', tags: ['React', 'Next.js', 'Supabase'] },
   { title: 'Web & Mobile Development', desc: 'Crafting performant web experiences with Vite and Tailwind, and cross-platform mobile apps with React Native (Expo) and push notifications.', tags: ['Vite', 'React Native', 'Expo'] },
   { title: 'Hardware–Software Integration', desc: 'Bridging physical and digital with ESP32/MFRC522 RFID systems, IoT sensor networks, and real-time data sync to cloud dashboards.', tags: ['ESP32', 'RFID', 'IoT'] },
 ];
@@ -98,8 +99,9 @@ export const CoreCapabilities: React.FC = () => {
                 {cap.tags.map((t) => (
                   <span
                     key={t}
-                    className="text-[10px] font-bold uppercase tracking-[0.2em] px-2 py-1 border-2 border-border text-fg group-hover:border-white group-hover:text-white transition-colors duration-200"
+                    className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] px-2 py-1 border-2 border-border text-fg group-hover:border-white group-hover:text-white transition-colors duration-200"
                   >
+                    <TechIcon name={t} className="w-3 h-3" />
                     {t}
                   </span>
                 ))}
