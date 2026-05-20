@@ -163,6 +163,29 @@
 
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Character Wave Animations */
+  .char-container {
+    display: inline-flex;
+    overflow: hidden;
+  }
+  .entrance-complete .char-container {
+    overflow: visible;
+  }
+  .char {
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+    transform-origin: bottom center;
+  }
+  .entrance-complete .char-container:hover .char {
+    transform: translateY(-16%) scale(1.1);
+    color: var(--accent);
+  }
+
+  /* Orange square interactive hover */
+  .bg-accent {
+    transition: background-color 0.3s ease;
+  }
 }
 
 ::-webkit-scrollbar { display: none; }

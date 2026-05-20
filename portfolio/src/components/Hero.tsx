@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ArrowDown, ArrowRight, Download } from 'lucide-react';
+import Lanyard from './Lanyard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,7 @@ export const Hero: React.FC = () => {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const compositionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const orangeSquareRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(() => {
     const tl = gsap.timeline({ delay: 0.4 });
@@ -24,6 +26,9 @@ export const Hero: React.FC = () => {
         stagger: 0.04,
         duration: 0.9,
         ease: 'power4.out',
+        onComplete: () => {
+          headlineRef.current?.classList.add('entrance-complete');
+        },
       });
     }
 
@@ -43,7 +48,6 @@ export const Hero: React.FC = () => {
     if (contentRef.current) {
       gsap.to(contentRef.current, {
         yPercent: 10,
-        opacity: 0.5,
         ease: 'none',
         scrollTrigger: {
           trigger: containerRef.current,
@@ -53,6 +57,63 @@ export const Hero: React.FC = () => {
         },
       });
     }
+
+    // Magnetic Orange Square
+    const square = orangeSquareRef.current;
+    if (square) {
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = square.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        const distanceX = mouseX - centerX;
+        const distanceY = mouseY - centerY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        const radius = 120; // active magnetic zone
+        if (distance < radius) {
+          const strength = 0.35; // 35% attraction
+          gsap.to(square, {
+            x: distanceX * strength,
+            y: distanceY * strength,
+            rotate: (distanceX / radius) * 35,
+            scale: 1.15,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        } else {
+          gsap.to(square, {
+            x: 0,
+            y: 0,
+            rotate: 0,
+            scale: 1,
+            duration: 0.6,
+            ease: 'elastic.out(1.1, 0.4)',
+          });
+        }
+      };
+
+      const handleMouseLeave = () => {
+        gsap.to(square, {
+          x: 0,
+          y: 0,
+          rotate: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: 'elastic.out(1.1, 0.4)',
+        });
+      };
+
+      window.addEventListener('mousemove', handleMouseMove);
+      square.addEventListener('mouseleave', handleMouseLeave);
+
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        square.removeEventListener('mouseleave', handleMouseLeave);
+      };
+    }
   }, { scope: containerRef });
 
   const splitChars = (text: string) =>
@@ -60,7 +121,7 @@ export const Hero: React.FC = () => {
       c === ' ' ? (
         <span key={i} className="inline-block w-[0.3em]" />
       ) : (
-        <span key={i} className="inline-flex overflow-hidden">
+        <span key={i} className="char-container">
           <span className="char inline-block">{c}</span>
         </span>
       )
@@ -78,7 +139,7 @@ export const Hero: React.FC = () => {
       <div className="absolute inset-0 swiss-pattern-noise opacity-[0.04] pointer-events-none mix-blend-multiply" />
 
       {/* Top meta strip — flush to grid, aligned by columns */}
-      <div className="relative z-10 grid grid-cols-12 border-b-2 border-border pt-20 md:pt-24 pb-4 px-6 md:px-10">
+      <div className="relative z-10 grid grid-cols-12 items-center border-b-2 border-border pt-16 md:pt-[72px] pb-2 md:pb-4 px-6 md:px-10">
         <div className="col-span-6 md:col-span-3 flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold">
           <span className="text-accent">00 / Index</span>
           <span className="text-fg-subtle truncate"><span className="md:hidden">Cebu, PH</span><span className="hidden md:inline">Cebu · 10.31°N 123.89°E</span></span>
@@ -91,8 +152,8 @@ export const Hero: React.FC = () => {
           <span>Issued</span>
           <span className="text-fg">May 2026</span>
         </div>
-        <div className="col-span-6 md:col-span-3 flex md:justify-end items-start gap-2 text-[10px] uppercase tracking-[0.25em] font-bold min-w-0">
-          <span className="relative inline-flex h-2 w-2 mt-1 bg-accent shrink-0">
+        <div className="col-span-6 md:col-span-3 flex md:justify-end items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-bold min-w-0">
+          <span className="relative inline-flex h-2 w-2 bg-accent shrink-0">
             <span className="absolute inset-0 bg-accent" style={{ animation: 'blink 1.4s infinite' }} />
           </span>
           <span className="text-fg truncate"><span className="md:hidden">Available · 2026</span><span className="hidden md:inline">Available for work · 2026</span></span>
@@ -100,9 +161,9 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Main composition — asymmetric 12-col grid */}
-      <div ref={contentRef} className="relative z-10 grid grid-cols-12 gap-0 px-6 md:px-10 pt-12 md:pt-16">
+      <div ref={contentRef} className="relative z-10 grid grid-cols-12 gap-0 px-6 md:px-10 pt-6 md:pt-8">
         {/* Left column — headline */}
-        <div className="col-span-12 md:col-span-9">
+        <div className="col-span-12 col-start-1 row-start-1">
           <h1
             ref={headlineRef}
             className="font-heavy uppercase leading-[0.82] tracking-tighter text-fg flex flex-col gap-0"
@@ -110,28 +171,23 @@ export const Hero: React.FC = () => {
             <span className="text-[16vw] md:text-[15vw] flex flex-nowrap whitespace-nowrap">{splitChars('JOSHUA')}</span>
             <span className="text-[13vw] md:text-[10vw] flex flex-nowrap whitespace-nowrap items-center">
               {splitChars('REBADOMIA')}
-              <span className="inline-block w-[0.55em] h-[0.55em] bg-accent ml-[0.15em] shrink-0" aria-hidden="true" />
+              <span
+                ref={orangeSquareRef}
+                className="inline-block w-[0.55em] h-[0.55em] bg-accent ml-[0.15em] shrink-0"
+                aria-hidden="true"
+              />
             </span>
           </h1>
         </div>
 
-        {/* Right column — Bauhaus geometric composition */}
-        <div className="hidden md:flex col-span-3 relative items-start justify-end pl-6">
-          <div ref={compositionRef} className="relative w-full aspect-square max-w-[280px] border-2 border-border bg-bg">
-            {/* Internal grid pattern */}
-            <div className="absolute inset-0 swiss-pattern-grid text-fg opacity-[0.06]" />
-            {/* Red circle */}
-            <div className="absolute top-[18%] left-[18%] w-[42%] aspect-square rounded-full bg-accent" />
-            {/* Black bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-[18%] bg-fg" />
-            {/* Diagonal line */}
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
-              <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="1" className="text-fg" />
-            </svg>
-            {/* Corner label */}
-            <div className="absolute top-2 right-2 text-[9px] uppercase tracking-[0.25em] font-bold text-fg">
-              Fig. 01
-            </div>
+        {/* Right column — Lanyard */}
+        <div className="col-span-12 md:col-span-6 col-start-1 md:col-start-7 row-start-2 md:row-start-1 z-20 flex relative items-start justify-center md:justify-end mt-8 md:-mt-8 pl-0 md:pl-6 overflow-visible">
+          <div ref={compositionRef} className="relative w-full max-w-[340px] md:max-w-[480px] h-[460px] md:h-[600px] md:-mr-20">
+            <Lanyard
+              position={[0, 0, 11.5]}
+              gravity={[0, -40, 0]}
+              className="w-full h-full relative z-10"
+            />
           </div>
         </div>
       </div>

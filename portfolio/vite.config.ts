@@ -79,5 +79,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
     plugins: [react(), tailwindcss(), chatDevApi(env)],
+    assetsInclude: ['**/*.glb'],
   }
 })
