@@ -222,8 +222,13 @@ export const Sections: React.FC = () => {
       <section id="about" className="relative border-t-2 border-border">
         {/* Section label header */}
         <div className="grid grid-cols-12 border-b-2 border-border">
+          {/* Title column — large decorative number + title */}
           <div className="col-span-12 md:col-span-4 px-6 md:px-10 py-8 md:py-12 border-b-2 md:border-b-0 md:border-r-2 border-border relative overflow-hidden">
             <div className="absolute inset-0 swiss-pattern-grid text-fg opacity-[0.05]" />
+            {/* Large decorative number */}
+            <div className="absolute -right-4 -bottom-6 font-heavy text-[180px] md:text-[220px] leading-none tracking-tighter text-fg opacity-[0.04] select-none pointer-events-none" aria-hidden="true">
+              01
+            </div>
             <div className="relative">
               <span className="text-[11px] uppercase tracking-[0.3em] font-bold text-accent">
                 Section 01 — Subject
@@ -231,31 +236,81 @@ export const Sections: React.FC = () => {
               <h2 data-reveal="mask" className="font-heavy text-5xl md:text-7xl uppercase mt-4 leading-[0.85] tracking-tighter">
                 About<br />Me
               </h2>
+              {/* Mini location tag */}
+              <div className="mt-6 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+                <span className="w-1.5 h-1.5 bg-accent" />
+                Cebu, Philippines
+              </div>
             </div>
           </div>
-          <div className="col-span-12 md:col-span-8 px-6 md:px-10 py-8 md:py-12 flex flex-col justify-end gap-4">
-            <p className="text-base md:text-lg font-medium text-fg-muted leading-snug max-w-2xl fade-up">
-              I'm an AI Executive & Full-Stack Developer based in Cebu, Philippines. I bridge the gap
-              between cutting-edge AI technology and real-world business needs — from building agentic
-              automation pipelines with n8n, OpenClaw, and Claude AI, to shipping production-grade
-              web & mobile applications.
-            </p>
-            <p className="text-base md:text-lg font-medium text-fg-muted leading-snug max-w-2xl fade-up">
-              With expertise spanning LLM integration, prompt engineering, hardware-software systems
-              (RFID/IoT), and modern React ecosystems, I thrive at the intersection of technology and
-              human impact.
-            </p>
-            <div className="flex flex-wrap gap-2 mt-2 fade-up">
-              {['English (Professional)', 'Filipino (Native)'].map((lang) => (
-                <span
-                  key={lang}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] font-bold border-2 border-border text-fg"
-                >
-                  <span className="w-1.5 h-1.5 bg-accent" />
-                  {lang}
-                </span>
-              ))}
+
+          {/* Bio column — structured with labeled sub-sections */}
+          <div className="col-span-12 md:col-span-5 border-b-2 md:border-b-0 md:border-r-2 border-border flex flex-col">
+            {/* Highlight quote strip */}
+            <div className="px-6 md:px-10 py-5 border-b-2 border-border bg-accent text-white fade-up">
+              <p className="text-sm md:text-base font-bold uppercase tracking-[0.1em] leading-snug">
+                "Bridging AI technology with real-world business impact."
+              </p>
             </div>
+
+            {/* Bio sections */}
+            <div className="px-6 md:px-10 py-6 md:py-8 flex flex-col gap-6 flex-1">
+              <div className="fade-up">
+                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-2 block">A. Background</span>
+                <p className="text-sm md:text-base font-medium text-fg-muted leading-snug">
+                  AI Executive &amp; Full-Stack Developer. I bridge the gap
+                  between cutting-edge AI technology and real-world business needs — from agentic
+                  automation pipelines with n8n, OpenClaw, and Claude AI, to production-grade
+                  web &amp; mobile applications.
+                </p>
+              </div>
+
+              <div className="w-full h-px bg-border" />
+
+              <div className="fade-up">
+                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-2 block">B. Expertise</span>
+                <p className="text-sm md:text-base font-medium text-fg-muted leading-snug">
+                  LLM integration, prompt engineering, hardware-software systems
+                  (RFID/IoT), and modern React ecosystems — thriving at the intersection of
+                  technology and human impact.
+                </p>
+              </div>
+
+              <div className="w-full h-px bg-border" />
+
+              {/* Focus areas */}
+              <div className="fade-up">
+                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-3 block">C. Focus Areas</span>
+                <div className="flex flex-wrap gap-2">
+                  {['Agentic AI', 'Full-Stack Apps', 'IoT / Hardware', 'Workflow Automation', 'LLM Pipelines', 'Mobile Dev'].map((area) => (
+                    <span
+                      key={area}
+                      className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 border-2 border-border text-fg hover:bg-accent hover:text-white hover:border-accent transition-colors duration-200 cursor-default"
+                    >
+                      <span className="w-1 h-1 bg-accent shrink-0" />
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Polaris Access Card */}
+          <div className="col-span-12 md:col-span-3 relative overflow-hidden flex flex-col items-center justify-center gap-3 px-4 md:px-6 py-8 md:py-12 fade-up">
+            <div className="absolute inset-0 swiss-pattern-diagonal text-fg opacity-[0.03]" />
+            <span className="relative text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Access Card</span>
+            <div className="relative border-2 border-border bg-bg-elevated overflow-hidden transition-transform duration-300 hover:rotate-1 hover:scale-[1.02]">
+              <iframe
+                src="https://polarisdev-gamma.vercel.app/access-card?name=Joshua+Robert+C.+Rebadomia&role=CO-FOUNDER&type=Backend+Developer+%7C+AI+Engineer"
+                width="220"
+                height="340"
+                style={{ border: 'none', background: 'transparent', overflow: 'hidden' }}
+                title="Polaris Access Card - Joshua Robert C. Rebadomia"
+                loading="lazy"
+              />
+            </div>
+            <span className="relative text-[9px] uppercase tracking-[0.25em] font-bold text-fg-subtle mt-1">Polaris · Co-Founder</span>
           </div>
         </div>
 

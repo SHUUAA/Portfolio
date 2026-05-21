@@ -27,6 +27,8 @@ interface LanyardProps {
   fov?: number;
   transparent?: boolean;
   className?: string;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
 export default function Lanyard({
@@ -34,7 +36,9 @@ export default function Lanyard({
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true,
-  className = "relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center"
+  className = "relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center",
+  onDragStart,
+  onDragEnd,
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -54,7 +58,7 @@ export default function Lanyard({
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-          <Band isMobile={isMobile} />
+          <Band isMobile={isMobile} onDragStart={onDragStart} onDragEnd={onDragEnd} />
         </Physics>
         <Environment blur={0.75}>
           <Lightformer
@@ -95,9 +99,11 @@ interface BandProps {
   maxSpeed?: number;
   minSpeed?: number;
   isMobile?: boolean;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
-function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
+function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onDragStart, onDragEnd }: BandProps) {
   // Using "any" for refs since the exact types depend on Rapier's internals
   const band = useRef<any>(null);
   const fixed = useRef<any>(null);
@@ -211,10 +217,12 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
             onPointerUp={(e: any) => {
               e.target.releasePointerCapture(e.pointerId);
               drag(false);
+              onDragEnd?.();
             }}
             onPointerDown={(e: any) => {
               e.target.setPointerCapture(e.pointerId);
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+              onDragStart?.();
             }}
           >
             {/* Original card with base material (back side + structure) */}
