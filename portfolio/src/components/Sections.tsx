@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, GraduationCap, Calendar, MapPin, Mail, Phone, Award, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, GraduationCap, Calendar, MapPin, Mail, Phone, Award } from 'lucide-react';
 import { SiGithub } from 'react-icons/si';
 import { CoreCapabilities } from './CoreCapabilities';
 import { TechIcon } from './TechIcon';
