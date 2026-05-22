@@ -519,10 +519,10 @@ export const Sections: React.FC = () => {
               {CERTIFICATES.length} Verified
             </span>
             <div className="flex items-center gap-3 mt-3">
-              <div className="w-6 h-6 flex items-center justify-center border-2 border-border bg-accent">
+              <div className="w-6 h-6 flex items-center justify-center border-2 border-[#22c55e] bg-[#22c55e]">
                 <Award className="w-3 h-3 text-white" strokeWidth={2.5} />
               </div>
-              <div className="w-6 h-6 flex items-center justify-center border-2 border-border bg-[#D4A27F]">
+              <div className="w-6 h-6 flex items-center justify-center border-2 border-[#D4A27F] bg-[#D4A27F]">
                 <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" aria-hidden="true">
                   <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="white"/>
                 </svg>
@@ -530,48 +530,69 @@ export const Sections: React.FC = () => {
             </div>
           </div>
           <div className="col-span-12 md:col-span-9 overflow-hidden py-6 flex flex-col justify-center gap-3">
-            {/* Row 1 — scrolls left */}
+            {/* Row 1 — scrolls left (AI Community certs repeated 5x for frequency) */}
             <div className="cert-marquee-row flex whitespace-nowrap">
-              {[...CERTIFICATES, ...CERTIFICATES].map((cert, i) => (
-                <button
-                  key={`r1-${i}`}
-                  onClick={() => setSelectedCert(cert as CertificateData)}
-                  className="hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 border-2 border-border bg-bg hover:bg-accent shrink-0 transition-all duration-200 cursor-pointer"
-                >
-                  {cert.image ? (
-                    <Award className="w-3.5 h-3.5 shrink-0 text-accent group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
-                  ) : (
-                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
-                      <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
-                    </svg>
-                  )}
-                  <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
-                    {cert.title}
-                  </span>
-                </button>
-              ))}
+              {(() => {
+                const community = CERTIFICATES.filter(c => c.image);
+                const anthropic = CERTIFICATES.filter(c => !c.image);
+                // Repeat community certs 5x so they appear frequently
+                const boosted = [...Array(5)].flatMap(() => community);
+                const combined = [...boosted, ...anthropic];
+                return [...combined, ...combined].map((cert, i) => (
+                  <button
+                    key={`r1-${i}`}
+                    onClick={() => setSelectedCert(cert as CertificateData)}
+                    className={`hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 shrink-0 transition-all duration-200 cursor-pointer border-2 bg-bg ${
+                      cert.image
+                        ? 'border-[#22c55e] hover:bg-[#22c55e]'
+                        : 'border-[#D4A27F] hover:bg-[#D4A27F]'
+                    }`}
+                  >
+                    {cert.image ? (
+                      <Award className="w-3.5 h-3.5 shrink-0 text-[#22c55e] group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
+                        <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
+                      </svg>
+                    )}
+                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
+                      {cert.title}
+                    </span>
+                  </button>
+                ));
+              })()}
             </div>
 
-            {/* Row 2 — scrolls right (reverse) */}
+            {/* Row 2 — scrolls right (reverse, AI Community certs repeated 5x) */}
             <div className="cert-marquee-row-reverse flex whitespace-nowrap">
-              {[...CERTIFICATES].reverse().concat([...CERTIFICATES].reverse()).map((cert, i) => (
-                <button
-                  key={`r2-${i}`}
-                  onClick={() => setSelectedCert(cert as CertificateData)}
-                  className="hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 border-2 border-border bg-bg hover:bg-accent shrink-0 transition-all duration-200 cursor-pointer"
-                >
-                  {cert.image ? (
-                    <Award className="w-3.5 h-3.5 shrink-0 text-accent group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
-                  ) : (
-                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
-                      <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
-                    </svg>
-                  )}
-                  <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
-                    {cert.title}
-                  </span>
-                </button>
-              ))}
+              {(() => {
+                const community = CERTIFICATES.filter(c => c.image);
+                const anthropic = CERTIFICATES.filter(c => !c.image);
+                const boosted = [...Array(5)].flatMap(() => community);
+                const combined = [...anthropic.reverse(), ...boosted];
+                return [...combined, ...combined].map((cert, i) => (
+                  <button
+                    key={`r2-${i}`}
+                    onClick={() => setSelectedCert(cert as CertificateData)}
+                    className={`hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 shrink-0 transition-all duration-200 cursor-pointer border-2 bg-bg ${
+                      cert.image
+                        ? 'border-[#22c55e] hover:bg-[#22c55e]'
+                        : 'border-[#D4A27F] hover:bg-[#D4A27F]'
+                    }`}
+                  >
+                    {cert.image ? (
+                      <Award className="w-3.5 h-3.5 shrink-0 text-[#22c55e] group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
+                        <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
+                      </svg>
+                    )}
+                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
+                      {cert.title}
+                    </span>
+                  </button>
+                ));
+              })()}
             </div>
           </div>
         </div>
