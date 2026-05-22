@@ -1,11 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, GraduationCap, Calendar, MapPin, Mail, Phone } from 'lucide-react';
+import { ArrowUpRight, GraduationCap, Calendar, MapPin, Mail, Phone, Award, ExternalLink } from 'lucide-react';
 import { SiGithub } from 'react-icons/si';
 import { CoreCapabilities } from './CoreCapabilities';
 import { TechIcon } from './TechIcon';
+import { CertificateModal, type CertificateData } from './CertificateModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,6 +76,7 @@ export const EXPERIENCE = [
 ];
 
 export const CERTIFICATES = [
+  // AI Community certificates (with local images)
   {
     title: 'Ship Mobile AI · Skip the Cloud',
     issuer: 'AI Cebu Community × FrontierAI',
@@ -88,6 +90,133 @@ export const CERTIFICATES = [
     date: 'Mar 28, 2026',
     location: 'Zero-Ten Park, Mandaue',
     image: '/Certificate%20-%20Joshua%20Robert%20Rebadomia%20(1)_page-0001.jpg',
+  },
+  // Anthropic Skilljar certificates
+  {
+    title: 'Claude 101',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/zntifbx2gqos',
+  },
+  {
+    title: 'Claude Code 101',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/ion7fmvbhwzs',
+  },
+  {
+    title: 'Introduction to Claude Cowork',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/up635d4rvuo9',
+  },
+  {
+    title: 'Claude Code in Action',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/xuj4zwn5jtue',
+  },
+  {
+    title: 'AI Fluency: Framework & Foundations',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/ktp3jah6jq2z',
+  },
+  {
+    title: 'Building with the Claude API',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/ftoiptrqg893',
+  },
+  {
+    title: 'Introduction to Model Context Protocol',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/ovqiq9oifkqd',
+  },
+  {
+    title: 'AI Fluency for Educators',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/esru58apzchj',
+  },
+  {
+    title: 'AI Fluency for Students',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/jnqp2xjp3fnf',
+  },
+  {
+    title: 'Model Context Protocol: Advanced Topics',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/335yw6rjbk67',
+  },
+  {
+    title: 'Claude with Amazon Bedrock',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/hn9ohk3twetn',
+  },
+  {
+    title: 'Claude with Google Cloud Vertex AI',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/h4igf8yn8w9m',
+  },
+  {
+    title: 'Teaching AI Fluency',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/ms2r4edrwujf',
+  },
+  {
+    title: 'AI Fluency for Nonprofits',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/7crf99a2iv95',
+  },
+  {
+    title: 'Introduction to Agent Skills',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/n8yx924r566m',
+  },
+  {
+    title: 'Introduction to Subagents',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/mum7ngn58cyn',
+  },
+  {
+    title: 'AI Capabilities and Limitations',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/rf7ka66c7b23',
+  },
+  {
+    title: 'AI Fluency for Small Businesses',
+    issuer: 'Anthropic',
+    date: '2026',
+    location: 'Online',
+    verifyUrl: 'https://verify.skilljar.com/c/vf38h4oh7k9j',
   },
 ];
 
@@ -106,6 +235,7 @@ export const Sections: React.FC = () => {
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const marqueeRevRef = useRef<HTMLDivElement>(null);
+  const [selectedCert, setSelectedCert] = useState<CertificateData | null>(null);
 
   useGSAP(() => {
     const horizontalContainer = horizontalContainerRef.current;
@@ -379,71 +509,70 @@ export const Sections: React.FC = () => {
           </div>
         </div>
 
-        {/* Certifications — image cards */}
+        {/* Certifications — full marquee */}
         <div id="certifications" className="grid grid-cols-12 border-b-2 border-border">
-          <div className="col-span-12 md:col-span-3 px-6 md:px-10 py-6 border-b-2 md:border-b-0 md:border-r-2 border-border flex items-start md:items-center">
+          <div className="col-span-12 md:col-span-3 px-6 md:px-10 py-6 border-b-2 md:border-b-0 md:border-r-2 border-border flex flex-col justify-center gap-2">
             <span className="text-[11px] uppercase tracking-[0.3em] font-bold text-accent">
               Credentials / Certifications
             </span>
+            <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
+              {CERTIFICATES.length} Verified
+            </span>
+            <div className="flex items-center gap-3 mt-3">
+              <div className="w-6 h-6 flex items-center justify-center border-2 border-border bg-accent">
+                <Award className="w-3 h-3 text-white" strokeWidth={2.5} />
+              </div>
+              <div className="w-6 h-6 flex items-center justify-center border-2 border-border bg-[#D4A27F]">
+                <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" aria-hidden="true">
+                  <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="white"/>
+                </svg>
+              </div>
+            </div>
           </div>
-          <div className="col-span-12 md:col-span-9 grid grid-cols-1 md:grid-cols-2">
-            {CERTIFICATES.map((cert, i) => (
-              <a
-                key={cert.title}
-                href={cert.image}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`hover-trigger group relative flex flex-col bg-bg hover:bg-accent transition-colors duration-200 fade-up ${
-                  i === 0 ? 'border-b-2 md:border-b-0 md:border-r-2 border-border' : ''
-                }`}
-              >
-                {/* Image */}
-                <div className="relative aspect-[16/11] overflow-hidden bg-bg-elevated border-b-2 border-border">
-                  <img
-                    src={cert.image}
-                    alt={cert.title}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute top-0 left-0 px-3 py-1.5 bg-bg border-b-2 border-r-2 border-border">
-                    <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg">
-                      Cert. 0{i + 1}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-0 right-0 px-3 py-1.5 bg-accent">
-                    <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-white">
-                      2026
-                    </span>
-                  </div>
-                </div>
+          <div className="col-span-12 md:col-span-9 overflow-hidden py-6 flex flex-col justify-center gap-3">
+            {/* Row 1 — scrolls left */}
+            <div className="cert-marquee-row flex whitespace-nowrap">
+              {[...CERTIFICATES, ...CERTIFICATES].map((cert, i) => (
+                <button
+                  key={`r1-${i}`}
+                  onClick={() => setSelectedCert(cert as CertificateData)}
+                  className="hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 border-2 border-border bg-bg hover:bg-accent shrink-0 transition-all duration-200 cursor-pointer"
+                >
+                  {cert.image ? (
+                    <Award className="w-3.5 h-3.5 shrink-0 text-accent group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
+                      <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
+                    </svg>
+                  )}
+                  <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
+                    {cert.title}
+                  </span>
+                </button>
+              ))}
+            </div>
 
-                {/* Meta */}
-                <div className="flex flex-col gap-2 px-6 md:px-8 py-6 flex-1">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-heavy text-base md:text-lg uppercase leading-tight tracking-tight text-fg group-hover:text-white transition-colors duration-200">
-                      {cert.title}
-                    </h3>
-                    <ArrowUpRight
-                      className="w-5 h-5 text-fg group-hover:text-white shrink-0 transition-all duration-200 group-hover:rotate-45"
-                      strokeWidth={2.5}
-                    />
-                  </div>
-                  <p className="text-xs font-bold text-fg-muted group-hover:text-white transition-colors duration-200">
-                    {cert.issuer}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle group-hover:text-white transition-colors duration-200">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Calendar className="w-3 h-3" strokeWidth={2.5} />
-                      {cert.date}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <MapPin className="w-3 h-3" strokeWidth={2.5} />
-                      {cert.location}
-                    </span>
-                  </div>
-                </div>
-              </a>
-            ))}
+            {/* Row 2 — scrolls right (reverse) */}
+            <div className="cert-marquee-row-reverse flex whitespace-nowrap">
+              {[...CERTIFICATES].reverse().concat([...CERTIFICATES].reverse()).map((cert, i) => (
+                <button
+                  key={`r2-${i}`}
+                  onClick={() => setSelectedCert(cert as CertificateData)}
+                  className="hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 border-2 border-border bg-bg hover:bg-accent shrink-0 transition-all duration-200 cursor-pointer"
+                >
+                  {cert.image ? (
+                    <Award className="w-3.5 h-3.5 shrink-0 text-accent group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
+                      <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
+                    </svg>
+                  )}
+                  <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
+                    {cert.title}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -771,11 +900,16 @@ export const Sections: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-12 px-6 md:px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
-          <span className="col-span-12 md:col-span-6">© 2026 Joshua Robert Rebadomia. All rights reserved.</span>
-          <span className="col-span-12 md:col-span-6 md:text-right mt-2 md:mt-0">React · TypeScript · GSAP · TailwindCSS</span>
+        <div className="px-6 md:px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
+          <span>© 2026 Joshua Robert Rebadomia. All rights reserved.</span>
         </div>
       </footer>
+
+      {/* Certificate Modal */}
+      <CertificateModal
+        certificate={selectedCert}
+        onClose={() => setSelectedCert(null)}
+      />
     </div>
   );
 };
