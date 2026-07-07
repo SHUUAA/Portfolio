@@ -161,7 +161,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const result = await handleChat(req.body);
-  if (!result.ok) {
+  if (result.ok === false) {
     res.status(result.status).json({ error: result.error });
     return;
   }

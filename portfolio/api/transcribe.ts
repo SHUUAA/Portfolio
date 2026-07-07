@@ -63,7 +63,7 @@ export default async function handler(req: any, res: any) {
   const contentType = (req.headers['content-type'] as string) || 'application/octet-stream';
 
   const result = await handleTranscribe(body, contentType);
-  if (!result.ok) {
+  if (result.ok === false) {
     res.status(result.status).json({ error: result.error });
     return;
   }
