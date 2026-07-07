@@ -17,18 +17,26 @@ import { Chatbot } from './components/Chatbot';
 import { useTheme } from './hooks/useTheme';
 
 // Smoothly scroll to the URL hash via Lenis after route changes.
+// When there's no hash (e.g. clicking "Index" from /projects), scroll to top.
 // The setTimeout gives the route's content time to mount before measuring.
 const ScrollToHash: React.FC = () => {
   const location = useLocation();
   useEffect(() => {
-    if (!location.hash) return;
-    const target = location.hash;
     const id = window.setTimeout(() => {
       const lenis = (window as any).lenis;
-      if (lenis && typeof lenis.scrollTo === 'function') {
-        lenis.scrollTo(target, { offset: -56 });
+      if (location.hash) {
+        if (lenis && typeof lenis.scrollTo === 'function') {
+          lenis.scrollTo(location.hash, { offset: -56 });
+        } else {
+          document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth' });
+        }
       } else {
-        document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+        // No hash — scroll to top (e.g. clicking "Index" from /projects)
+        if (lenis && typeof lenis.scrollTo === 'function') {
+          lenis.scrollTo(0, { immediate: false });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
     }, 120);
     return () => window.clearTimeout(id);

@@ -29,7 +29,7 @@ import {
   SiEspressif,
   SiElevenlabs,
 } from 'react-icons/si';
-import { Cpu } from 'lucide-react';
+import { Cpu, Database, Brain, MessageSquare, Cog } from 'lucide-react';
 
 // Map tech-tag string → react-icons component.
 // Names below match the values used in PROJECTS.tech and CAPABILITIES.tags.
@@ -68,6 +68,11 @@ const ICONS: Record<string, IconType> = {
   // Lucide fallback for hardware-class tags
   IoT: Cpu as unknown as IconType,
   RFID: Cpu as unknown as IconType,
+  // AI / chatbot tags
+  RAG: Database as unknown as IconType,
+  LLM: Brain as unknown as IconType,
+  Chatbot: MessageSquare as unknown as IconType,
+  OpenClaw: Cog as unknown as IconType,
 };
 
 export const TechIcon: React.FC<{ name: string; className?: string }> = ({

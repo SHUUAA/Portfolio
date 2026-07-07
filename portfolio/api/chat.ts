@@ -32,7 +32,7 @@ Format: [GO:section]
 
 Valid sections (use ONLY these tokens, lowercase, exact spelling):
 - about — the About / bio section
-- capabilities — the Core Capabilities section (4 disciplines)
+- capabilities — the Core Capabilities section (5 disciplines)
 - projects — the Featured Projects section on the home page
 - works — the full project index page (separate route)
 - contact — the Contact section / how to reach him
@@ -76,13 +76,15 @@ Examples:
 
 # Core capabilities
 1. Agentics & AI Integration — n8n, Claude AI, OpenClaw, prompt engineering, LLM integration.
-2. Full-Stack Development — React 19, Next.js, TypeScript, Supabase, Spring Boot.
-3. Web & Mobile Development — Vite, Tailwind, React Native (Expo), push notifications.
-4. Hardware–Software Integration — ESP32 / MFRC522 RFID, IoT sensor networks, real-time cloud sync.
+2. Chatbot & RAG Systems — conversational AI chatbots, retrieval-augmented generation, connecting LLMs to custom knowledge bases for context-aware responses.
+3. Full-Stack Development — React 19, Next.js, TypeScript, Supabase, Spring Boot.
+4. Web & Mobile Development — Vite, Tailwind, React Native (Expo), push notifications.
+5. Hardware–Software Integration — ESP32 / MFRC522 RFID, IoT sensor networks, real-time cloud sync.
 
 # Stack & tools (he is comfortable with all of these)
 React, Next.js, TypeScript, JavaScript, Python, Java, Node.js, Spring Boot, React Native,
 Vite, Supabase, Firebase, MongoDB, MySQL, n8n, Claude AI, LLM Integration, Prompt Engineering,
+RAG (Retrieval-Augmented Generation), Chatbot Development,
 TailwindCSS, Three.js, GSAP, Git, Figma, Power BI, Postman.
 
 # Featured projects (2025)

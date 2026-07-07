@@ -18,6 +18,22 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    title: "HRIS-201",
+    description: "Human Resource Information System for managing employee records, 201 files, and HR workflows — built with a modern React + TypeScript stack on Supabase.",
+    tech: ["React", "TypeScript", "Supabase", "Vite"],
+    date: "2026-05-26",
+    repo: "SHUUAA/HRIS-201",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "LifeVantage",
+    description: "Network intelligence and signal-processing platform for Lifewood — featuring social network ingestion, cross-network impact scoring, operative management, and a bespoke \"Digital Frost\" frosted-glass UI.",
+    tech: ["TypeScript", "React", "Supabase", "PLpgSQL"],
+    date: "2026-04-13",
+    repo: "MarkJanzenB/LifeVantage_frontend",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800"
+  },
+  {
     title: "LifeScan",
     description: "Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, WiFi sync, a React admin dashboard (DTR, analytics, accounting), and a React Native (Expo) mobile app.",
     tech: ["React", "TypeScript", "Supabase", "React Native", "ESP32", "Three.js"],
@@ -40,6 +56,14 @@ const PROJECTS: Project[] = [
     date: "2026-02-20",
     repo: "PierceBorinaga/AI_Interviewer_V2_PH",
     image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "OJT Monitoring System",
+    description: "Internship monitoring and evaluation platform for Lifewood — real-time tracking, performance evaluation, and ranking of interns with a premium lab-inspired aesthetic.",
+    tech: ["React", "JavaScript", "Supabase", "PLpgSQL"],
+    date: "2026-02-19",
+    repo: "ChristianCants/OJT_LW_App",
+    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800"
   },
   {
     title: "CampusEats",
@@ -296,35 +320,50 @@ export const Projects: React.FC = () => {
         {filtered.map((project, idx) => (
           <div
             key={`${project.repo}-${idx}`}
-            className="project-item group relative grid grid-cols-12 px-6 md:px-10 py-6 md:py-8 border-b-2 border-border bg-bg hover:bg-accent transition-colors duration-200 items-center"
+            className="project-item group relative border-b-2 border-border bg-bg hover:bg-accent transition-colors duration-200"
           >
-            <span className="col-span-2 md:col-span-1 font-mono-tight text-xs md:text-sm font-bold text-fg group-hover:text-white tabular-nums uppercase tracking-tight transition-colors duration-200">
-              P/{(idx + 1).toString().padStart(2, '0')}
-            </span>
+            {/* Main row */}
+            <div className="grid grid-cols-12 px-6 md:px-10 py-6 md:py-8 items-center">
+              <span className="col-span-2 md:col-span-1 font-mono-tight text-xs md:text-sm font-bold text-fg group-hover:text-white tabular-nums uppercase tracking-tight transition-colors duration-200">
+                P/{(idx + 1).toString().padStart(2, '0')}
+              </span>
 
-            <h3 className="col-span-10 md:col-span-5 font-heavy text-xl md:text-2xl lg:text-4xl uppercase tracking-tighter text-fg group-hover:text-white flex items-center gap-3 transition-colors duration-200">
-              <span className="truncate">{project.title}</span>
-              <ArrowUpRight
-                className="w-5 h-5 md:w-6 md:h-6 text-fg group-hover:text-white opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 shrink-0"
-                strokeWidth={2.5}
-              />
-            </h3>
+              <h3 className="col-span-10 md:col-span-5 font-heavy text-xl md:text-2xl lg:text-4xl uppercase tracking-tighter text-fg group-hover:text-white flex items-center gap-3 transition-colors duration-200">
+                <span className="truncate">{project.title}</span>
+                <ArrowUpRight
+                  className="w-5 h-5 md:w-6 md:h-6 text-fg group-hover:text-white opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 shrink-0"
+                  strokeWidth={2.5}
+                />
+              </h3>
 
-            <div className="hidden md:flex col-span-4 flex-wrap gap-1.5">
-              {project.tech.slice(0, 3).map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 border-2 border-border text-fg group-hover:border-white group-hover:text-white transition-colors duration-200"
-                >
-                  <TechIcon name={t} className="w-2.5 h-2.5" />
-                  {t}
-                </span>
-              ))}
+              <div className="hidden md:flex col-span-4 flex-wrap gap-1.5">
+                {project.tech.slice(0, 3).map((t) => (
+                  <span
+                    key={t}
+                    className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 border-2 border-border text-fg group-hover:border-white group-hover:text-white transition-colors duration-200"
+                  >
+                    <TechIcon name={t} className="w-2.5 h-2.5" />
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <span className="hidden md:block col-span-2 text-right font-heavy text-xl md:text-2xl text-fg group-hover:text-white tabular-nums tracking-tighter transition-colors duration-200">
+                {new Date(project.date).getFullYear()}
+              </span>
             </div>
 
-            <span className="hidden md:block col-span-2 text-right font-heavy text-xl md:text-2xl text-fg group-hover:text-white tabular-nums tracking-tighter transition-colors duration-200">
-              {new Date(project.date).getFullYear()}
-            </span>
+            {/* Hover dropdown — description */}
+            <div className="max-h-0 group-hover:max-h-40 overflow-hidden transition-all duration-300 ease-out">
+              <div className="px-6 md:px-10 pb-6 md:pb-8 pt-0">
+                <div className="grid grid-cols-12 items-start">
+                  <span className="hidden md:block col-span-1" />
+                  <p className="col-span-12 md:col-span-8 text-sm md:text-base font-medium text-white/80 leading-snug">
+                    {project.description}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

@@ -51,6 +51,7 @@ const SKILLS = [
   'Node.js', 'Spring Boot', 'React Native', 'Vite',
   'Supabase', 'Firebase', 'MongoDB', 'MySQL',
   'n8n', 'OpenClaw', 'Claude AI', 'LLM Integration', 'Prompt Engineering',
+  'RAG', 'Chatbot Development',
   'TailwindCSS', 'Three.js', 'GSAP', 'Git', 'Figma', 'Power BI', 'Postman',
 ];
 
@@ -400,9 +401,9 @@ export const Sections: React.FC = () => {
               <div className="fade-up">
                 <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-2 block">B. Expertise</span>
                 <p className="text-sm md:text-base font-medium text-fg-muted leading-snug">
-                  LLM integration, prompt engineering, hardware-software systems
-                  (RFID/IoT), and modern React ecosystems — thriving at the intersection of
-                  technology and human impact.
+                  LLM integration, prompt engineering, chatbot &amp; RAG systems,
+                  hardware-software systems (RFID/IoT), and modern React ecosystems —
+                  thriving at the intersection of technology and human impact.
                 </p>
               </div>
 
@@ -412,7 +413,7 @@ export const Sections: React.FC = () => {
               <div className="fade-up">
                 <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-3 block">C. Focus Areas</span>
                 <div className="flex flex-wrap gap-2">
-                  {['Agentic AI', 'Full-Stack Apps', 'IoT / Hardware', 'Workflow Automation', 'LLM Pipelines', 'Mobile Dev'].map((area) => (
+                  {['Agentic AI', 'Chatbot / RAG', 'Full-Stack Apps', 'IoT / Hardware', 'Workflow Automation', 'LLM Pipelines', 'Mobile Dev'].map((area) => (
                     <span
                       key={area}
                       className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 border-2 border-border text-fg hover:bg-accent hover:text-white hover:border-accent transition-colors duration-200 cursor-default"

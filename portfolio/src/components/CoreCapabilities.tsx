@@ -6,6 +6,7 @@ import { TechIcon } from './TechIcon';
 
 const CAPABILITIES = [
   { title: 'Agentics & AI Integration', desc: 'Building agentic automation pipelines with n8n, OpenClaw, and Claude AI — from prompt engineering and LLM integration to fully autonomous task workflows.', tags: ['n8n', 'OpenClaw', 'Claude AI', 'LLM'] },
+  { title: 'Chatbot & RAG Systems', desc: 'Designing conversational AI chatbots powered by retrieval-augmented generation — connecting LLMs to custom knowledge bases for context-aware, accurate responses.', tags: ['RAG', 'LLM', 'Chatbot'] },
   { title: 'Full Stack Development', desc: 'End-to-end architecture with React, Next.js, TypeScript, Supabase, and Spring Boot — designing scalable systems from database to deployment.', tags: ['React', 'Next.js', 'Supabase'] },
   { title: 'Web & Mobile Development', desc: 'Crafting performant web experiences with Vite and Tailwind, and cross-platform mobile apps with React Native (Expo) and push notifications.', tags: ['Vite', 'React Native', 'Expo'] },
   { title: 'Hardware–Software Integration', desc: 'Bridging physical and digital with ESP32/MFRC522 RFID systems, IoT sensor networks, and real-time data sync to cloud dashboards.', tags: ['ESP32', 'RFID', 'IoT'] },
@@ -67,7 +68,7 @@ export const CoreCapabilities: React.FC = () => {
         </div>
         <div className="col-span-12 md:col-span-8 px-6 md:px-10 py-8 md:py-12 flex items-end">
           <p className="text-base md:text-lg font-medium text-fg-muted max-w-2xl leading-snug">
-            Four overlapping disciplines. Each row defines a domain of practice — selected
+            Five overlapping disciplines. Each row defines a domain of practice — selected
             tools and methods used in production engagements.
           </p>
         </div>
