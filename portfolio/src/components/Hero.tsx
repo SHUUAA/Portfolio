@@ -164,7 +164,7 @@ export const Hero: React.FC = () => {
       <div className="absolute inset-0 swiss-pattern-noise opacity-[0.04] pointer-events-none mix-blend-multiply" />
 
       {/* Top meta strip — flush to grid, aligned by columns */}
-      <div className="relative z-10 grid grid-cols-12 items-center border-b-2 border-border pt-16 md:pt-[72px] pb-2 md:pb-4 px-6 md:px-10 max-w-[1600px] mx-auto">
+      <div className="relative z-10 grid grid-cols-12 items-center border-b-2 border-border pt-16 md:pt-[72px] pb-2 md:pb-4 px-6 md:px-10">
         <div className="col-span-6 md:col-span-3 flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] font-bold">
           <span className="text-accent">00 / Index</span>
           <span className="text-fg-subtle truncate"><span className="md:hidden">Cebu, PH</span><span className="hidden md:inline">Cebu · 10.31°N 123.89°E</span></span>
@@ -186,15 +186,15 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Main composition — asymmetric 12-col grid */}
-      <div ref={contentRef} className="relative z-10 grid grid-cols-12 gap-0 px-6 md:px-10 pt-6 md:pt-8 max-w-[1600px] mx-auto">
-        {/* Left column — headline */}
-        <div className="col-span-12 col-start-1 row-start-1">
+      <div ref={contentRef} className="relative z-10 grid grid-cols-12 gap-0 px-6 md:px-10 pt-6 md:pt-8">
+        {/* Left column — headline and tagline */}
+        <div className="col-span-12 col-start-1 row-start-1 flex flex-col items-start">
           <h1
             ref={headlineRef}
             className="font-heavy uppercase leading-[0.82] tracking-tighter text-fg flex flex-col gap-0"
           >
-            <span className="text-[16vw] md:text-[15vw] xl:text-[12vw] 2xl:text-[180px] flex flex-nowrap whitespace-nowrap">{splitChars('JOSHUA')}</span>
-            <span className="text-[13vw] md:text-[10vw] xl:text-[8vw] 2xl:text-[125px] flex flex-nowrap whitespace-nowrap items-center">
+            <span className="text-[16vw] md:text-[15vw] flex flex-nowrap whitespace-nowrap">{splitChars('JOSHUA')}</span>
+            <span className="text-[13vw] md:text-[10vw] flex flex-nowrap whitespace-nowrap items-center">
               {splitChars('REBADOMIA')}
               <span
                 ref={orangeSquareRef}
@@ -203,20 +203,20 @@ export const Hero: React.FC = () => {
               />
             </span>
           </h1>
-        </div>
 
-        {/* Left column — Tagline (visible on md+) */}
-        <div className="hidden md:flex col-span-5 xl:col-span-4 col-start-1 row-start-1 self-end pb-6 xl:pb-10 flex-col gap-4 z-10">
-          <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Who I Am</span>
-          <p className="text-lg md:text-xl font-medium leading-snug text-fg-muted max-w-[420px]">
-            AI Executive &amp; Full-Stack Developer crafting intelligent systems — from agentic automation pipelines to production-grade web &amp; mobile applications.
-          </p>
-          <div className="w-16 h-[3px] bg-accent mt-1" />
+          {/* Left column — Tagline (visible on md+) */}
+          <div className="hidden md:flex flex-col gap-4 mt-8 md:mt-12 lg:mt-16 max-w-[320px] lg:max-w-[420px] z-10">
+            <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Who I Am</span>
+            <p className="text-lg md:text-xl font-medium leading-snug text-fg-muted">
+              AI Executive &amp; Full-Stack Developer crafting intelligent systems — from agentic automation pipelines to production-grade web &amp; mobile applications.
+            </p>
+            <div className="w-16 h-[3px] bg-accent mt-1" />
+          </div>
         </div>
 
         {/* Right column — Lanyard */}
         <div className="col-span-12 md:col-span-6 col-start-1 md:col-start-7 row-start-2 md:row-start-1 z-20 flex relative items-start justify-center md:justify-end mt-8 md:-mt-8 pl-0 md:pl-6 overflow-visible">
-          <div ref={compositionRef} className="relative w-full max-w-[340px] md:max-w-[480px] xl:max-w-[520px] h-[460px] md:h-[600px] xl:h-[660px] md:-mr-20">
+          <div ref={compositionRef} className="relative w-full max-w-[340px] md:max-w-[480px] h-[460px] md:h-[600px] md:-mr-20">
             <Lanyard
               position={[0, 0, 11.5]}
               gravity={[0, -40, 0]}
@@ -239,7 +239,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Subtitle row — divides via thick line */}
-      <div className="relative z-10 mt-12 md:mt-16 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-8 max-w-[1600px] mx-auto">
+      <div className="relative z-10 mt-12 md:mt-16 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-8">
         <div className="col-span-12 md:col-span-4 flex flex-col gap-2">
           <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">A. Discipline</span>
           <p className="text-base md:text-lg font-bold uppercase leading-tight text-fg">
@@ -267,7 +267,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* CTA row — strict rectangles, full-width on mobile */}
-      <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border max-w-[1600px] mx-auto">
+      <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border">
         <a
           href="/projects"
           className="hover-trigger col-span-12 md:col-span-4 flex items-center justify-between gap-4 bg-fg text-bg hover:bg-accent transition-colors duration-200 px-6 md:px-10 py-7 group"
@@ -293,7 +293,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Bottom info ledger */}
-      <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-4 max-w-[1600px] mx-auto">
+      <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-4">
         <div className="col-span-6 md:col-span-3 flex flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle min-w-0">
           <span>Currently</span>
           <span className="text-fg truncate"><span className="md:hidden">AI Executive</span><span className="hidden md:inline">AI Executive · Lifewood</span></span>
