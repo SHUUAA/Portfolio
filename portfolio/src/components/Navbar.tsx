@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 
 const LINKS: { label: string; to: string; external?: boolean; download?: boolean }[] = [
@@ -10,9 +10,21 @@ const LINKS: { label: string; to: string; external?: boolean; download?: boolean
   { label: 'Contact', to: '/#contact' },
 ];
 
+/** When already on the home page, scroll to the hero (top). */
+const scrollToHero = () => {
+  const lenis = (window as any).lenis;
+  if (lenis && typeof lenis.scrollTo === 'function') {
+    lenis.scrollTo(0, { immediate: false });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
 export const Navbar: React.FC = () => {
   const [time, setTime] = useState<string>('');
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const fmt = () =>
@@ -105,6 +117,7 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={l.label}
                   to={l.to}
+                  onClick={l.to === '/' && isHome ? (e) => { e.preventDefault(); scrollToHero(); } : undefined}
                   className="hover-trigger flex items-center px-4 xl:px-5 border-l-2 border-border text-xs font-bold uppercase tracking-[0.2em] text-fg overflow-hidden"
                 >
                   <span className="swiss-link">
@@ -191,7 +204,7 @@ export const Navbar: React.FC = () => {
               <li key={l.label} className="border-b-2 border-border">
                 <Link
                   to={l.to}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => { setOpen(false); if (l.to === '/' && isHome) { e.preventDefault(); scrollToHero(); } }}
                   className="flex items-center justify-between gap-4 px-6 py-7 hover:bg-accent hover:text-white transition-colors duration-200"
                 >
                   <span className="flex items-baseline gap-3 min-w-0">
