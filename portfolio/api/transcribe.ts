@@ -27,7 +27,7 @@ export async function handleTranscribe(
             ? 'ogg'
             : 'webm';
 
-  const audioBlob = new Blob([body], { type: contentType || 'audio/webm' });
+  const audioBlob = new Blob([new Uint8Array(body)], { type: contentType || 'audio/webm' });
   const form = new FormData();
   form.append('file', audioBlob, `audio.${ext}`);
   form.append('model', MODEL);
@@ -63,9 +63,9 @@ export default async function handler(req: any, res: any) {
   const contentType = (req.headers['content-type'] as string) || 'application/octet-stream';
 
   const result = await handleTranscribe(body, contentType);
-  if (result.ok) {
-    res.status(200).json({ text: result.text });
-  } else {
+  if (!result.ok) {
     res.status(result.status).json({ error: result.error });
+    return;
   }
+  res.status(200).json({ text: result.text });
 }

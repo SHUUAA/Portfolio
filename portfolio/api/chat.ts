@@ -161,9 +161,9 @@ export default async function handler(req: any, res: any) {
   }
 
   const result = await handleChat(req.body);
-  if (result.ok) {
-    res.status(200).json({ reply: result.reply });
-  } else {
+  if (!result.ok) {
     res.status(result.status).json({ error: result.error });
+    return;
   }
+  res.status(200).json({ reply: result.reply });
 }
