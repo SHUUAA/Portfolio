@@ -8,6 +8,15 @@ declare module 'meshline' {
   export const MeshLineMaterial: any;
 }
 
+declare namespace React {
+  namespace JSX {
+    interface IntrinsicElements {
+      meshLineGeometry: any;
+      meshLineMaterial: any;
+    }
+  }
+}
+
 declare namespace JSX {
   interface IntrinsicElements {
     meshLineGeometry: any;
