@@ -12,24 +12,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const PROJECTS = [
   {
-    title: 'LifeScan',
-    category: 'RFID & IOT SYSTEM',
+    title: 'LumiNote',
+    category: 'AI NOTE & KNOWLEDGE SYSTEM',
     year: '2025',
     description:
-      'Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, and WiFi sync. Includes a React admin dashboard with DTR, analytics, and accounting modules, plus a React Native (Expo) mobile app for leave requests and push notifications.',
-    tech: ['React', 'TypeScript', 'Supabase', 'React Native', 'ESP32', 'Three.js'],
-    image: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800',
-    github: 'https://github.com/SHUUAA',
-    live: '#',
-  },
-  {
-    title: 'LiftApp',
-    category: 'EXAM & ANNOTATION PLATFORM',
-    year: '2025',
-    description:
-      'Timed exam and annotation platform for historical record transcription across five exam types. Users annotate scanned documents into structured tables with automatic scoring, retake support, and an admin panel for managing images, answer keys, and progress.',
-    tech: ['React', 'TypeScript', 'Supabase', 'Chart.js', 'TailwindCSS', 'Vercel'],
-    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800',
+      'Intelligent markdown note-taking and knowledge management platform featuring real-time synchronization, AI-assisted summaries, dynamic workspace organization, and structured tag analytics.',
+    tech: ['React', 'TypeScript', 'Supabase', 'TailwindCSS', 'Vite', 'OpenAI API'],
+    image: 'https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&q=80&w=800',
     github: 'https://github.com/SHUUAA',
     live: '#',
   },
@@ -42,6 +31,17 @@ export const PROJECTS = [
     tech: ['Next.js 16', 'TypeScript', 'React', 'ElevenLabs AI', 'Google Sheets API'],
     image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800',
     github: 'https://github.com/PierceBorinaga/AI_Interviewer_V2_PH',
+    live: '#',
+  },
+  {
+    title: 'LiftApp',
+    category: 'EXAM & ANNOTATION PLATFORM',
+    year: '2025',
+    description:
+      'Timed exam and annotation platform for historical record transcription across five exam types. Users annotate scanned documents into structured tables with automatic scoring, retake support, and an admin panel for managing images, answer keys, and progress.',
+    tech: ['React', 'TypeScript', 'Supabase', 'Chart.js', 'TailwindCSS', 'Vercel'],
+    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800',
+    github: 'https://github.com/SHUUAA',
     live: '#',
   },
 ];

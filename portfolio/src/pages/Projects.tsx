@@ -34,12 +34,12 @@ const PROJECTS: Project[] = [
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800"
   },
   {
-    title: "LifeScan",
-    description: "Full-stack RFID attendance & workforce management system with ESP32-C6/MFRC522 hardware for shift detection, overtime, WiFi sync, a React admin dashboard (DTR, analytics, accounting), and a React Native (Expo) mobile app.",
-    tech: ["React", "TypeScript", "Supabase", "React Native", "ESP32", "Three.js"],
+    title: "LumiNote",
+    description: "Intelligent markdown note-taking and knowledge management platform featuring real-time synchronization, AI-assisted summaries, dynamic workspace organization, and structured tag analytics.",
+    tech: ["React", "TypeScript", "Supabase", "TailwindCSS", "Vite", "OpenAI API"],
     date: "2026-04-15",
-    repo: "SHUUAA/LifeScan",
-    image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800"
+    repo: "SHUUAA/LumiNote",
+    image: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&q=80&w=800"
   },
   {
     title: "LiftApp",

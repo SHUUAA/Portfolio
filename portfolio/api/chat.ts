@@ -88,11 +88,10 @@ RAG (Retrieval-Augmented Generation), Chatbot Development,
 TailwindCSS, Three.js, GSAP, Git, Figma, Power BI, Postman.
 
 # Featured projects (2025)
-- LifeScan — RFID & IoT attendance / workforce-management system. ESP32-C6 + MFRC522
-  hardware for shift detection, overtime, and WiFi sync. React 19 admin dashboard
-  (DTR, analytics, accounting modules) plus a React Native (Expo) mobile app for
-  leave requests and push notifications. Stack: React 19, TypeScript, Supabase,
-  React Native, ESP32, Three.js.
+- LumiNote — Intelligent markdown note-taking and knowledge management platform with
+  real-time synchronization, AI-assisted summaries, dynamic workspace organization,
+  and structured tag analytics. Stack: React 19, TypeScript, Supabase, TailwindCSS,
+  Vite, OpenAI API.
 - LiftApp — Timed exam & annotation platform for historical record transcription
   across five exam types. Users annotate scanned documents into structured tables;
   automatic scoring, retake support, and an admin panel for images, answer keys,
