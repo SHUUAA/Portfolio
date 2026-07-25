@@ -87,8 +87,8 @@ Vite, Supabase, Firebase, MongoDB, MySQL, n8n, Claude AI, LLM Integration, Promp
 RAG (Retrieval-Augmented Generation), Chatbot Development,
 TailwindCSS, Three.js, GSAP, Git, Figma, Power BI, Postman.
 
-# Featured projects (2025)
-- LumiNote — Intelligent markdown note-taking and knowledge management platform with
+# Featured projects (2025–2026)
+- LumiNote (2026) — Intelligent markdown note-taking and knowledge management platform with
   real-time synchronization, AI-assisted summaries, dynamic workspace organization,
   and structured tag analytics. Stack: React 19, TypeScript, Supabase, TailwindCSS,
   Vite, OpenAI API.

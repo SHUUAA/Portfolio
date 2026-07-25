@@ -14,7 +14,7 @@ export const PROJECTS = [
   {
     title: 'LumiNote',
     category: 'AI NOTE & KNOWLEDGE SYSTEM',
-    year: '2025',
+    year: '2026',
     description:
       'Intelligent markdown note-taking and knowledge management platform featuring real-time synchronization, AI-assisted summaries, dynamic workspace organization, and structured tag analytics.',
     tech: ['React', 'TypeScript', 'Supabase', 'TailwindCSS', 'Vite', 'OpenAI API'],
