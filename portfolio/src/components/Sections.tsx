@@ -12,6 +12,18 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const PROJECTS = [
   {
+    title: 'AI Agent Automation (OpenClaw)',
+    category: 'AI AUTOMATION SYSTEM',
+    year: '2026',
+    description:
+      'Built AI agents using OpenClaw to handle assistant-style tasks including social media marketing coordination, documentation, tracking, and reporting/analytics. Reduced manual effort and improved accuracy and consistency across recurring tasks.',
+    tech: ['OpenClaw', 'n8n', 'Claude AI', 'RAG', 'Vector Embeddings', 'pgvector'],
+    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800',
+    github: 'https://github.com/SHUUAA',
+    live: '#',
+    role: 'AI Automation Developer',
+  },
+  {
     title: 'LumiNote',
     category: 'AI NOTE & KNOWLEDGE SYSTEM',
     year: '2025',
@@ -51,7 +63,9 @@ const SKILLS = [
   'Node.js', 'Spring Boot', 'React Native', 'Vite',
   'Supabase', 'Firebase', 'MongoDB', 'MySQL',
   'n8n', 'OpenClaw', 'Claude AI', 'LLM Integration', 'Prompt Engineering',
-  'RAG', 'Chatbot Development',
+  'RAG', 'Vector Embeddings', 'pgvector', 'Chatbot Development',
+  'Meta Ads', 'Google Analytics', 'UTM Parameters', 'Campaign Tracking',
+  'HubSpot', 'GoHighLevel',
   'TailwindCSS', 'Three.js', 'GSAP', 'Git', 'Figma', 'Power BI', 'Postman',
 ];
 
@@ -618,7 +632,7 @@ export const Sections: React.FC = () => {
           </div>
           <div className="col-span-12 md:col-span-8 px-6 md:px-10 py-8 md:py-12 flex items-end justify-between gap-6">
             <p className="text-base md:text-lg font-medium text-fg-muted max-w-xl leading-snug">
-              Three featured engagements from 2025. Full index available at <span className="text-fg font-bold">/works</span>.
+              Four featured engagements from 2025–2026. Full index available at <span className="text-fg font-bold">/works</span>.
             </p>
             <span className="hidden md:inline-flex shrink-0 text-[10px] font-bold uppercase tracking-[0.25em] text-fg">
               03 / Featured
@@ -662,6 +676,11 @@ export const Sections: React.FC = () => {
                       <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-accent">
                         P/0{idx + 1} — {project.category}
                       </span>
+                      {(project as any).role && (
+                        <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle border border-border px-2 py-0.5">
+                          {(project as any).role}
+                        </span>
+                      )}
                     </div>
                     <h3 className="font-heavy text-4xl md:text-5xl lg:text-6xl uppercase leading-[0.9] tracking-tighter mt-6 text-fg">
                       {project.title}

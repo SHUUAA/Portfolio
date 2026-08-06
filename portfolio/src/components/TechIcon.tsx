@@ -28,8 +28,11 @@ import {
   SiChartdotjs,
   SiEspressif,
   SiElevenlabs,
+  SiGoogleanalytics,
+  SiHubspot,
+  SiMeta,
 } from 'react-icons/si';
-import { Cpu, Database, Brain, MessageSquare, Cog } from 'lucide-react';
+import { Cpu, Database, Brain, MessageSquare, Cog, BarChart2, Target, Link2 } from 'lucide-react';
 
 // Map tech-tag string → react-icons component.
 // Names below match the values used in PROJECTS.tech and CAPABILITIES.tags.
@@ -73,6 +76,20 @@ const ICONS: Record<string, IconType> = {
   LLM: Brain as unknown as IconType,
   Chatbot: MessageSquare as unknown as IconType,
   OpenClaw: Cog as unknown as IconType,
+  // AI & vector search
+  'Vector Embeddings': Database as unknown as IconType,
+  pgvector: SiPostgresql,
+  // Marketing & tracking
+  'Meta Ads': SiMeta,
+  'Google Analytics': SiGoogleanalytics,
+  GA4: SiGoogleanalytics,
+  'UTM Parameters': Link2 as unknown as IconType,
+  'Campaign Tracking': BarChart2 as unknown as IconType,
+  'Campaign Performance Tracking': BarChart2 as unknown as IconType,
+  HubSpot: SiHubspot,
+  GoHighLevel: Target as unknown as IconType,
+  'UTM Parameter Implementation': Link2 as unknown as IconType,
+  'Google Analytics (GA4) Tagging': SiGoogleanalytics,
 };
 
 export const TechIcon: React.FC<{ name: string; className?: string }> = ({
