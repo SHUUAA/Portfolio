@@ -18,7 +18,23 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    title: "AI Agent Automation (OpenClaw)",
+    title: "LYGO",
+    description: "CRM & marketing platform for Daan Bantayan Scuba Diving — designed and developed a comprehensive web and mobile CRM application featuring automated workflows for lead generation, customer retention, social media publishing, and email marketing.",
+    tech: ["React", "React Native", "TypeScript", "Node.js", "PostgreSQL", "TailwindCSS"],
+    date: "2026-10-15",
+    repo: "SHUUAA",
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "ATUA MIDTOWN",
+    description: "Tourist one-stop shop & local artist marketplace — designed and developed a digital one-stop-shop platform for tourists visiting Atua Midtown, featuring an interactive directory, shop listings, and floor plans, plus a dedicated space for local artists to promote and sell their artwork.",
+    tech: ["React", "TypeScript", "TailwindCSS", "Node.js", "PostgreSQL", "Figma"],
+    date: "2026-09-15",
+    repo: "SHUUAA",
+    image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "AI Agent Automation",
     description: "Built AI agents using OpenClaw to handle assistant-style tasks including social media marketing coordination, documentation, tracking, and reporting/analytics. Reduced manual effort and improved accuracy and consistency across recurring tasks.",
     tech: ["OpenClaw", "n8n", "Claude AI", "RAG", "Vector Embeddings", "pgvector"],
     date: "2026-08-01",
@@ -32,14 +48,6 @@ const PROJECTS: Project[] = [
     date: "2026-05-26",
     repo: "SHUUAA/HRIS-201",
     image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800"
-  },
-  {
-    title: "LifeVantage",
-    description: "Network intelligence and signal-processing platform for Lifewood — featuring social network ingestion, cross-network impact scoring, operative management, and a bespoke \"Digital Frost\" frosted-glass UI.",
-    tech: ["TypeScript", "React", "Supabase", "PLpgSQL"],
-    date: "2026-04-13",
-    repo: "MarkJanzenB/LifeVantage_frontend",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800"
   },
   {
     title: "LumiNote",

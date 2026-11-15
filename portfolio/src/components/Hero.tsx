@@ -283,7 +283,7 @@ export const Hero: React.FC = () => {
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
         </a>
         <a
-          href="/Joshua_Rebadomia_Resume.pdf"
+          href="/Joshua_Rebadomia_CV_2026.pdf"
           download
           className="hover-trigger col-span-6 md:col-span-4 flex items-center justify-between gap-4 bg-bg text-fg border-t-2 md:border-t-0 md:border-l-2 border-border hover:bg-accent hover:text-white hover:border-accent transition-colors duration-200 px-6 md:px-10 py-7 group"
         >

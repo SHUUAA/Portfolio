@@ -1,7 +1,47 @@
 // Server-side proxy to Groq Whisper. Frontend POSTs raw audio bytes (e.g. audio/webm),
 // we wrap it in multipart and forward to /openai/v1/audio/transcriptions.
 
-const MODEL = 'whisper-large-v3-turbo';
+const PREFERRED_WHISPER_MODELS = [
+  'whisper-large-v3-turbo',
+  'whisper-large-v3',
+];
+
+const DEFAULT_WHISPER_MODEL = 'whisper-large-v3-turbo';
+
+let cachedWhisperModel: { id: string; expiresAt: number } | null = null;
+
+async function getActiveWhisperModel(apiKey: string, forceRefresh = false): Promise<string> {
+  const now = Date.now();
+  if (!forceRefresh && cachedWhisperModel && cachedWhisperModel.expiresAt > now) {
+    return cachedWhisperModel.id;
+  }
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/models', {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+
+    if (res.ok) {
+      const json = (await res.json()) as { data?: Array<{ id: string; active?: boolean }> };
+      const availableModels = new Set(
+        (json.data ?? [])
+          .filter((m) => m.active !== false)
+          .map((m) => m.id)
+      );
+
+      for (const pref of PREFERRED_WHISPER_MODELS) {
+        if (availableModels.has(pref)) {
+          cachedWhisperModel = { id: pref, expiresAt: now + 60 * 60 * 1000 };
+          return pref;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[Groq Whisper] Failed to fetch live models:', err);
+  }
+
+  return cachedWhisperModel?.id || DEFAULT_WHISPER_MODEL;
+}
 
 export async function handleTranscribe(
   body: Buffer,
@@ -27,17 +67,38 @@ export async function handleTranscribe(
             ? 'ogg'
             : 'webm';
 
-  const audioBlob = new Blob([new Uint8Array(body)], { type: contentType || 'audio/webm' });
-  const form = new FormData();
-  form.append('file', audioBlob, `audio.${ext}`);
-  form.append('model', MODEL);
-  form.append('response_format', 'json');
+  let model = await getActiveWhisperModel(apiKey);
 
-  const upstream = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}` },
-    body: form,
-  });
+  const executeTranscription = async (targetModel: string) => {
+    const audioBlob = new Blob([new Uint8Array(body)], { type: contentType || 'audio/webm' });
+    const form = new FormData();
+    form.append('file', audioBlob, `audio.${ext}`);
+    form.append('model', targetModel);
+    form.append('response_format', 'json');
+
+    return fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}` },
+      body: form,
+    });
+  };
+
+  let upstream = await executeTranscription(model);
+
+  if (!upstream.ok && (upstream.status === 400 || upstream.status === 404)) {
+    const errorText = await upstream.text();
+    if (/model|deprecated|decommissioned|not_found/i.test(errorText)) {
+      const newModel = await getActiveWhisperModel(apiKey, true);
+      if (newModel && newModel !== model) {
+        model = newModel;
+        upstream = await executeTranscription(model);
+      } else {
+        return { ok: false, status: upstream.status, error: `Groq Whisper ${upstream.status}: ${errorText}` };
+      }
+    } else {
+      return { ok: false, status: upstream.status, error: `Groq Whisper ${upstream.status}: ${errorText}` };
+    }
+  }
 
   if (!upstream.ok) {
     const text = await upstream.text();
@@ -47,9 +108,6 @@ export async function handleTranscribe(
   const data = (await upstream.json()) as { text?: string };
   return { ok: true, text: data.text ?? '' };
 }
-
-// Vercel: tell the runtime not to parse the body — we need raw bytes.
-export const config = { api: { bodyParser: false } };
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {

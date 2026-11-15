@@ -6,7 +6,7 @@ const LINKS: { label: string; to: string; external?: boolean; download?: boolean
   { label: 'Index', to: '/' },
   { label: 'Subject', to: '/#about' },
   { label: 'Works', to: '/projects' },
-  { label: 'Resume', to: '/Joshua_Rebadomia_Resume.pdf', external: true, download: true },
+  { label: 'Resume', to: '/Joshua_Rebadomia_CV_2026.pdf', external: true, download: true },
   { label: 'Contact', to: '/#contact' },
 ];
 

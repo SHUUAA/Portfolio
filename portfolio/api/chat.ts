@@ -65,6 +65,9 @@ Examples:
   • "Ship Mobile AI · Skip the Cloud" — AI Cebu Community × FrontierAI, May 10, 2026 (online).
   • "Agents & AI at the Frontier!" — AI Cebu Community × FrontierAI, Mar 28, 2026,
     Zero-Ten Park, Mandaue, Cebu.
+  • Verified credentials across Anthropic (Claude 101, Claude Code, MCP, AI Fluency, Bedrock, Vertex AI),
+    Kaggle (Intro to Programming, Pandas, Data Visualization),
+    SoloLearn (Java, PHP, SQL), and Huawei Talent Online (Storage & Data Organization).
 - Currently: AI Executive & Project Coordinator at Lifewood Data Technology Ltd.
   (Apr 2025 – present, on-site, Cebu). Coordinates AI-driven projects, builds agentic
   automation pipelines with n8n, OpenClaw, and Claude AI; leads training programs;
@@ -88,6 +91,14 @@ RAG (Retrieval-Augmented Generation), Chatbot Development,
 TailwindCSS, Three.js, GSAP, Git, Figma, Power BI, Postman.
 
 # Featured projects (2025–2026)
+- LYGO (2026) — CRM & marketing platform for Daan Bantayan Scuba Diving. Comprehensive web and
+  mobile CRM application featuring automated workflows for lead generation, customer retention,
+  social media publishing, and email marketing. Stack: React, React Native, TypeScript, Node.js, PostgreSQL, TailwindCSS.
+- ATUA MIDTOWN (2026) — Tourist one-stop shop & local artist marketplace. Digital platform for tourists
+  visiting Atua Midtown with interactive directory, shop listings, floor plans, and a dedicated space for local artists.
+  Stack: React, TypeScript, TailwindCSS, Node.js, PostgreSQL, Figma.
+- AI Agent Automation (2026) — Built AI agents using OpenClaw to handle assistant-style tasks including social
+  media marketing coordination, documentation, tracking, and reporting/analytics. Stack: OpenClaw, n8n, Claude AI, RAG, pgvector.
 - LumiNote (2026) — Intelligent markdown note-taking and knowledge management platform with
   real-time synchronization, AI-assisted summaries, dynamic workspace organization,
   and structured tag analytics. Stack: React 19, TypeScript, Supabase, TailwindCSS,
@@ -105,41 +116,137 @@ TailwindCSS, Three.js, GSAP, Git, Figma, Power BI, Postman.
 - Email: rebadomiarobert@gmail.com
 - Phone: +63 997 287 8044
 - GitHub: https://github.com/SHUUAA
-- Resume: available at /Joshua_Rebadomia_Resume.pdf on this site
+- Resume: available at /Joshua_Rebadomia_CV_2026.pdf on this site
 - The Contact section is at the bottom of the home page; the full project index is at /projects.
 
 If a visitor asks something Joshua-related that isn't covered above, say you don't have
 that detail and suggest they email him at rebadomiarobert@gmail.com. Never make up facts.`;
 
-const MODEL = 'llama-3.3-70b-versatile';
+// Priority order of supported production models on Groq
+const PREFERRED_CHAT_MODELS = [
+  'llama-3.3-70b-versatile',
+  'llama-3.1-8b-instant',
+  'openai/gpt-oss-120b',
+  'openai/gpt-oss-20b',
+  'qwen/qwen3.8-27b',
+  'meta-models/muse-spark-open',
+  'minimaxai/minimax-m2.7',
+];
+
+const DEFAULT_FALLBACK_MODEL = 'llama-3.3-70b-versatile';
+
+let cachedModel: { id: string; expiresAt: number } | null = null;
+
+/**
+ * Dynamically queries Groq's `/openai/v1/models` endpoint to discover active models.
+ * Automatically adapts if Groq updates, deprecates, or launches new models.
+ */
+async function getActiveGroqModel(apiKey: string, forceRefresh = false): Promise<string> {
+  // Allow manual override via environment variable if desired
+  if (process.env.GROQ_MODEL) {
+    return process.env.GROQ_MODEL;
+  }
+
+  const now = Date.now();
+  if (!forceRefresh && cachedModel && cachedModel.expiresAt > now) {
+    return cachedModel.id;
+  }
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/models', {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+
+    if (res.ok) {
+      const json = (await res.json()) as { data?: Array<{ id: string; active?: boolean }> };
+      const availableModels = new Set(
+        (json.data ?? [])
+          .filter((m) => m.active !== false)
+          .map((m) => m.id)
+      );
+
+      // 1. Pick the best model from our preferred production list that Groq currently serves
+      for (const pref of PREFERRED_CHAT_MODELS) {
+        if (availableModels.has(pref)) {
+          cachedModel = { id: pref, expiresAt: now + 60 * 60 * 1000 }; // cache for 1 hour
+          return pref;
+        }
+      }
+
+      // 2. Fallback: pick any active text model (excluding whisper, speech, or prompt-guard)
+      const anyActiveTextModel = Array.from(availableModels).find(
+        (id) => !id.includes('whisper') && !id.includes('guard') && !id.includes('orpheus')
+      );
+      if (anyActiveTextModel) {
+        cachedModel = { id: anyActiveTextModel, expiresAt: now + 60 * 60 * 1000 };
+        return anyActiveTextModel;
+      }
+    }
+  } catch (err) {
+    console.warn('[Groq] Failed to fetch live model catalog from Groq API:', err);
+  }
+
+  return cachedModel?.id || DEFAULT_FALLBACK_MODEL;
+}
 
 export interface ChatRequestBody {
   messages: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
 export async function handleChat(body: ChatRequestBody): Promise<
-  { ok: true; reply: string } | { ok: false; status: number; error: string }
+  { ok: true; reply: string; modelUsed?: string } | { ok: false; status: number; error: string }
 > {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return { ok: false, status: 500, error: 'GROQ_API_KEY is not configured on the server.' };
+    return {
+      ok: false,
+      status: 500,
+      error: 'GROQ_API_KEY is not configured on the server. Please add GROQ_API_KEY to your environment variables.',
+    };
   }
 
   if (!body || !Array.isArray(body.messages) || body.messages.length === 0) {
     return { ok: false, status: 400, error: 'Request body must include a non-empty messages array.' };
   }
 
-  const upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...body.messages],
-    }),
-  });
+  let model = await getActiveGroqModel(apiKey);
+
+  const executeCompletion = async (targetModel: string) => {
+    return fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: targetModel,
+        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...body.messages],
+      }),
+    });
+  };
+
+  let upstream = await executeCompletion(model);
+
+  // If the model was decommissioned, deprecated, or not found:
+  // Automatically query Groq's live model catalog, refresh the cache, and retry with the active model.
+  if (!upstream.ok && (upstream.status === 400 || upstream.status === 404)) {
+    const errorText = await upstream.text();
+    const isModelDeprecation = /model|decommissioned|deprecated|not_found|does not exist/i.test(errorText);
+
+    if (isModelDeprecation) {
+      console.warn(`[Groq] Model "${model}" failed (${errorText}). Auto-discovering updated model...`);
+      const newModel = await getActiveGroqModel(apiKey, true);
+
+      if (newModel && newModel !== model) {
+        model = newModel;
+        upstream = await executeCompletion(model);
+      } else {
+        return { ok: false, status: upstream.status, error: `Groq API ${upstream.status}: ${errorText}` };
+      }
+    } else {
+      return { ok: false, status: upstream.status, error: `Groq API ${upstream.status}: ${errorText}` };
+    }
+  }
 
   if (!upstream.ok) {
     const text = await upstream.text();
@@ -150,7 +257,7 @@ export async function handleChat(body: ChatRequestBody): Promise<
     choices?: Array<{ message?: { content?: string } }>;
   };
   const reply = data.choices?.[0]?.message?.content ?? '';
-  return { ok: true, reply };
+  return { ok: true, reply, modelUsed: model };
 }
 
 export default async function handler(req: any, res: any) {

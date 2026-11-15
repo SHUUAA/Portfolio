@@ -1,46 +1,106 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 interface PreloaderProps {
   onComplete: () => void;
 }
 
-const logEntries = [
-  { threshold: 0, text: "INIT: Booting portfolio application kernel..." },
-  { threshold: 10, text: "INIT: Activating React WebGL canvas modules..." },
-  { threshold: 20, text: "SYS: Binding Lenis smooth-scrolling engine..." },
-  { threshold: 30, text: "SYS: Hydrating Swiss International design grid..." },
-  { threshold: 42, text: "THREE: Initializing Rapier physics engine..." },
-  { threshold: 54, text: "THREE: Binding Canvas WebGL rendering context..." },
-  { threshold: 65, text: "SYS: Mounting Three.js 3D renderer context..." },
-  { threshold: 76, text: "AI: Activating Chatbot pipeline & neural weights..." },
-  { threshold: 88, text: "UI: Injecting scroll-triggered GSAP behaviors..." },
-  { threshold: 95, text: "SYS: Verification pass complete. Preloading done." },
-  { threshold: 99, text: "READY: Executing system handoff. Welcome." },
-];
+interface Pixel {
+  x: number;
+  y: number;
+  threshold: number;
+}
+
+interface SnakeSegment {
+  c: number;
+  r: number;
+}
+
+interface PixelSnake {
+  body: SnakeSegment[];
+  dir: { dc: number; dr: number };
+  targetLength: number;
+  lastStepTime: number;
+  stepSpeed: number;
+  life: number;
+  maxLife: number;
+  opacity: number;
+  state: 'fadein' | 'alive' | 'fadeout';
+}
 
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [progress, setProgress] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const numberRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
-  // Dynamic logs computed reactively from current progress
-  const activeLogs = logEntries
-    .filter((entry) => progress >= entry.threshold)
-    .map((entry) => entry.text);
-
-  // Background Canvas Drawing Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+
+    // Responsive grid cell size (30px to 44px)
+    const pixelSize = Math.max(30, Math.min(44, Math.floor(width / 38)));
+    const cols = Math.ceil(width / pixelSize);
+    const rows = Math.ceil(height / pixelSize);
+
+    // 1. Base dissolve pixels
+    const pixels: Pixel[] = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const normX = (c + 0.5) / cols;
+        const normY = (r + 0.5) / rows;
+        const dx = normX - 0.5;
+        const dy = normY - 0.5;
+        const dist = Math.sqrt(dx * dx + dy * dy) * 1.25;
+        const noise = Math.random() * 0.35;
+        const threshold = Math.min(0.92, dist * 0.65 + noise);
+
+        pixels.push({
+          x: c * pixelSize,
+          y: r * pixelSize,
+          threshold,
+        });
+      }
+    }
+
+    // 2. Pixel Snakes that crawl, disappear, and respawn
+    const CARDINAL_DIRS = [
+      { dc: 1, dr: 0 },
+      { dc: -1, dr: 0 },
+      { dc: 0, dr: 1 },
+      { dc: 0, dr: -1 },
+    ];
+
+    const createSnake = (initialDelay = 0): PixelSnake => {
+      const startC = Math.floor(Math.random() * cols);
+      const startR = Math.floor(Math.random() * rows);
+      const dir = CARDINAL_DIRS[Math.floor(Math.random() * CARDINAL_DIRS.length)];
+      const maxLife = Math.floor(Math.random() * 16 + 14); // 14 to 30 steps
+      const targetLength = Math.floor(Math.random() * 3 + 2); // 2 to 4 segments
+
+      return {
+        body: [{ c: startC, r: startR }],
+        dir,
+        targetLength,
+        lastStepTime: performance.now() + initialDelay,
+        stepSpeed: Math.floor(Math.random() * 40 + 75), // 75ms - 115ms per grid step
+        life: maxLife,
+        maxLife,
+        opacity: 0,
+        state: 'fadein',
+      };
+    };
+
+    // Stagger spawn 7 to 9 snakes across the screen
+    const snakeCount = Math.max(6, Math.min(10, Math.floor(cols / 4)));
+    const snakes: PixelSnake[] = Array.from({ length: snakeCount }, (_, i) =>
+      createSnake(i * 120)
+    );
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -48,301 +108,205 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     };
     window.addEventListener('resize', handleResize);
 
-    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.targetX = (e.clientX - window.innerWidth / 2) * 0.03;
-      mouse.targetY = (e.clientY - window.innerHeight / 2) * 0.03;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    interface TechPoint {
-      x: number;
-      y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      label: string;
-    }
-
-    const points: TechPoint[] = Array.from({ length: 15 }, (_, i) => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 2 + 1,
-      speedX: (Math.random() - 0.5) * 0.4,
-      speedY: (Math.random() - 0.5) * 0.4,
-      label: `SYS_ND_${i.toString().padStart(2, '0')}_${Math.floor(Math.random() * 900 + 100)}`
-    }));
-
-    const drawGrid = () => {
-      const borderVal = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
-      ctx.strokeStyle = borderVal;
-      ctx.globalAlpha = 0.05;
-      ctx.lineWidth = 1;
-
-      const gridSize = 48;
-      const startX = mouse.x % gridSize;
-      for (let x = startX; x < width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-
-      const startY = mouse.y % gridSize;
-      for (let y = startY; y < height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
-      ctx.globalAlpha = 1.0;
+    const state = {
+      dissolve: 0,
     };
 
-    const drawTechElements = (time: number) => {
-      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-      const fgColor = getComputedStyle(document.documentElement).getPropertyValue('--fg').trim();
-
-      // Render floating points & coordinates
-      points.forEach((pt) => {
-        pt.x += pt.speedX;
-        pt.y += pt.speedY;
-
-        // Wrap edges
-        if (pt.x < 0) pt.x = width;
-        if (pt.x > width) pt.x = 0;
-        if (pt.y < 0) pt.y = height;
-        if (pt.y > height) pt.y = 0;
-
-        const renderX = pt.x + mouse.x * 0.4;
-        const renderY = pt.y + mouse.y * 0.4;
-
-        ctx.fillStyle = accentColor;
-        ctx.globalAlpha = 0.6;
-        ctx.beginPath();
-        ctx.arc(renderX, renderY, pt.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = fgColor;
-        ctx.globalAlpha = 0.25;
-        ctx.font = '8px ui-monospace, SF Mono, Menlo, monospace';
-        ctx.fillText(
-          `${pt.label} (${Math.round(renderX)}, ${Math.round(renderY)})`,
-          renderX + 8,
-          renderY + 3
-        );
-      });
-
-      // Draw a rotating radar or geometric crosshair in center background
-      ctx.save();
-      ctx.translate(width / 2 + mouse.x * 0.25, height / 2 + mouse.y * 0.25);
-      ctx.rotate(time * 0.0004);
-
-      ctx.strokeStyle = fgColor;
-      ctx.globalAlpha = 0.05;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(0, 0, 150, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.globalAlpha = 0.03;
-      ctx.setLineDash([2, 8]);
-      ctx.beginPath();
-      ctx.arc(0, 0, 170, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      ctx.strokeStyle = accentColor;
-      ctx.globalAlpha = 0.15;
-      ctx.beginPath();
-      ctx.moveTo(-15, 0); ctx.lineTo(15, 0);
-      ctx.moveTo(0, -15); ctx.lineTo(0, 15);
-      ctx.stroke();
-
-      const bSize = 100;
-      const len = 12;
-      ctx.strokeStyle = fgColor;
-      ctx.globalAlpha = 0.08;
-      // top left
-      ctx.beginPath();
-      ctx.moveTo(-bSize + len, -bSize); ctx.lineTo(-bSize, -bSize); ctx.lineTo(-bSize, -bSize + len);
-      ctx.stroke();
-      // top right
-      ctx.beginPath();
-      ctx.moveTo(bSize - len, -bSize); ctx.lineTo(bSize, -bSize); ctx.lineTo(bSize, -bSize + len);
-      ctx.stroke();
-      // bottom left
-      ctx.beginPath();
-      ctx.moveTo(-bSize + len, bSize); ctx.lineTo(-bSize, bSize); ctx.lineTo(-bSize, bSize - len);
-      ctx.stroke();
-      // bottom right
-      ctx.beginPath();
-      ctx.moveTo(bSize - len, bSize); ctx.lineTo(bSize, bSize); ctx.lineTo(bSize, bSize - len);
-      ctx.stroke();
-
-      ctx.restore();
-      ctx.globalAlpha = 1.0;
-    };
+    let animationFrameId: number;
 
     const render = (time: number) => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth mouse interpolation
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      const isDark = document.documentElement.classList.contains('dark');
+      const bgColor = isDark ? '#000000' : '#ffffff';
+      const gridBorder = isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.035)';
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#FF3000';
 
-      drawGrid();
-      drawTechElements(time);
+      const d = state.dissolve;
+
+      // Draw background pixel tiles
+      for (let i = 0; i < pixels.length; i++) {
+        const p = pixels[i];
+        if (d <= p.threshold) {
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(p.x, p.y, pixelSize, pixelSize);
+
+          ctx.strokeStyle = gridBorder;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(p.x + 0.5, p.y + 0.5, pixelSize - 1, pixelSize - 1);
+        } else if (d < p.threshold + 0.18) {
+          const progressInWindow = (d - p.threshold) / 0.18;
+          const scale = 1 - progressInWindow;
+          const currentSize = pixelSize * scale;
+          const offset = (pixelSize - currentSize) / 2;
+
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(p.x + offset, p.y + offset, currentSize, currentSize);
+
+          ctx.strokeStyle = gridBorder;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(p.x + offset + 0.5, p.y + offset + 0.5, currentSize - 1, currentSize - 1);
+        }
+      }
+
+      // Update and draw pixel snakes while loading
+      if (d < 0.25) {
+        const fadeOutMultiplier = Math.max(0, 1 - d * 4);
+
+        for (let i = 0; i < snakes.length; i++) {
+          const snake = snakes[i];
+
+          // Advance snake step
+          if (time - snake.lastStepTime > snake.stepSpeed) {
+            snake.lastStepTime = time;
+
+            // 30% chance to turn 90 degrees
+            if (Math.random() < 0.35) {
+              const currentDir = snake.dir;
+              const possibleTurns = CARDINAL_DIRS.filter(
+                (d) => !(d.dc === -currentDir.dc && d.dr === -currentDir.dr) && !(d.dc === currentDir.dc && d.dr === currentDir.dr)
+              );
+              snake.dir = possibleTurns[Math.floor(Math.random() * possibleTurns.length)];
+            }
+
+            const head = snake.body[0];
+            const nextC = (head.c + snake.dir.dc + cols) % cols;
+            const nextR = (head.r + snake.dir.dr + rows) % rows;
+
+            snake.body.unshift({ c: nextC, r: nextR });
+            if (snake.body.length > snake.targetLength) {
+              snake.body.pop();
+            }
+
+            snake.life--;
+            if (snake.life <= 0) {
+              snake.state = 'fadeout';
+            }
+          }
+
+          // Handle opacity lifecycle
+          if (snake.state === 'fadein') {
+            snake.opacity += 0.07;
+            if (snake.opacity >= 1) {
+              snake.opacity = 1;
+              snake.state = 'alive';
+            }
+          } else if (snake.state === 'fadeout') {
+            snake.opacity -= 0.08;
+            if (snake.opacity <= 0) {
+              // Respawn at a fresh location
+              Object.assign(snake, createSnake());
+            }
+          }
+
+          // Draw snake segments as solid orange pixel blocks
+          const alpha = snake.opacity * fadeOutMultiplier;
+          if (alpha > 0) {
+            ctx.fillStyle = accentColor;
+            ctx.globalAlpha = alpha;
+
+            for (let s = 0; s < snake.body.length; s++) {
+              const seg = snake.body[s];
+              const segX = seg.c * pixelSize;
+              const segY = seg.r * pixelSize;
+              ctx.fillRect(segX, segY, pixelSize, pixelSize);
+            }
+
+            ctx.globalAlpha = 1.0;
+          }
+        }
+      }
 
       animationFrameId = requestAnimationFrame(render);
     };
 
     animationFrameId = requestAnimationFrame(render);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
-  // GSAP Animation Timelines
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          // 1. Fade out the text content elements
-          gsap.to(contentRef.current, {
-            opacity: 0,
-            duration: 0.4,
-            ease: 'power2.out',
-            onComplete: () => {
-              // 2. Staggered slide up of background panels
-              gsap.to('.preloader-panel', {
-                yPercent: -100,
-                duration: 0.9,
-                stagger: 0.08,
-                ease: 'power3.inOut',
-                onComplete,
-              });
-            },
-          });
-        },
-      });
-
-      // Progress counter animation
-      tl.to(
-        { value: 0 },
-        {
-          value: 100,
-          duration: 2.2,
-          ease: 'power2.inOut',
-          onUpdate: function () {
-            const v = Math.round(this.targets()[0].value);
-            setProgress(v);
-            if (barRef.current) {
-              gsap.set(barRef.current, { scaleX: v / 100, transformOrigin: '0% 50%' });
-            }
-          },
-        }
-      );
+    const tl = gsap.timeline({
+      onComplete: () => {
+        cancelAnimationFrame(animationFrameId);
+        onComplete();
+      },
     });
 
-    return () => ctx.revert();
+    // 1. Ultra-smooth progress count from 000 to 100
+    // Using direct DOM updates for 60/120fps buttery smooth count without React re-render lag
+    tl.to(
+      { val: 0 },
+      {
+        val: 100,
+        duration: 2.2,
+        ease: 'power1.inOut',
+        onUpdate: function () {
+          const v = Math.round(this.targets()[0].val);
+          if (numberRef.current) {
+            numberRef.current.textContent = v.toString().padStart(3, '0');
+          }
+          if (barRef.current) {
+            barRef.current.style.transform = `scaleX(${v / 100})`;
+          }
+        },
+      }
+    );
+
+    // Brief graceful hold at 100
+    tl.to({}, { duration: 0.15 });
+
+    // 2. Fade out center content cleanly
+    tl.to(contentRef.current, {
+      opacity: 0,
+      duration: 0.25,
+      ease: 'power2.out',
+    });
+
+    // 3. Pixel dissolve wave — reveals the landing page underneath
+    tl.to(state, {
+      dissolve: 1.15,
+      duration: 1.0,
+      ease: 'power3.inOut',
+    });
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+      tl.kill();
+    };
   }, [onComplete]);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 z-[10000] text-fg flex flex-col overflow-hidden select-none pointer-events-auto"
-    >
-      {/* Background Curtain Panels */}
-      <div className="absolute inset-0 flex pointer-events-none z-0">
-        <div className="preloader-panel flex-1 bg-bg border-r border-border/10 last:border-r-0 h-full w-full" />
-        <div className="preloader-panel flex-1 bg-bg border-r border-border/10 last:border-r-0 h-full w-full" />
-        <div className="preloader-panel flex-1 bg-bg border-r border-border/10 last:border-r-0 h-full w-full" />
-        <div className="preloader-panel flex-1 bg-bg border-r border-border/10 last:border-r-0 h-full w-full" />
-      </div>
-
-      {/* Interactive Grid/Particle Canvas */}
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden select-none pointer-events-none">
+      {/* Pixel Curtain & Snake Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full z-10 pointer-events-none opacity-60"
+        className="absolute inset-0 w-full h-full pointer-events-auto"
       />
 
-      {/* Foreground Content Wrapper */}
+      {/* Pure Center Content — Minimalist loading indicator */}
       <div
         ref={contentRef}
-        className="preloader-content absolute inset-0 flex flex-col z-25 pointer-events-none"
+        className="relative z-10 flex flex-col items-center justify-center text-center px-6"
       >
-        {/* Top Ledger */}
-        <div className="grid grid-cols-12 border-b-2 border-border bg-bg/20 backdrop-blur-[2px]">
-          <div className="col-span-6 md:col-span-3 px-6 md:px-10 py-5 border-r-2 border-border text-[10px] uppercase tracking-[0.3em] font-bold">
-            <span className="text-accent">00 / Loading</span>
-          </div>
-          <div className="hidden md:flex col-span-3 items-center px-6 md:px-10 py-5 border-r-2 border-border text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
-            Joshua R. Rebadomia
-          </div>
-          <div className="hidden md:flex col-span-3 items-center px-6 md:px-10 py-5 border-r-2 border-border text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
-            Portfolio · Vol. 04
-          </div>
-          <div className="col-span-6 md:col-span-3 flex items-center justify-end px-6 md:px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
-            Edition 2026
-          </div>
+        {/* Loading Label */}
+        <div className="flex items-center gap-2.5 mb-3 text-[11px] md:text-xs uppercase tracking-[0.35em] font-bold text-accent">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+          <span>Loading</span>
         </div>
 
-        {/* Center Stage: Progress Counter & Technical Logs */}
-        <div className="flex-1 grid grid-cols-12 items-center gap-6 py-8">
-          {/* Big Digital Counter */}
-          <div className="col-span-12 md:col-span-7 px-6 md:px-10 flex flex-col justify-center">
-            <span className="text-[11px] uppercase tracking-[0.3em] font-bold text-accent">
-              Compiling System
-            </span>
-            <div className="font-heavy text-[24vw] md:text-[15vw] uppercase leading-[0.8] tracking-tighter mt-2 tabular-nums">
-              {progress.toString().padStart(3, '0')}
-            </div>
-          </div>
-
-          {/* Compilation Logs terminal */}
-          <div className="col-span-12 md:col-span-5 px-6 md:px-10">
-            <div className="font-mono-tight text-[10px] text-fg-subtle flex flex-col gap-1 overflow-hidden h-[160px] md:h-[220px] border border-border/20 p-4 bg-bg-elevated/40 backdrop-blur-sm rounded">
-              <div className="flex items-center justify-between border-b border-border/20 pb-2 mb-2">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                  <span className="text-[9px] uppercase tracking-wider text-accent font-bold">System Log</span>
-                </div>
-                <span className="text-[9px] text-fg-subtle opacity-50 font-bold">V4.0.0</span>
-              </div>
-              <div className="flex-1 flex flex-col justify-end gap-1.5 overflow-hidden">
-                {activeLogs.map((log, idx) => (
-                  <div key={idx} className="flex gap-2 items-start transition-opacity duration-300">
-                    <span className="text-accent shrink-0 select-none">&gt;</span>
-                    <span className="leading-relaxed">{log}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        {/* Big Number at the Center — updated smoothly via direct DOM ref */}
+        <div
+          ref={numberRef}
+          className="font-heavy text-[24vw] md:text-[18vw] lg:text-[15vw] uppercase leading-none tracking-tighter text-fg tabular-nums drop-shadow-sm select-none"
+        >
+          000
         </div>
 
-        {/* Progress Bar */}
-        <div className="relative h-1 bg-bg border-t-2 border-border">
+        {/* Minimal Hairline Progress Bar */}
+        <div className="w-44 sm:w-56 h-[2px] bg-border/15 relative overflow-hidden mt-6 sm:mt-8">
           <div
             ref={barRef}
-            className="absolute inset-y-0 left-0 right-0 bg-accent"
+            className="absolute inset-y-0 left-0 w-full bg-accent will-change-transform"
             style={{ transform: 'scaleX(0)', transformOrigin: '0% 50%' }}
           />
-        </div>
-
-        {/* Bottom Ledger */}
-        <div className="grid grid-cols-12 border-t-2 border-border bg-bg/20 backdrop-blur-[2px]">
-          <div className="col-span-12 md:col-span-8 px-6 md:px-10 py-5 border-b-2 md:border-b-0 md:border-r-2 border-border text-[10px] uppercase tracking-[0.3em] font-bold text-fg truncate">
-            <span className="md:hidden">AI Exec · Full-Stack Dev</span>
-            <span className="hidden md:inline">AI Executive · Full-Stack Developer</span>
-          </div>
-          <div className="col-span-12 md:col-span-4 flex items-center justify-between md:justify-end gap-3 px-6 md:px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-fg-subtle">
-            <span className="relative inline-flex h-2 w-2 bg-accent shrink-0" style={{ animation: 'blink 1.4s infinite' }} />
-            <span>Loading System</span>
-          </div>
         </div>
       </div>
     </div>

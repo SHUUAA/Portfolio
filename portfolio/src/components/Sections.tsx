@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ArrowUpRight, GraduationCap, Calendar, MapPin, Mail, Phone, Award } from 'lucide-react';
-import { SiGithub } from 'react-icons/si';
+import { SiGithub, SiKaggle, SiSololearn, SiHuawei } from 'react-icons/si';
 import { CoreCapabilities } from './CoreCapabilities';
 import { TechIcon } from './TechIcon';
 import { CertificateModal, type CertificateData } from './CertificateModal';
@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const PROJECTS = [
   {
-    title: 'AI Agent Automation (OpenClaw)',
+    title: 'AI Agent Automation',
     category: 'AI AUTOMATION SYSTEM',
     year: '2026',
     description:
@@ -70,6 +70,15 @@ const SKILLS = [
 ];
 
 export const EXPERIENCE = [
+  {
+    company: 'Polaris',
+    role: 'Backend Developer & AI Engineer',
+    period: 'Oct 2026 — Present',
+    duration: 'Current',
+    description:
+      'Designing and maintaining scalable server-side systems, RESTful APIs, and AI-powered features for Polaris. Building LLM integrations, intelligent automation pipelines, and data-driven backend services that power the platform.',
+    location: 'Cebu, Philippines',
+  },
   {
     company: 'Lifewood Data Technology Ltd.',
     role: 'AI Executive & Project Coordinator',
@@ -233,13 +242,96 @@ export const CERTIFICATES = [
     location: 'Online',
     verifyUrl: 'https://verify.skilljar.com/c/vf38h4oh7k9j',
   },
+  // Kaggle certificates
+  {
+    title: 'Intro to Programming',
+    issuer: 'Kaggle',
+    date: 'Aug 30, 2023',
+    location: 'Online',
+    image: '/certificates/kaggle-intro-to-programming.png',
+    verifyUrl: 'https://www.kaggle.com/learn/certification/joshuarobertrebadomia/intro-to-programming',
+  },
+  {
+    title: 'Pandas',
+    issuer: 'Kaggle',
+    date: 'Sep 9, 2023',
+    location: 'Online',
+    image: '/certificates/kaggle-pandas.png',
+    verifyUrl: 'https://www.kaggle.com/learn/certification/joshuarobertrebadomia/pandas',
+  },
+  {
+    title: 'Data Visualization',
+    issuer: 'Kaggle',
+    date: 'Sep 23, 2023',
+    location: 'Online',
+    image: '/certificates/kaggle-data-visualization.png',
+    verifyUrl: 'https://www.kaggle.com/learn/certification/joshuarobertrebadomia/data-visualization',
+  },
+  // SoloLearn certificates
+  {
+    title: 'Introduction to Java',
+    issuer: 'SoloLearn',
+    date: 'Feb 1, 2023',
+    location: 'Online',
+    image: '/certificates/sololearn-java.jpg',
+    verifyUrl: 'https://www.sololearn.com/certificates/CC-TRLIOBLZ',
+  },
+  {
+    title: 'PHP',
+    issuer: 'SoloLearn',
+    date: 'May 5, 2023',
+    location: 'Online',
+    image: '/certificates/sololearn-php.jpg',
+    verifyUrl: 'https://www.sololearn.com/certificates/CT-CHUNLYM7',
+  },
+  {
+    title: 'Introduction to SQL',
+    issuer: 'SoloLearn',
+    date: 'Apr 24, 2023',
+    location: 'Online',
+    image: '/certificates/sololearn-sql.jpg',
+    verifyUrl: 'https://www.sololearn.com/certificates/CC-4Z3J2MR3',
+  },
+  // Huawei Talent Online certificates
+  {
+    title: 'Information Representation & Data Organization',
+    issuer: 'Huawei Talent Online',
+    date: 'Feb 11, 2022',
+    location: 'Online',
+    image: '/certificates/huawei-data-organization.jpg',
+    verifyUrl: 'https://ilearningx.huawei.com/portal/certificates/b4506cf82ee246cf8a97ce2d10543049',
+  },
+  {
+    title: 'HCIA-Storage Course',
+    issuer: 'Huawei Talent Online',
+    date: 'Feb 22, 2022',
+    location: 'Online',
+    image: '/certificates/huawei-hcia-storage.jpg',
+    verifyUrl: 'https://ilearningx.huawei.com/portal/certificates/6235aeb95d22480c8a963771ba3658d1',
+  },
+  {
+    title: 'HCIP-Storage Course',
+    issuer: 'Huawei Talent Online',
+    date: 'Mar 10, 2022',
+    location: 'Online',
+    image: '/certificates/huawei-hcip-storage.jpg',
+    verifyUrl: 'https://ilearningx.huawei.com/portal/certificates/aeaf0e42bc104823b6480df456bd49b7',
+  },
+  {
+    title: 'HCIE-Storage Course',
+    issuer: 'Huawei Talent Online',
+    date: 'Apr 5, 2022',
+    location: 'Online',
+    image: '/certificates/huawei-hcie-storage.jpg',
+    verifyUrl: 'https://ilearningx.huawei.com/portal/certificates/25299aaca0594ada9619ac120a85f711',
+  },
 ];
 
 const STATS = [
   { num: '22+', label: 'Projects Built' },
-  { num: '4+',  label: 'Years Coding' },
+  { num: '4+', label: 'Years Coding' },
   { num: '25+', label: 'Technologies' },
-  { num: '03',  label: 'AI Pipelines' },
+  { num: '03', label: 'AI Pipelines' },
 ];
 
 const MARQUEE_SKILLS = [...SKILLS, ...SKILLS, ...SKILLS];
@@ -441,21 +533,45 @@ export const Sections: React.FC = () => {
             </div>
           </div>
 
-          {/* Polaris Access Card */}
-          <div className="col-span-12 md:col-span-3 relative overflow-hidden flex flex-col items-center justify-center gap-3 px-4 md:px-6 py-8 md:py-12 fade-up">
+          {/* Current Role — Polaris */}
+          <div className="col-span-12 md:col-span-3 relative overflow-hidden flex flex-col fade-up">
             <div className="absolute inset-0 swiss-pattern-diagonal text-fg opacity-[0.03]" />
-            <span className="relative text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Access Card</span>
-            <div className="relative border-2 border-border bg-bg-elevated overflow-hidden transition-transform duration-300 hover:rotate-1 hover:scale-[1.02]">
-              <iframe
-                src="https://polarisdev-gamma.vercel.app/access-card?name=Joshua+Robert+C.+Rebadomia&role=CO-FOUNDER&type=Backend+Developer+%7C+AI+Engineer"
-                width="220"
-                height="340"
-                style={{ border: 'none', background: 'transparent', overflow: 'hidden' }}
-                title="Polaris Access Card - Joshua Robert C. Rebadomia"
-                loading="lazy"
-              />
+
+            {/* Top label bar */}
+            <div className="relative border-b-2 border-border px-6 md:px-8 py-3 flex items-center justify-between">
+              <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Current Role</span>
+              <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">2026</span>
             </div>
-            <span className="relative text-[9px] uppercase tracking-[0.25em] font-bold text-fg-subtle mt-1">Polaris · Co-Founder</span>
+
+            {/* Company block */}
+            <div className="relative border-b-2 border-border px-6 md:px-8 py-6 flex flex-col gap-1">
+              <span className="text-[9px] uppercase tracking-[0.3em] font-bold text-fg-subtle">Company</span>
+              <span className="font-heavy text-4xl md:text-5xl uppercase tracking-tighter text-fg leading-none mt-1">
+                Polaris
+              </span>
+            </div>
+
+            {/* Role 1 — full-width accent fill */}
+            <div className="relative border-b-2 border-border bg-accent px-6 md:px-8 py-4 flex items-center gap-3">
+              <span className="w-1.5 h-1.5 bg-white shrink-0" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white">Backend Developer</span>
+            </div>
+
+            {/* Role 2 — outline variant */}
+            <div className="relative border-b-2 border-border px-6 md:px-8 py-4 flex items-center gap-3 group hover:bg-accent transition-colors duration-200">
+              <span className="w-1.5 h-1.5 bg-fg group-hover:bg-white shrink-0 transition-colors duration-200" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-fg group-hover:text-white transition-colors duration-200">AI Engineer</span>
+            </div>
+
+            {/* Status footer */}
+            <div className="relative mt-auto px-6 md:px-8 py-4 flex items-center gap-2.5">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              </span>
+              <span className="text-[9px] uppercase tracking-[0.3em] font-bold text-fg-subtle">Active</span>
+              <span className="ml-auto text-[9px] uppercase tracking-[0.25em] font-bold text-fg-subtle">Polaris</span>
+            </div>
           </div>
         </div>
 
@@ -464,9 +580,8 @@ export const Sections: React.FC = () => {
           {STATS.map((stat, i) => (
             <div
               key={i}
-              className={`group relative p-6 md:p-10 bg-bg hover:bg-accent transition-colors duration-200 ${
-                i < 2 ? 'border-b-2 md:border-b-0' : ''
-              } ${i % 2 === 0 ? 'border-r-2' : ''} md:border-r-2 border-border ${i === 3 ? 'md:border-r-0' : ''}`}
+              className={`group relative p-6 md:p-10 bg-bg hover:bg-accent transition-colors duration-200 ${i < 2 ? 'border-b-2 md:border-b-0' : ''
+                } ${i % 2 === 0 ? 'border-r-2' : ''} md:border-r-2 border-border ${i === 3 ? 'md:border-r-0' : ''}`}
             >
               <div className="flex items-start justify-between gap-2">
                 <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle group-hover:text-white transition-colors duration-200">
@@ -533,82 +648,100 @@ export const Sections: React.FC = () => {
             <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
               {CERTIFICATES.length} Verified
             </span>
-            <div className="flex items-center gap-3 mt-3">
-              <div className="w-6 h-6 flex items-center justify-center border-2 border-[#22c55e] bg-[#22c55e]">
-                <Award className="w-3 h-3 text-white" strokeWidth={2.5} />
+            {/* Issuer legend — 2 columns to keep height compact */}
+            <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-3">
+              {/* AI Cebu — green Award */}
+              <div className="flex items-center gap-1.5">
+                <Award className="w-3 h-3 shrink-0" style={{ color: '#22c55e' }} />
+                <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-fg-subtle">AI Cebu</span>
               </div>
-              <div className="w-6 h-6 flex items-center justify-center border-2 border-[#D4A27F] bg-[#D4A27F]">
-                <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" aria-hidden="true">
-                  <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="white"/>
+              {/* Anthropic — A logo */}
+              <div className="flex items-center gap-1.5">
+                <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3 shrink-0" aria-hidden="true" style={{ color: '#D4A27F' }}>
+                  <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor" />
                 </svg>
+                <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-fg-subtle">Anthropic</span>
+              </div>
+              {/* Kaggle */}
+              <div className="flex items-center gap-1.5">
+                <SiKaggle className="w-3 h-3 shrink-0" style={{ color: '#20BEFF' }} />
+                <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-fg-subtle">Kaggle</span>
+              </div>
+              {/* SoloLearn */}
+              <div className="flex items-center gap-1.5">
+                <SiSololearn className="w-3 h-3 shrink-0" style={{ color: '#149EF2' }} />
+                <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-fg-subtle">SoloLearn</span>
+              </div>
+              {/* Huawei */}
+              <div className="flex items-center gap-1.5">
+                <SiHuawei className="w-3 h-3 shrink-0" style={{ color: '#CF0A2C' }} />
+                <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-fg-subtle">Huawei</span>
               </div>
             </div>
           </div>
           <div className="col-span-12 md:col-span-9 overflow-hidden py-6 flex flex-col justify-center gap-3">
-            {/* Row 1 — scrolls left (AI Community certs repeated 5x for frequency) */}
-            <div className="cert-marquee-row flex whitespace-nowrap">
-              {(() => {
-                const community = CERTIFICATES.filter(c => c.image);
-                const anthropic = CERTIFICATES.filter(c => !c.image);
-                // Repeat community certs 5x so they appear frequently
-                const boosted = [...Array(5)].flatMap(() => community);
-                const combined = [...boosted, ...anthropic];
-                return [...combined, ...combined].map((cert, i) => (
-                  <button
-                    key={`r1-${i}`}
-                    onClick={() => setSelectedCert(cert as CertificateData)}
-                    className={`hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 shrink-0 transition-all duration-200 cursor-pointer border-2 bg-bg ${
-                      cert.image
-                        ? 'border-[#22c55e] hover:bg-[#22c55e]'
-                        : 'border-[#D4A27F] hover:bg-[#D4A27F]'
-                    }`}
-                  >
-                    {cert.image ? (
-                      <Award className="w-3.5 h-3.5 shrink-0 text-[#22c55e] group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
-                    ) : (
-                      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
-                        <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
-                      </svg>
-                    )}
-                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
-                      {cert.title}
-                    </span>
-                  </button>
-                ));
-              })()}
-            </div>
+            {/* Shared helpers */}
+            {(() => {
+              const getColor = (cert: (typeof CERTIFICATES)[0]) => {
+                if (cert.issuer.includes('AI Cebu')) return '#22c55e';
+                if (cert.issuer === 'Kaggle') return '#20BEFF';
+                if (cert.issuer === 'SoloLearn') return '#149EF2';
+                if (cert.issuer?.startsWith('Huawei')) return '#CF0A2C';
+                return '#D4A27F';
+              };
 
-            {/* Row 2 — scrolls right (reverse, AI Community certs repeated 5x) */}
-            <div className="cert-marquee-row-reverse flex whitespace-nowrap">
-              {(() => {
-                const community = CERTIFICATES.filter(c => c.image);
-                const anthropic = CERTIFICATES.filter(c => !c.image);
-                const boosted = [...Array(5)].flatMap(() => community);
-                const combined = [...anthropic.reverse(), ...boosted];
-                return [...combined, ...combined].map((cert, i) => (
+              const CertIcon = ({ cert, color }: { cert: (typeof CERTIFICATES)[0]; color: string }) => {
+                if (cert.issuer.includes('AI Cebu')) return <Award className="w-3.5 h-3.5 shrink-0 transition-colors duration-200" style={{ color }} />;
+                if (cert.issuer === 'Kaggle') return <SiKaggle className="w-3.5 h-3.5 shrink-0 transition-colors duration-200" style={{ color }} />;
+                if (cert.issuer === 'SoloLearn') return <SiSololearn className="w-3.5 h-3.5 shrink-0 transition-colors duration-200" style={{ color }} />;
+                if (cert.issuer?.startsWith('Huawei')) return <SiHuawei className="w-3.5 h-3.5 shrink-0 transition-colors duration-200" style={{ color }} />;
+                // Anthropic A logo
+                return (
+                  <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 transition-colors duration-200" aria-hidden="true" style={{ color }}>
+                    <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor" />
+                  </svg>
+                );
+              };
+
+              const renderPill = (cert: (typeof CERTIFICATES)[0], key: string) => {
+                const color = getColor(cert);
+                return (
                   <button
-                    key={`r2-${i}`}
+                    key={key}
                     onClick={() => setSelectedCert(cert as CertificateData)}
-                    className={`hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 shrink-0 transition-all duration-200 cursor-pointer border-2 bg-bg ${
-                      cert.image
-                        ? 'border-[#22c55e] hover:bg-[#22c55e]'
-                        : 'border-[#D4A27F] hover:bg-[#D4A27F]'
-                    }`}
+                    className="hover-trigger group inline-flex items-center gap-2 px-4 py-2.5 mx-1.5 shrink-0 transition-all duration-200 cursor-pointer border-2 bg-bg"
+                    style={{ borderColor: color }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = color)}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
                   >
-                    {cert.image ? (
-                      <Award className="w-3.5 h-3.5 shrink-0 text-[#22c55e] group-hover:text-white transition-colors duration-200" strokeWidth={2.5} />
-                    ) : (
-                      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 shrink-0 text-[#D4A27F] group-hover:text-white transition-colors duration-200" aria-hidden="true">
-                        <path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0H10.172L16.742 20.48H13.14L11.06 15.14H5.532l-2.078 5.34H0L6.57 3.52zm4.132 8.69L8.283 6.27l-2.418 5.94h4.84z" fill="currentColor"/>
-                      </svg>
-                    )}
+                    <CertIcon cert={cert} color={color} />
                     <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-fg group-hover:text-white transition-colors duration-200">
                       {cert.title}
                     </span>
                   </button>
-                ));
-              })()}
-            </div>
+                );
+              };
+
+              const community = CERTIFICATES.filter(c => c.issuer.includes('AI Cebu'));
+              const anthropic = CERTIFICATES.filter(c => c.issuer === 'Anthropic');
+              const platforms = CERTIFICATES.filter(c => !c.issuer.includes('AI Cebu') && c.issuer !== 'Anthropic');
+
+              const row1 = [...platforms, ...community, ...anthropic, ...community];
+              const row2 = [...anthropic.slice().reverse(), ...community, ...platforms.slice().reverse(), ...community];
+
+              return (
+                <>
+                  {/* Row 1 — scrolls left */}
+                  <div className="cert-marquee-row flex whitespace-nowrap">
+                    {[...row1, ...row1].map((cert, i) => renderPill(cert, `r1-${i}`))}
+                  </div>
+                  {/* Row 2 — scrolls right */}
+                  <div className="cert-marquee-row-reverse flex whitespace-nowrap">
+                    {[...row2, ...row2].map((cert, i) => renderPill(cert, `r2-${i}`))}
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
       </section>
@@ -662,11 +795,7 @@ export const Sections: React.FC = () => {
                       Fig. 0{idx + 1}
                     </span>
                   </div>
-                  <div className="absolute bottom-0 right-0 px-4 py-2 bg-accent">
-                    <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-white">
-                      {project.year}
-                    </span>
-                  </div>
+
                 </div>
 
                 {/* Detail block */}
@@ -779,8 +908,7 @@ export const Sections: React.FC = () => {
                 Experience
               </h2>
               <p className="mt-8 max-w-md text-base md:text-lg font-medium text-fg-muted leading-snug">
-                A journey of coordinating AI initiatives, developing digital experiences, and managing
-                global data workflows.
+                A journey of building backend systems and AI pipelines, coordinating AI initiatives, developing digital experiences, and managing global data workflows.
               </p>
             </div>
             <div className="hidden md:flex relative col-span-4 border-l-2 border-border flex-col justify-between p-10">
@@ -902,7 +1030,7 @@ export const Sections: React.FC = () => {
                 { label: 'Home', href: '/' },
                 { label: 'About', href: '#about' },
                 { label: 'Works', href: '/projects' },
-                { label: 'Resume', href: '/Joshua_Rebadomia_Resume.pdf' },
+                { label: 'Resume', href: '/Joshua_Rebadomia_CV_2026.pdf' },
                 { label: 'Contact', href: 'mailto:rebadomiarobert@gmail.com' },
               ].map(({ label, href }) => (
                 <li key={label}>

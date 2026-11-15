@@ -83,7 +83,7 @@ export default function App() {
       {loading && <Preloader onComplete={() => setLoading(false)} />}
 
       <div
-        className={`transition-opacity duration-1000 ${loading ? 'opacity-0 h-screen overflow-hidden' : 'opacity-100'}`}
+        className={loading ? 'h-screen overflow-hidden' : ''}
       >
         <ScrollProgress />
         <Navbar />

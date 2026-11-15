@@ -202,7 +202,7 @@ export const Chatbot: React.FC = () => {
       return;
     }
     if (target === 'resume') {
-      window.open('/Joshua_Rebadomia_Resume.pdf', '_blank', 'noopener,noreferrer');
+      window.open('/Joshua_Rebadomia_CV_2026.pdf', '_blank', 'noopener,noreferrer');
       return;
     }
 
