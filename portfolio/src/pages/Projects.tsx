@@ -18,6 +18,14 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    title: "AI Agent Automation (OpenClaw)",
+    description: "Built AI agents using OpenClaw to handle assistant-style tasks including social media marketing coordination, documentation, tracking, and reporting/analytics. Reduced manual effort and improved accuracy and consistency across recurring tasks.",
+    tech: ["OpenClaw", "n8n", "Claude AI", "RAG", "Vector Embeddings", "pgvector"],
+    date: "2026-08-01",
+    repo: "SHUUAA",
+    image: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800"
+  },
+  {
     title: "HRIS-201",
     description: "Human Resource Information System for managing employee records, 201 files, and HR workflows — built with a modern React + TypeScript stack on Supabase.",
     tech: ["React", "TypeScript", "Supabase", "Vite"],
