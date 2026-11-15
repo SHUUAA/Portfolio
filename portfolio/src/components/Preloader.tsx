@@ -235,7 +235,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       { val: 0 },
       {
         val: 100,
-        duration: 2.2,
+        duration: 3,
         ease: 'power1.inOut',
         onUpdate: function () {
           const v = Math.round(this.targets()[0].val);
@@ -250,7 +250,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     );
 
     // Brief graceful hold at 100
-    tl.to({}, { duration: 0.15 });
+    tl.to({}, { duration: 1 });
 
     // 2. Fade out center content cleanly
     tl.to(contentRef.current, {

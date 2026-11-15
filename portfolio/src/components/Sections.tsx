@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -337,12 +337,79 @@ const STATS = [
 const MARQUEE_SKILLS = [...SKILLS, ...SKILLS, ...SKILLS];
 const MARQUEE_SKILLS_REV = [...SKILLS, ...SKILLS];
 
+function shuffleArray<T>(items: readonly T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function generateRandomizedCertRow(): (typeof CERTIFICATES)[0][] {
+  const aiCebu = shuffleArray(CERTIFICATES.filter(c => c.issuer.includes('AI Cebu')));
+  const kaggle = shuffleArray(CERTIFICATES.filter(c => c.issuer === 'Kaggle'));
+  const sololearn = shuffleArray(CERTIFICATES.filter(c => c.issuer === 'SoloLearn'));
+  const huawei = shuffleArray(CERTIFICATES.filter(c => c.issuer.startsWith('Huawei')));
+  const anthropic = shuffleArray(CERTIFICATES.filter(c => c.issuer === 'Anthropic'));
+
+  const otherBuckets = [
+    { name: 'AI Cebu', items: aiCebu },
+    { name: 'Kaggle', items: kaggle },
+    { name: 'SoloLearn', items: sololearn },
+    { name: 'Huawei', items: huawei },
+  ];
+
+  const others: (typeof CERTIFICATES)[0][] = [];
+  let lastIssuer = '';
+
+  while (otherBuckets.some(b => b.items.length > 0)) {
+    const available = otherBuckets.filter(b => b.items.length > 0);
+    const nonRepeated = available.filter(b => b.name !== lastIssuer);
+    const candidateBuckets = nonRepeated.length > 0 ? nonRepeated : available;
+    candidateBuckets.sort((a, b) => b.items.length - a.items.length);
+    const chosenBucket =
+      candidateBuckets[0].items.length > 1 && candidateBuckets.length > 1 && Math.random() < 0.6
+        ? candidateBuckets[0]
+        : candidateBuckets[Math.floor(Math.random() * candidateBuckets.length)];
+    const item = chosenBucket.items.pop()!;
+    others.push(item);
+    lastIssuer = chosenBucket.name;
+  }
+
+  // Interleave the 12 non-Anthropic items with 18 Anthropic items so certificates from different issuers
+  // (AI Cebu, Kaggle, Huawei, SoloLearn, Anthropic) are distributed throughout rather than clustered
+  const slotCounts = shuffleArray([1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2]);
+  const row: (typeof CERTIFICATES)[0][] = [];
+
+  for (let i = 0; i < others.length; i++) {
+    row.push(others[i]);
+    const count = slotCounts[i];
+    for (let j = 0; j < count; j++) {
+      if (anthropic.length > 0) {
+        row.push(anthropic.pop()!);
+      }
+    }
+  }
+
+  while (anthropic.length > 0) {
+    row.push(anthropic.pop()!);
+  }
+
+  const offset = Math.floor(Math.random() * row.length);
+  return [...row.slice(offset), ...row.slice(0, offset)];
+}
+
 export const Sections: React.FC = () => {
   const horizontalPinRef = useRef<HTMLDivElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const marqueeRevRef = useRef<HTMLDivElement>(null);
   const [selectedCert, setSelectedCert] = useState<CertificateData | null>(null);
+
+  const [certRow1, certRow2] = useMemo(() => {
+    return [generateRandomizedCertRow(), generateRandomizedCertRow()];
+  }, []);
 
   useGSAP(() => {
     const horizontalContainer = horizontalContainerRef.current;
@@ -722,22 +789,15 @@ export const Sections: React.FC = () => {
                 );
               };
 
-              const community = CERTIFICATES.filter(c => c.issuer.includes('AI Cebu'));
-              const anthropic = CERTIFICATES.filter(c => c.issuer === 'Anthropic');
-              const platforms = CERTIFICATES.filter(c => !c.issuer.includes('AI Cebu') && c.issuer !== 'Anthropic');
-
-              const row1 = [...platforms, ...community, ...anthropic, ...community];
-              const row2 = [...anthropic.slice().reverse(), ...community, ...platforms.slice().reverse(), ...community];
-
               return (
                 <>
                   {/* Row 1 — scrolls left */}
                   <div className="cert-marquee-row flex whitespace-nowrap">
-                    {[...row1, ...row1].map((cert, i) => renderPill(cert, `r1-${i}`))}
+                    {[...certRow1, ...certRow1].map((cert, i) => renderPill(cert, `r1-${i}-${cert.title}`))}
                   </div>
                   {/* Row 2 — scrolls right */}
                   <div className="cert-marquee-row-reverse flex whitespace-nowrap">
-                    {[...row2, ...row2].map((cert, i) => renderPill(cert, `r2-${i}`))}
+                    {[...certRow2, ...certRow2].map((cert, i) => renderPill(cert, `r2-${i}-${cert.title}`))}
                   </div>
                 </>
               );
