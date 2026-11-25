@@ -66,7 +66,7 @@ const PROJECTS: Project[] = [
     image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800"
   },
   {
-    title: "LifeChat (AI Interviewer V2)",
+    title: "AI Interviewer",
     description: "AI pre-screening platform with CV upload and real-time 10-minute voice interview using ElevenLabs AI agent 'Cebee.' Transcripts auto-processed via Google Sheets.",
     tech: ["Next.js 16", "TypeScript", "React", "ElevenLabs AI", "Google Sheets API"],
     date: "2026-02-20",

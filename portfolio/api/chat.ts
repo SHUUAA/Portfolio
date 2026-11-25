@@ -107,7 +107,7 @@ TailwindCSS, Three.js, GSAP, Git, Figma, Power BI, Postman.
   across five exam types. Users annotate scanned documents into structured tables;
   automatic scoring, retake support, and an admin panel for images, answer keys,
   and progress tracking. Stack: React 19, TypeScript, Supabase, Chart.js, TailwindCSS, Vercel.
-- LifeChat — AI pre-screening platform. Candidates upload a CV and do a real-time
+- AI Interviewer — AI pre-screening platform. Candidates upload a CV and do a real-time
   10-minute voice interview with an ElevenLabs AI agent named "Cebee". Transcripts
   are auto-processed and logged via the Google Sheets API. Stack: Next.js 16,
   TypeScript, React 19, ElevenLabs AI, Google Sheets API.

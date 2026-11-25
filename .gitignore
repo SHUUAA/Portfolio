@@ -1,0 +1,4 @@
+# Only the portfolio app is pushed; everything else in this folder stays local.
+/*
+!/.gitignore
+!/portfolio/

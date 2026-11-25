@@ -18,7 +18,8 @@ export const PROJECTS = [
     description:
       'Built AI agents using OpenClaw to handle assistant-style tasks including social media marketing coordination, documentation, tracking, and reporting/analytics. Reduced manual effort and improved accuracy and consistency across recurring tasks.',
     tech: ['OpenClaw', 'n8n', 'Claude AI', 'RAG', 'Vector Embeddings', 'pgvector'],
-    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800',
+    video: '/videos/ai-agent-automation.mp4',
+    poster: '/videos/ai-agent-automation.jpg',
     github: 'https://github.com/SHUUAA',
     live: '#',
     role: 'AI Automation Developer',
@@ -30,18 +31,20 @@ export const PROJECTS = [
     description:
       'Intelligent markdown note-taking and knowledge management platform featuring real-time synchronization, AI-assisted summaries, dynamic workspace organization, and structured tag analytics.',
     tech: ['React', 'TypeScript', 'Supabase', 'TailwindCSS', 'Vite', 'OpenAI API'],
-    image: 'https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&q=80&w=800',
+    video: '/videos/luminote.mp4',
+    poster: '/videos/luminote.jpg',
     github: 'https://github.com/SHUUAA',
     live: '#',
   },
   {
-    title: 'LifeChat',
+    title: 'AI Interviewer',
     category: 'AI-POWERED PLATFORM',
     year: '2025',
     description:
       "AI pre-screening platform where candidates submit applications with CV upload and engage in a real-time 10-minute voice interview with ElevenLabs AI agent 'Cebee.' Transcripts are auto-processed and logged via Google Sheets integration.",
     tech: ['Next.js 16', 'TypeScript', 'React', 'ElevenLabs AI', 'Google Sheets API'],
-    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800',
+    video: '/videos/ai-interviewer.mp4',
+    poster: '/videos/ai-interviewer.jpg',
     github: 'https://github.com/PierceBorinaga/AI_Interviewer_V2_PH',
     live: '#',
   },
@@ -52,7 +55,8 @@ export const PROJECTS = [
     description:
       'Timed exam and annotation platform for historical record transcription across five exam types. Users annotate scanned documents into structured tables with automatic scoring, retake support, and an admin panel for managing images, answer keys, and progress.',
     tech: ['React', 'TypeScript', 'Supabase', 'Chart.js', 'TailwindCSS', 'Vercel'],
-    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800',
+    video: '/videos/liftapp.mp4',
+    poster: '/videos/liftapp.jpg',
     github: 'https://github.com/SHUUAA',
     live: '#',
   },
@@ -843,10 +847,16 @@ export const Sections: React.FC = () => {
               >
                 {/* Image block */}
                 <div className={`col-span-12 md:col-span-7 relative aspect-[16/10] md:aspect-auto md:min-h-[520px] overflow-hidden bg-bg-elevated border-b-2 md:border-b-0 ${isEven ? 'md:border-r-2' : 'md:border-l-2'} border-border`}>
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="project-img absolute inset-0 w-full h-full object-cover grayscale contrast-125"
+                  <video
+                    src={project.video}
+                    poster={project.poster}
+                    aria-label={`${project.title} demo`}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="project-img absolute inset-0 w-full h-full object-cover object-top"
                   />
                   {/* Frame & label */}
                   <div className="absolute inset-0 bg-fg/0 group-hover:bg-fg/20 transition-colors duration-200" />
