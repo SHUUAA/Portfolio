@@ -86,8 +86,8 @@ export const EXPERIENCE = [
   {
     company: 'Lifewood Data Technology Ltd.',
     role: 'AI Executive & Project Coordinator',
-    period: 'Apr 2025 — Present',
-    duration: '1 yr+',
+    period: 'Apr 2025 — Oct 2026',
+    duration: '1 yr 6 mos',
     description:
       'Coordinated AI-driven projects and built agentic automation pipelines using n8n, OpenClaw, and Claude AI. Led training programs, oversaw data workflows for global AI initiatives, and automated repetitive workflows through prompt engineering and LLM integration.',
     location: 'Cebu, Philippines · On-site',
@@ -566,7 +566,7 @@ export const Sections: React.FC = () => {
               <div className="fade-up">
                 <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent mb-2 block">A. Background</span>
                 <p className="text-sm md:text-base font-medium text-fg-muted leading-snug">
-                  AI Executive &amp; Full-Stack Developer. I bridge the gap
+                  AI Engineer &amp; Full-Stack Developer. I bridge the gap
                   between cutting-edge AI technology and real-world business needs — from agentic
                   automation pipelines with n8n, OpenClaw, and Claude AI, to production-grade
                   web &amp; mobile applications.
@@ -846,7 +846,9 @@ export const Sections: React.FC = () => {
                 className={`project-card grid grid-cols-12 border-b-2 border-border ${isEven ? '' : 'md:[&>*:first-child]:order-2'}`}
               >
                 {/* Image block */}
-                <div className={`col-span-12 md:col-span-7 relative aspect-[16/10] md:aspect-auto md:min-h-[520px] overflow-hidden bg-bg-elevated border-b-2 md:border-b-0 ${isEven ? 'md:border-r-2' : 'md:border-l-2'} border-border`}>
+                <div className={`col-span-12 md:col-span-7 relative flex items-center overflow-hidden bg-bg-elevated border-b-2 md:border-b-0 ${isEven ? 'md:border-r-2' : 'md:border-l-2'} border-border`}>
+                  {/* 16:10 box matches the demo footage, so the whole frame is always visible */}
+                  <div className="relative w-full aspect-[16/10] overflow-hidden">
                   <video
                     src={project.video}
                     poster={project.poster}
@@ -856,8 +858,9 @@ export const Sections: React.FC = () => {
                     loop
                     playsInline
                     preload="metadata"
-                    className="project-img absolute inset-0 w-full h-full object-cover object-top"
+                    className="project-img absolute inset-0 w-full h-full object-contain"
                   />
+                  </div>
                   {/* Frame & label */}
                   <div className="absolute inset-0 bg-fg/0 group-hover:bg-fg/20 transition-colors duration-200" />
                   <div className="absolute top-0 left-0 px-4 py-2 bg-bg border-b-2 border-r-2 border-border">
@@ -1052,8 +1055,8 @@ export const Sections: React.FC = () => {
                 What's<br />Next?
               </h2>
               <p className="mt-8 max-w-lg text-base md:text-lg font-medium text-fg-muted leading-snug">
-                Currently building agentic AI systems and coordinating global automation projects at
-                Lifewood — always open to discussing new innovations and collaborations.
+                Currently building AI-powered features and backend systems as an AI Engineer at
+                Polaris — always open to discussing new innovations and collaborations.
               </p>
             </div>
           </div>
@@ -1086,7 +1089,7 @@ export const Sections: React.FC = () => {
               Joshua<br />Rebadomia
             </h3>
             <p className="mt-6 text-sm md:text-base font-medium text-fg-muted">
-              AI Executive · Full-Stack Developer<br />
+              AI Engineer · Full-Stack Developer<br />
               BSIT — CIT-U · Cebu, Philippines
             </p>
           </div>

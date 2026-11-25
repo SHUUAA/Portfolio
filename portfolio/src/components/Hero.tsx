@@ -208,7 +208,7 @@ export const Hero: React.FC = () => {
           <div className="hidden md:flex flex-col gap-4 mt-8 md:mt-12 lg:mt-16 max-w-[320px] lg:max-w-[420px] z-10">
             <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Who I Am</span>
             <p className="text-lg md:text-xl font-medium leading-snug text-fg-muted">
-              AI Executive &amp; Full-Stack Developer crafting intelligent systems — from agentic automation pipelines to production-grade web &amp; mobile applications.
+              AI Engineer &amp; Full-Stack Developer crafting intelligent systems — from agentic automation pipelines to production-grade web &amp; mobile applications.
             </p>
             <div className="w-16 h-[3px] bg-accent mt-1" />
           </div>
@@ -243,7 +243,7 @@ export const Hero: React.FC = () => {
         <div className="col-span-12 md:col-span-4 flex flex-col gap-2">
           <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">A. Discipline</span>
           <p className="text-base md:text-lg font-bold uppercase leading-tight text-fg">
-            AI Executive<br />& Full-Stack Developer
+            AI Engineer<br />& Full-Stack Developer
           </p>
         </div>
 
@@ -296,7 +296,7 @@ export const Hero: React.FC = () => {
       <div className="relative z-10 grid grid-cols-12 gap-0 border-t-2 border-border px-6 md:px-10 py-4">
         <div className="col-span-6 md:col-span-3 flex flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle min-w-0">
           <span>Currently</span>
-          <span className="text-fg truncate"><span className="md:hidden">AI Executive</span><span className="hidden md:inline">AI Executive · Lifewood</span></span>
+          <span className="text-fg truncate"><span className="md:hidden">AI Engineer</span><span className="hidden md:inline">AI Engineer · Polaris</span></span>
         </div>
         <div className="hidden md:flex col-span-3 flex-col gap-0.5 text-[10px] uppercase tracking-[0.25em] font-bold text-fg-subtle">
           <span>Selected works</span>

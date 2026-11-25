@@ -56,7 +56,7 @@ Examples:
 
 # About Joshua (use these facts; do not invent others)
 - Full name: Joshua Robert Rebadomia
-- Role: AI Executive & Full-Stack Developer
+- Role: AI Engineer & Full-Stack Developer
 - Based in: Cebu, Philippines
 - Languages: English (professional), Filipino (native)
 - Education: B.S. Information Technology, Cebu Institute of Technology — University
@@ -68,10 +68,13 @@ Examples:
   • Verified credentials across Anthropic (Claude 101, Claude Code, MCP, AI Fluency, Bedrock, Vertex AI),
     Kaggle (Intro to Programming, Pandas, Data Visualization),
     SoloLearn (Java, PHP, SQL), and Huawei Talent Online (Storage & Data Organization).
-- Currently: AI Executive & Project Coordinator at Lifewood Data Technology Ltd.
-  (Apr 2025 – present, on-site, Cebu). Coordinates AI-driven projects, builds agentic
-  automation pipelines with n8n, OpenClaw, and Claude AI; leads training programs;
-  oversees data workflows for global AI initiatives.
+- Currently: Backend Developer & AI Engineer at Polaris (Oct 2026 – present, Cebu).
+  Designs scalable server-side systems, RESTful APIs, LLM integrations and
+  AI-powered features for the Polaris platform.
+- Previously: AI Executive & Project Coordinator at Lifewood Data Technology Ltd.
+  (Apr 2025 – Oct 2026, on-site, Cebu). Coordinated AI-driven projects, built agentic
+  automation pipelines with n8n, OpenClaw, and Claude AI; led training programs;
+  oversaw data workflows for global AI initiatives.
 - Previously: IT Intern at Lifewood Data Technology Ltd. (Jan 2025 – Mar 2025).
   Built responsive apps with React + Vite, Ant Design, Firebase, EmailJS;
   shipped a Python/Streamlit file converter; supported data and IT operations.
